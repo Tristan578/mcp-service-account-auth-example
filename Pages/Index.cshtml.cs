@@ -9,19 +9,23 @@ public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
 
-    // Record to represent a provisioned service account
+    // Record to represent a service account for MCP server authentication
+    // These service accounts eliminate the need for personal credentials on developer machines
     private record OktaClient(string ClientSecret, string[] Scopes);
 
-    // Dictionary to store valid service account clients
+    // Dictionary to store valid MCP service account clients
+    // In production, these would be managed centrally by enterprise identity providers
     private readonly Dictionary<string, OktaClient> _validClients = new()
     {
+        // MCP Read-Only Service Account - for VS Code context servers
         ["0oa8f5j3ecb5w3dF35d7"] = new OktaClient(
             ClientSecret: "a_very_secret_mock_value_for_alpha",
-            Scopes: new[] { "mcp:projects:read" }
+            Scopes: new[] { "mcp:projects:read", "mcp:documentation:read" }
         ),
+        // MCP Read/Write Service Account - for GitHub Copilot with enhanced capabilities  
         ["0oa9g2k1idg9x7eE45d8"] = new OktaClient(
             ClientSecret: "another_super_secret_for_beta_writer",
-            Scopes: new[] { "mcp:projects:read", "mcp:projects:write" }
+            Scopes: new[] { "mcp:projects:read", "mcp:projects:write", "mcp:teams:read" }
         )
     };
 

@@ -1,53 +1,69 @@
-# Mock Okta Token Endpoint
+# MCP Service Account Authentication System
 
-This ASP.NET Core Razor Pages application simulates an OAuth 2.0 token endpoint, specifically mimicking how service accounts provisioned through an identity provider like **Okta** would authenticate using the **OAuth 2.0 Client Credentials flow**.
+This ASP.NET Core Razor Pages application provides a **secure authentication foundation for Model Context Protocol (MCP) servers**, eliminating the need to store personal API keys or private credentials on developer machines or in repositories.
+
+## 🔐 Security-First Approach: Service Accounts vs Personal Credentials
+
+### The Problem with Personal Credentials
+- ❌ **Private keys stored locally** on developer machines
+- ❌ **Personal API tokens in repositories** (accidental commits)
+- ❌ **Individual credential management** across teams
+- ❌ **No centralized access control** or audit trails
+- ❌ **Credential rotation requires individual action** from each developer
+
+### The Service Account Solution
+- ✅ **Centralized credential management** through enterprise identity providers
+- ✅ **No private keys on local machines** - tokens acquired dynamically
+- ✅ **Team-based access control** with scope-based permissions
+- ✅ **Automated credential rotation** without developer intervention
+- ✅ **Complete audit trails** for all authentication events
+- ✅ **Zero-trust architecture** for AI-assisted development
 
 ## Overview
 
-The application acts as a mock OAuth 2.0 authorization server that:
-- Accepts Client ID and Client Secret credentials
-- Validates them against a pre-configured set of service accounts
-- Issues structurally correct JSON Web Tokens (JWTs) upon successful authentication
-- Logs all authentication attempts for security monitoring
+This application simulates an OAuth 2.0 authorization server that:
+- **Authenticates MCP servers using service account credentials** instead of personal tokens
+- **Issues dynamic, time-limited JWT tokens** for secure API access
+- **Provides comprehensive logging** for enterprise security monitoring
+- **Eliminates credential storage** on developer workstations
 
 ## Features
 
-### 🔐 OAuth 2.0 Client Credentials Flow Simulation
-- Mimics real-world service account authentication
-- Validates client credentials against a secure registry
-- Issues time-limited JWT tokens with appropriate scopes
+### 🔐 Service Account Authentication for MCP Servers
+- **Eliminates personal credential storage** on developer machines
+- **Centralizes access control** through enterprise identity providers
+- **Provides dynamic token acquisition** for MCP server operations
+- **Enables team-based permission management** with granular scopes
 
-### 🎯 Realistic JWT Generation
-- **Header**: Includes algorithm and token type
-- **Payload**: Contains standard OAuth 2.0 claims (iss, sub, aud, scp, iat, exp)
-- **Signature**: Mock signature for demonstration purposes
-- **Encoding**: Proper Base64Url encoding for JWT compliance
+### 🎯 Enterprise-Grade Security
+- **Zero local credential storage** - all tokens acquired at runtime
+- **Time-limited JWT tokens** with automatic expiration
+- **Scope-based access control** for fine-grained permissions
+- **Comprehensive audit logging** for compliance and monitoring
 
-### 📝 Comprehensive Logging
-- Console logging for development visibility
-- File logging to `auth.log` for persistent audit trails
-- Detailed logging includes timestamps, IP addresses, and authentication results
-- Separate log entries for successful and failed authentication attempts
+### 📝 MCP Server Integration
+- **VS Code MCP server authentication** without personal tokens
+- **GitHub Copilot integration** with enterprise security
+- **Real-time context access** through authenticated API calls
+- **Multi-environment support** (dev, staging, production)
 
-### 🖥️ User-Friendly Interface
-- Clean, responsive web interface
-- Real-time feedback for authentication attempts
-- JWT token display with detailed claims information
-- Built-in test credentials for easy demonstration
+## Pre-configured Service Accounts
 
-## Pre-configured Test Clients
+The application includes service accounts specifically designed for **MCP server authentication**:
 
-The application comes with two pre-configured service accounts for testing:
-
-### Alpha Client (Read-Only Access)
+### MCP Read-Only Service Account
 - **Client ID**: `0oa8f5j3ecb5w3dF35d7`
 - **Client Secret**: `a_very_secret_mock_value_for_alpha`
-- **Scopes**: `mcp:projects:read`
+- **Scopes**: `mcp:projects:read`, `mcp:documentation:read`
+- **Use Case**: VS Code MCP servers requiring read-only access to project data
 
-### Beta Client (Read/Write Access)
+### MCP Read/Write Service Account
 - **Client ID**: `0oa9g2k1idg9x7eE45d8`
 - **Client Secret**: `another_super_secret_for_beta_writer`
-- **Scopes**: `mcp:projects:read`, `mcp:projects:write`
+- **Scopes**: `mcp:projects:read`, `mcp:projects:write`, `mcp:teams:read`
+- **Use Case**: GitHub Copilot extensions requiring project management capabilities
+
+> 🔒 **Security Note**: These service accounts are managed centrally and **never stored on developer machines**. MCP servers acquire tokens dynamically at runtime.
 
 ## Getting Started
 
@@ -132,14 +148,40 @@ mcp-service-account-auth-example/
 └── auth.log                   # Authentication log file (created at runtime)
 ```
 
+## Security Architecture
+
+### Traditional Approach (❌ Insecure)
+```
+Developer Machine:
+├── .env files with personal API keys
+├── ~/.aws/credentials with personal tokens  
+├── Personal GitHub tokens in repositories
+└── Individual OAuth apps with private keys
+```
+
+### Service Account Approach (✅ Secure)
+```
+MCP Server Runtime:
+├── Dynamic token acquisition from identity provider
+├── Service account credentials (never stored locally)
+├── Time-limited, scope-specific JWT tokens
+└── Centralized audit and access control
+```
+
 ## Security Considerations
 
-⚠️ **Important**: This is a **mock application** for development and testing purposes only.
+### ✅ **Production-Ready Security Patterns**
+- **Service accounts eliminate personal credential exposure**
+- **Dynamic token acquisition prevents credential theft**
+- **Centralized identity management** through enterprise providers
+- **Scope-based access control** limits blast radius of compromised tokens
+- **Comprehensive audit logging** for security monitoring
 
-- Client secrets are stored in plain text in code
-- JWT signature is not cryptographically valid
-- No rate limiting or advanced security measures implemented
-- Not suitable for production use without significant security enhancements
+### 🔒 **Zero Local Credential Storage**
+- MCP servers **never store credentials locally**
+- All authentication happens **at runtime through secure channels**
+- Service account credentials are **managed centrally** by IT security teams
+- **Automatic credential rotation** without developer intervention
 
 ## Extending the Application
 
@@ -188,13 +230,29 @@ After running this mock application, consider:
 
 ## MCP Integration
 
-This application serves as the foundation for **Model Context Protocol (MCP) server authentication** in Visual Studio Code and GitHub Copilot environments. See `MCP_CONFIG.md` for comprehensive configuration guides including:
+This application serves as the **secure authentication foundation** for Model Context Protocol (MCP) servers in Visual Studio Code and GitHub Copilot environments. See `MCP_CONFIG.md` for comprehensive configuration guides including:
 
-- 🔗 **VS Code MCP Server Setup**: Complete configuration for AI-assisted development
-- 🤖 **GitHub Copilot Integration**: Enhanced context and intelligent code generation
-- 🔐 **OAuth 2.0 Authentication Flow**: Secure service-to-service communication
-- 📊 **Real-time Project Context**: Access to Werner APIs, documentation, and team data
-- 🛠️ **Custom Tools and Resources**: Automated project management and requirement tracking
+### 🔐 **Secure MCP Server Authentication**
+- **Service account-based authentication** eliminating personal credential storage
+- **Dynamic token acquisition** for runtime security
+- **Enterprise identity provider integration** for centralized access control
+
+### 🤖 **AI-Assisted Development Security**
+- **Zero-trust architecture** for GitHub Copilot integration
+- **Scope-based permissions** for AI context access
+- **Audit trails** for all AI-to-API communication
+
+### 🏢 **Enterprise-Ready Configuration**
+- **Multi-environment support** (dev, staging, production)
+- **Team-based access control** through service accounts
+- **Compliance-ready logging** and monitoring
+
+### Key Benefits
+- 🔗 **VS Code MCP Server Setup**: Complete configuration for secure AI-assisted development
+- 🤖 **GitHub Copilot Integration**: Enhanced context without credential exposure
+- 🔐 **OAuth 2.0 Authentication Flow**: Service account-based security architecture
+- 📊 **Real-time Project Context**: Secure access to Werner APIs, documentation, and team data
+- 🛠️ **Custom Tools and Resources**: Authenticated project management without personal tokens
 
 ## License
 

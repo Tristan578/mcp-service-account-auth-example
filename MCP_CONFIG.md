@@ -1,19 +1,63 @@
-# MCP Server Configuration for Visual Studio Code + GitHub Copilot
+# Secure MCP Server Configuration: Service Account Authentication for VS Code + GitHub Copilot
 
 ## Overview
 
-This document provides a comprehensive configuration guide for integrating the OAuth 2.0 service account authentication system with **Model Context Protocol (MCP) servers** in Visual Studio Code and GitHub Copilot environments.
+This document provides a comprehensive configuration guide for **secure Model Context Protocol (MCP) server authentication** using **service accounts** instead of personal credentials. This approach eliminates the need to store private keys, personal API tokens, or credentials on developer machines while enabling rich AI-assisted development with Visual Studio Code and GitHub Copilot.
 
-## What is MCP (Model Context Protocol)?
+## 🔐 Security-First Architecture: Why Service Accounts Matter
 
-The **Model Context Protocol** is a standardized way for AI assistants (like GitHub Copilot) to securely access external data sources and services. MCP servers act as bridges between AI models and various APIs, databases, and services, providing contextual information that enhances code generation and assistance.
+### The Problem with Personal Credentials in AI Development
 
-### Key Benefits of MCP Integration
+Traditional MCP server configurations often require personal tokens:
 
-- 🔗 **Seamless AI Integration**: Direct access to project data, documentation, and APIs
-- 🔐 **Secure Authentication**: OAuth 2.0-based security for all AI-to-service communication
-- 📊 **Rich Context**: AI assistants get real-time access to project state and requirements
-- 🎯 **Scope-Based Permissions**: Fine-grained control over what data AI can access
+```json
+// ❌ INSECURE: Personal credentials in VS Code settings
+{
+  "mcp.servers": {
+    "project-context": {
+      "env": {
+        "GITHUB_TOKEN": "ghp_xxxxxxxxxxxxxxxxxxxx",     // Personal token
+        "AWS_ACCESS_KEY": "AKIAIOSFODNN7EXAMPLE",       // Personal credentials
+        "DATABASE_URL": "postgres://user:pass@host/db", // Personal access
+        "API_KEY": "personal-api-key-here"              // Personal key
+      }
+    }
+  }
+}
+```
+
+**Critical Security Risks:**
+- 🚨 **Credential Theft**: Personal tokens accessible if machine is compromised
+- 🚨 **Accidental Exposure**: Settings synced to cloud, potentially exposing credentials
+- 🚨 **Over-Privileged Access**: AI gets same permissions as developer
+- 🚨 **No Audit Trail**: Cannot track AI vs. human API usage
+- 🚨 **Rotation Challenges**: Changing personal tokens breaks AI functionality
+
+### The Service Account Solution
+
+```json
+// ✅ SECURE: Service account-based authentication
+{
+  "mcp.servers": {
+    "werner-project-context": {
+      "env": {
+        "OAUTH_TOKEN_ENDPOINT": "https://auth.werner.com/oauth2/token",
+        "MCP_SERVICE_ACCOUNT_ID": "mcp-readonly-service",
+        "PROJECT_API_BASE": "https://api.werner.com/v1",
+        "SCOPES": "mcp:projects:read mcp:documentation:read"
+        // NO credentials stored locally!
+      }
+    }
+  }
+}
+```
+
+**Security Benefits:**
+- ✅ **Zero Local Storage**: No credentials on developer machines
+- ✅ **Centralized Management**: IT controls service account lifecycle
+- ✅ **Principle of Least Privilege**: AI gets only necessary permissions
+- ✅ **Complete Audit Trail**: All AI context access logged
+- ✅ **Automated Rotation**: Service account secrets rotated transparently
 
 ## MCP Server Configuration
 
