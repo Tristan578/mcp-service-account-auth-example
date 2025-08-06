@@ -1,79 +1,249 @@
-# Secure MCP Server Configuration: Service Account Authentication for VS Code + GitHub Copilot
+# VS Code MCP Server Configuration: Stop Using Personal Tokens!
 
-## Overview
+**This guide shows you how to configure MCP servers in VS Code WITHOUT putting personal API tokens in your settings.**
 
-This document provides a comprehensive configuration guide for **secure Model Context Protocol (MCP) server authentication** using **service accounts** instead of personal credentials. This approach eliminates the need to store private keys, personal API tokens, or credentials on developer machines while enabling rich AI-assisted development with Visual Studio Code and GitHub Copilot.
+If you're manually configuring MCP servers for GitHub Copilot and other AI tools, this is for you.
 
-## 🔐 Security-First Architecture: Why Service Accounts Matter
+## The Problem: You're Probably Doing This
 
-### The Problem with Personal Credentials in AI Development
-
-Traditional MCP server configurations often require personal tokens:
+Most developers configure MCP servers like this in their VS Code `settings.json`:
 
 ```json
-// ❌ INSECURE: Personal credentials in VS Code settings
+// ❌ INSECURE: Your settings.json probably looks like this
 {
   "mcp.servers": {
-    "project-context": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "GITHUB_TOKEN": "ghp_xxxxxxxxxxxxxxxxxxxx",     // Personal token
-        "AWS_ACCESS_KEY": "AKIAIOSFODNN7EXAMPLE",       // Personal credentials
-        "DATABASE_URL": "postgres://user:pass@host/db", // Personal access
-        "API_KEY": "personal-api-key-here"              // Personal key
+        "GITHUB_TOKEN": "ghp_xxxxxxxxxxxxxxxxxxxx"  // 🚨 Your personal token!
+      }
+    },
+    "database-context": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "postgres://user:password@host/db"  // 🚨 Personal credentials!
+      }
+    },
+    "aws-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-aws"], 
+      "env": {
+        "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",      // 🚨 Personal AWS key!
+        "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG"  // 🚨 Personal secret!
       }
     }
   }
 }
 ```
 
-**Critical Security Risks:**
-- 🚨 **Credential Theft**: Personal tokens accessible if machine is compromised
-- 🚨 **Accidental Exposure**: Settings synced to cloud, potentially exposing credentials
-- 🚨 **Over-Privileged Access**: AI gets same permissions as developer
-- 🚨 **No Audit Trail**: Cannot track AI vs. human API usage
-- 🚨 **Rotation Challenges**: Changing personal tokens breaks AI functionality
+**Why this is dangerous:**
+- 🚨 **Personal tokens stored in plain text** in VS Code settings
+- 🚨 **Settings sync uploads your tokens** to Microsoft's cloud  
+- 🚨 **Anyone who accesses your machine** can steal your credentials
+- 🚨 **No way to rotate tokens** without updating every developer manually
+- 🚨 **Tokens don't expire** - permanent security risk
+## The Solution: Service Account Authentication
 
-### The Service Account Solution
+Instead of personal tokens, configure your MCP servers like this:
 
 ```json
-// ✅ SECURE: Service account-based authentication
+// ✅ SECURE: Service account authentication in VS Code settings
 {
   "mcp.servers": {
-    "werner-project-context": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "OAUTH_TOKEN_ENDPOINT": "https://auth.werner.com/oauth2/token",
-        "MCP_SERVICE_ACCOUNT_ID": "mcp-readonly-service",
-        "PROJECT_API_BASE": "https://api.werner.com/v1",
-        "SCOPES": "mcp:projects:read mcp:documentation:read"
-        // NO credentials stored locally!
+        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    },
+    "database-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"], 
+      "env": {
+        "DATABASE_URL": "${mcp_service_token:postgres-service-account}"
+      }
+    },
+    "aws-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-aws"],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "${mcp_service_token:aws-service-account-key}",
+        "AWS_SECRET_ACCESS_KEY": "${mcp_service_token:aws-service-account-secret}"
       }
     }
   }
 }
 ```
 
-**Security Benefits:**
-- ✅ **Zero Local Storage**: No credentials on developer machines
-- ✅ **Centralized Management**: IT controls service account lifecycle
-- ✅ **Principle of Least Privilege**: AI gets only necessary permissions
-- ✅ **Complete Audit Trail**: All AI context access logged
-- ✅ **Automated Rotation**: Service account secrets rotated transparently
+**Why this is secure:**
+- ✅ **No personal tokens** in your VS Code settings
+- ✅ **Dynamic token acquisition** - fresh tokens every time MCP servers start  
+- ✅ **Tokens expire automatically** - no permanent credentials
+- ✅ **Safe to sync settings** - no secrets exposed
+- ✅ **Centrally managed** by DevOps team
+- ✅ **Easy rotation** - no individual developer action needed
 
-## MCP Server Configuration
+## Step-by-Step Setup for VS Code Developers
 
-### 1. VS Code Settings Configuration
+### Step 1: Start the Authentication Server
 
-Create or update your VS Code settings to include MCP server configuration:
+```bash
+# Clone and run the auth server
+git clone https://github.com/Tristan578/mcp-service-account-auth-example.git
+cd mcp-service-account-auth-example
+dotnet run
+```
 
-**File**: `.vscode/settings.json`
+The server starts at `http://localhost:5000` and provides service account authentication for your MCP servers.
 
+### Step 2: Configure VS Code MCP Servers
+
+Open VS Code settings (`Ctrl+Shift+P` → "Preferences: Open Settings (JSON)") and configure your MCP servers:
+
+#### Example 1: GitHub Context for Copilot
 ```json
 {
   "mcp.servers": {
-    "werner-project-context": {
-      "command": "node",
-      "args": [
-        "/path/to/werner-mcp-server/dist/index.js"
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  }
+}
+```
+
+#### Example 2: Database Schema Context
+```json
+{
+  "mcp.servers": {
+    "database-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "${mcp_service_token:postgres-service-account}"
+      }
+    }
+  }
+}
+```
+
+#### Example 3: AWS Resources Context
+```json
+{
+  "mcp.servers": {
+    "aws-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-aws"],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "${mcp_service_token:aws-service-account-key}",
+        "AWS_SECRET_ACCESS_KEY": "${mcp_service_token:aws-service-account-secret}"
+      }
+    }
+  }
+}
+```
+
+#### Example 4: Complete Multi-Server Configuration
+```json
+{
+  "mcp.servers": {
+    "github-context": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    },
+    "database-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "${mcp_service_token:postgres-service-account}"
+      }
+    },
+    "aws-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-aws"],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "${mcp_service_token:aws-service-account-key}",
+        "AWS_SECRET_ACCESS_KEY": "${mcp_service_token:aws-service-account-secret}"
+      }
+    },
+    "slack-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${mcp_service_token:slack-service-account}"
+      }
+    }
+  }
+}
+```
+
+### Step 3: Test Your Configuration
+
+1. **Reload VS Code** (`Ctrl+Shift+P` → "Developer: Reload Window")
+2. **Open a project** - any repository or folder
+3. **Use GitHub Copilot** - it will automatically get context through the secure service account
+4. **No personal tokens needed!**
+
+## Available Service Accounts
+
+This demo includes pre-configured service accounts you can use:
+
+| Service Account ID | Use Case | What It Does |
+|-------------------|----------|--------------|
+| `github-service-account` | GitHub repositories | Gives Copilot access to your repo context |
+| `postgres-service-account` | Database schemas | Provides database structure context |
+| `aws-service-account-key` | AWS resources | AWS access key for cloud resources |
+| `aws-service-account-secret` | AWS resources | AWS secret key for cloud resources |
+| `slack-service-account` | Slack integration | Access to Slack channels and messages |
+
+## Troubleshooting
+
+### MCP Server Won't Start
+```bash
+# Check if the auth server is running
+curl http://localhost:5000/health
+
+# Expected response: {"status": "healthy"}
+```
+
+### Token Authentication Fails
+```bash
+# Test token acquisition manually
+curl -X POST http://localhost:5000/api/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "github-service-account",
+    "client_secret": "service-secret-123",
+    "grant_type": "client_credentials",
+    "scope": "repo read:org"
+  }'
+```
+
+### VS Code Settings Sync Issues
+- **Safe to sync**: Your settings only contain `${mcp_service_token:...}` placeholders
+- **No secrets exposed**: Real tokens are acquired dynamically by MCP servers
+- **Team sharing**: Everyone can use the same settings configuration
+
+## How the Token Replacement Works
+
+The `${mcp_service_token:service-account-id}` syntax is replaced by the MCP server at startup:
+
+1. **MCP server starts** with placeholder in environment variable
+2. **Server detects** the `${mcp_service_token:...}` pattern  
+3. **Calls auth endpoint** to get a real token for that service account
+4. **Replaces placeholder** with actual token
+5. **Uses real token** for API calls
+
+Your VS Code settings never contain real tokens - only placeholders!
       ],
       "env": {
         "OAUTH_TOKEN_ENDPOINT": "http://localhost:5000",

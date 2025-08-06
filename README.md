@@ -1,53 +1,179 @@
-# MCP Service Account Authentication System
+# MCP Service Account Authentication for VS Code Developers
 
-This ASP.NET Core Razor Pages application provides a **secure authentication foundation for Model Context Protocol (MCP) servers**, eliminating the need to store personal API keys or private credentials on developer machines or in repositories.
+**Stop putting personal tokens in your VS Code MCP server configs!** 
 
-## 🔐 Security-First Approach: Service Accounts vs Personal Credentials
+This ASP.NET Core application provides secure authentication for your Visual Studio Code MCP servers, so you can use GitHub Copilot and other AI tools **without storing personal API keys in your settings**.
 
-### The Problem with Personal Credentials
-- ❌ **Private keys stored locally** on developer machines
-- ❌ **Personal API tokens in repositories** (accidental commits)
-- ❌ **Individual credential management** across teams
-- ❌ **No centralized access control** or audit trails
-- ❌ **Credential rotation requires individual action** from each developer
+## The Problem: Personal Tokens in VS Code Settings
 
-### The Service Account Solution
-- ✅ **Centralized credential management** through enterprise identity providers
-- ✅ **No private keys on local machines** - tokens acquired dynamically
-- ✅ **Team-based access control** with scope-based permissions
-- ✅ **Automated credential rotation** without developer intervention
-- ✅ **Complete audit trails** for all authentication events
-- ✅ **Zero-trust architecture** for AI-assisted development
+If you're manually configuring MCP servers in VS Code, you've probably done this:
 
-## Overview
+```json
+// ❌ Your current VS Code settings.json probably looks like this:
+{
+  "mcp.servers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_your_personal_token_here"  // 🚨 DANGER!
+      }
+    }
+  }
+}
+```
 
-This application simulates an OAuth 2.0 authorization server that:
-- **Authenticates MCP servers using service account credentials** instead of personal tokens
-- **Issues dynamic, time-limited JWT tokens** for secure API access
-- **Provides comprehensive logging** for enterprise security monitoring
-- **Eliminates credential storage** on developer workstations
+**Problems with this approach:**
+- ❌ Your personal GitHub token is **stored in plain text** in VS Code settings
+- ❌ If you sync settings, your token gets **uploaded to Microsoft's cloud**
+- ❌ Anyone with access to your machine can **steal your credentials**
+- ❌ **No way to rotate tokens** without manually updating every developer's settings
 
-## Features
+## The Solution: Service Account Authentication
 
-### 🔐 Service Account Authentication for MCP Servers
-- **Eliminates personal credential storage** on developer machines
-- **Centralizes access control** through enterprise identity providers
-- **Provides dynamic token acquisition** for MCP server operations
-- **Enables team-based permission management** with granular scopes
+Instead of personal tokens, this system lets you configure MCP servers like this:
 
-### 🎯 Enterprise-Grade Security
-- **Zero local credential storage** - all tokens acquired at runtime
-- **Time-limited JWT tokens** with automatic expiration
-- **Scope-based access control** for fine-grained permissions
-- **Comprehensive audit logging** for compliance and monitoring
+```json
+// ✅ Secure VS Code settings with service account authentication:
+{
+  "mcp.servers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  }
+}
+```
 
-### 📝 MCP Server Integration
-- **VS Code MCP server authentication** without personal tokens
-- **GitHub Copilot integration** with enterprise security
-- **Real-time context access** through authenticated API calls
-- **Multi-environment support** (dev, staging, production)
+**Benefits for developers:**
+- ✅ **No personal tokens** in your VS Code settings
+- ✅ **Dynamic token acquisition** - fresh tokens every time
+- ✅ **Centrally managed** by your DevOps/Security team  
+- ✅ **Works with GitHub Copilot** and all MCP servers
+- ✅ **Safe to sync settings** - no credentials exposed
 
-## Pre-configured Service Accounts
+## How It Works for VS Code + GitHub Copilot
+
+This mock authentication server demonstrates how to:
+
+1. **Replace personal tokens** in your MCP server configurations
+2. **Authenticate MCP servers** using service accounts instead of personal credentials  
+3. **Generate dynamic JWT tokens** that work with GitHub API, AWS, databases, etc.
+4. **Integrate with VS Code** and GitHub Copilot securely
+
+### Sample VS Code MCP Server Configurations
+
+Here are real-world examples of how you'd configure common MCP servers securely:
+
+#### GitHub Context Server (for GitHub Copilot)
+```json
+{
+  "mcp.servers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  }
+}
+```
+
+#### Database Context Server  
+```json
+{
+  "mcp.servers": {
+    "database-context": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "${mcp_service_token:postgres-service-account}"
+      }
+    }
+  }
+}
+```
+
+#### AWS Resources Server
+```json
+{
+  "mcp.servers": {
+    "aws-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-aws"],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "${mcp_service_token:aws-service-account-key}",
+        "AWS_SECRET_ACCESS_KEY": "${mcp_service_token:aws-service-account-secret}"
+      }
+    }
+  }
+}
+```
+
+### Real-World Developer Workflow
+
+1. **Developer opens VS Code** with MCP servers configured
+2. **MCP servers start** and request tokens using service account credentials
+3. **Authentication server issues JWT tokens** with appropriate scopes
+4. **GitHub Copilot gets context** from secure API calls (no personal tokens involved)
+5. **Tokens expire automatically** - no manual rotation needed
+
+## Available Service Accounts (Pre-configured for Testing)
+
+This demo includes these service accounts that you can use in your VS Code MCP configurations:
+
+### GitHub Service Account
+- **Service Account ID**: `github-service-account`
+- **Use Case**: GitHub repository access for Copilot context
+- **Scopes**: `repo`, `read:org`, `read:user`
+- **Token Endpoint**: `http://localhost:5000/api/auth/token`
+
+### Database Service Account  
+- **Service Account ID**: `postgres-service-account`
+- **Use Case**: Database schema and query context
+- **Scopes**: `db:read`, `schema:read`
+- **Token Endpoint**: `http://localhost:5000/api/auth/token`
+
+### AWS Service Account
+- **Service Account ID**: `aws-service-account`
+- **Use Case**: AWS resource discovery and management
+- **Scopes**: `s3:read`, `ec2:describe`, `lambda:read`
+- **Token Endpoint**: `http://localhost:5000/api/auth/token`
+
+## Getting Started for VS Code Developers
+
+### 1. Run the Authentication Server
+```bash
+git clone https://github.com/Tristan578/mcp-service-account-auth-example.git
+cd mcp-service-account-auth-example
+dotnet run
+```
+
+### 2. Configure Your VS Code MCP Servers
+Open VS Code settings (`Ctrl+,`) and add MCP server configurations:
+
+```json
+{
+  "mcp.servers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  }
+}
+```
+
+### 3. Test with GitHub Copilot
+- Open a project in VS Code
+- GitHub Copilot will automatically get repository context through the secure service account
+- **No personal tokens required!**
 
 The application includes service accounts specifically designed for **MCP server authentication**:
 

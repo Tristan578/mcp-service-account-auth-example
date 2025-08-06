@@ -1,7 +1,7 @@
 @page
 @model mcp_service_account_auth_example.Pages.IndexModel
 @{
-    ViewData["Title"] = "MCP Service Account Authentication";
+    ViewData["Title"] = "MCP Service Account Auth for VS Code Developers";
 }
 
 <!DOCTYPE html>
@@ -12,31 +12,47 @@
     <title>@ViewData["Title"]</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
         }
         .container {
             background-color: white;
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #333;
+            color: #2d3748;
             text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
             margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .security-banner {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: bold;
         }
         .form-group {
             margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
@@ -123,10 +139,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔐 MCP Service Account Authentication</h1>
+        <h1>🔐 MCP Service Account Auth</h1>
+        <div class="subtitle">Stop putting personal tokens in your VS Code settings!</div>
+        
+        <div class="security-banner">
+            ⚠️ This demo shows how to configure MCP servers in VS Code WITHOUT personal credentials ⚠️
+        </div>
+        
         <p style="text-align: center; color: #666; margin-bottom: 30px;">
-            Secure authentication for Model Context Protocol servers<br>
-            <strong>Zero local credential storage • Service account-based • Enterprise security</strong>
+            <strong>For developers manually configuring MCP servers in Visual Studio Code</strong><br>
+            Secure GitHub Copilot context • No personal tokens • Dynamic authentication
         </p>
         
         <form method="post">
@@ -174,28 +196,36 @@
         }
 
         <div class="client-examples">
-            <h3>🔐 MCP Service Account Credentials</h3>
-            <p><strong>These service accounts eliminate personal credential storage on developer machines:</strong></p>
+            <h3>� VS Code MCP Server Examples</h3>
+            <p><strong>Use these service accounts in your VS Code settings instead of personal tokens:</strong></p>
             
             <div class="client-example">
-                <strong>🤖 MCP Read-Only Service Account</strong> (VS Code Context Servers)<br />
-                Client ID: <span class="client-id">0oa8f5j3ecb5w3dF35d7</span><br />
-                Client Secret: <span class="client-secret">a_very_secret_mock_value_for_alpha</span><br />
-                Scopes: <span class="scopes">mcp:projects:read, mcp:documentation:read</span>
+                <strong>🐙 GitHub Context Server</strong> (for GitHub Copilot)<br />
+                Client ID: <span class="client-id">github-service-account</span><br />
+                Client Secret: <span class="client-secret">service-secret-123</span><br />
+                VS Code config: <span class="scopes">"GITHUB_TOKEN": "${mcp_service_token:github-service-account}"</span>
             </div>
             
             <div class="client-example">
-                <strong>🚀 MCP Read/Write Service Account</strong> (GitHub Copilot Extensions)<br />
-                Client ID: <span class="client-id">0oa9g2k1idg9x7eE45d8</span><br />
-                Client Secret: <span class="client-secret">another_super_secret_for_beta_writer</span><br />
-                Scopes: <span class="scopes">mcp:projects:read, mcp:projects:write, mcp:teams:read</span>
+                <strong>🗄️ Database Context Server</strong> (for schema context)<br />
+                Client ID: <span class="client-id">postgres-service-account</span><br />
+                Client Secret: <span class="client-secret">db-service-secret-456</span><br />
+                VS Code config: <span class="scopes">"DATABASE_URL": "${mcp_service_token:postgres-service-account}"</span>
+            </div>
+            
+            <div class="client-example">
+                <strong>☁️ AWS Context Server</strong> (for cloud resources)<br />
+                Client ID: <span class="client-id">aws-service-account-key</span><br />
+                Client Secret: <span class="client-secret">aws-access-key-789</span><br />
+                VS Code config: <span class="scopes">"AWS_ACCESS_KEY_ID": "${mcp_service_token:aws-service-account-key}"</span>
             </div>
             
             <div style="margin-top: 20px; padding: 15px; background-color: #e8f5e8; border-radius: 4px; border-left: 4px solid #28a745;">
-                <strong>🔒 Security Benefits:</strong><br />
-                • No personal tokens stored on developer machines<br />
-                • Centralized credential management by IT security<br />
-                • Automated rotation without developer intervention<br />
+                <strong>✨ Benefits for VS Code Developers:</strong><br />
+                • ✅ No personal GitHub tokens in settings.json<br />
+                • ✅ Safe to sync VS Code settings to cloud<br />
+                • ✅ Works with GitHub Copilot automatically<br />
+                • ✅ Fresh tokens every time MCP servers start<br />
                 • Complete audit trail for AI context access<br />
                 • Scope-based permissions for AI assistants
             </div>
