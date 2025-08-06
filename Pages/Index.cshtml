@@ -1,0 +1,192 @@
+@page
+@model mcp_service_account_auth_example.Pages.IndexModel
+@{
+    ViewData["Title"] = "Mock Okta Token Endpoint";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        .token-info {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .client-examples {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        .client-examples h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .client-example {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .client-id {
+            font-family: monospace;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .client-secret {
+            font-family: monospace;
+            color: #6c757d;
+        }
+        .scopes {
+            font-style: italic;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mock Okta Token Endpoint</h1>
+        
+        <form method="post">
+            <div class="form-group">
+                <label for="ClientId">Client ID:</label>
+                <input type="text" id="ClientId" name="ClientId" value="@Model.ClientId" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="ClientSecret">Client Secret:</label>
+                <input type="password" id="ClientSecret" name="ClientSecret" value="@Model.ClientSecret" required />
+            </div>
+            
+            <button type="submit" class="submit-btn">Get Token</button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(Model.ResultMessage))
+        {
+            if (Model.IsSuccess)
+            {
+                <div class="result-section success">
+                    <h3>✅ Authentication Successful</h3>
+                    <p>@Model.ResultMessage</p>
+                    
+                    <label for="jwt-token">Generated JWT Token:</label>
+                    <textarea id="jwt-token" readonly>@Model.GeneratedToken</textarea>
+                    
+                    <div class="token-info">
+                        <strong>Token Information:</strong><br />
+                        • Issuer: https://dev-12345.okta.com/oauth2/default<br />
+                        • Subject: @Model.ClientId<br />
+                        • Audience: api://mcp-server<br />
+                        • Scopes: @string.Join(", ", Model.TokenScopes ?? Array.Empty<string>())<br />
+                        • Expires: @Model.TokenExpiration?.ToString("yyyy-MM-dd HH:mm:ss UTC")
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="result-section error">
+                    <h3>❌ Authentication Failed</h3>
+                    <p>@Model.ResultMessage</p>
+                </div>
+            }
+        }
+
+        <div class="client-examples">
+            <h3>Test Client Credentials</h3>
+            <p>Use these example client credentials to test the mock OAuth 2.0 endpoint:</p>
+            
+            <div class="client-example">
+                <strong>Alpha Client (Read-Only)</strong><br />
+                Client ID: <span class="client-id">0oa8f5j3ecb5w3dF35d7</span><br />
+                Client Secret: <span class="client-secret">a_very_secret_mock_value_for_alpha</span><br />
+                Scopes: <span class="scopes">mcp:projects:read</span>
+            </div>
+            
+            <div class="client-example">
+                <strong>Beta Client (Read/Write)</strong><br />
+                Client ID: <span class="client-id">0oa9g2k1idg9x7eE45d8</span><br />
+                Client Secret: <span class="client-secret">another_super_secret_for_beta_writer</span><br />
+                Scopes: <span class="scopes">mcp:projects:read, mcp:projects:write</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
