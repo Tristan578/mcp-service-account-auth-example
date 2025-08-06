@@ -114,13 +114,44 @@ Here are real-world examples of how you'd configure common MCP servers securely:
 }
 ```
 
-### Real-World Developer Workflow
+## Real-World Developer Workflow
 
 1. **Developer opens VS Code** with MCP servers configured
 2. **MCP servers start** and request tokens using service account credentials
 3. **Authentication server issues JWT tokens** with appropriate scopes
 4. **GitHub Copilot gets context** from secure API calls (no personal tokens involved)
 5. **Tokens expire automatically** - no manual rotation needed
+
+## Key Files in This Demo
+
+- **`Program.cs`** - OAuth 2.0 server implementation  
+- **`Pages/Index.cshtml`** - Web interface for testing token generation
+- **`README.md`** - This developer guide
+- **`MCP_CONFIG.md`** - Detailed VS Code configuration examples
+- **`PATTERN.md`** - Security architecture patterns
+
+## Try It Now
+
+```bash
+# 1. Clone and run the auth server
+git clone https://github.com/Tristan578/mcp-service-account-auth-example.git
+cd mcp-service-account-auth-example
+dotnet run
+
+# 2. Test token generation
+curl -X POST http://localhost:5000/api/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "github-service-account",
+    "client_secret": "service-secret-123", 
+    "grant_type": "client_credentials",
+    "scope": "repo read:org"
+  }'
+
+# 3. Configure VS Code and enjoy secure GitHub Copilot!
+```
+
+**Result**: GitHub Copilot gets repository context without any personal tokens in your VS Code settings!
 
 ## Available Service Accounts (Pre-configured for Testing)
 
