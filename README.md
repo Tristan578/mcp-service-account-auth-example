@@ -1,9 +1,7 @@
 # MCP Service Account Authentication for AI-Assisted Development Environments
 
 **Author:** Tristan Nolan  
-**Organization:** Enterprise Example  
 **Repository:** [mcp-service-account-auth-example](https://github.com/Tristan578/mcp-service-account-auth-example)  
-**Documentation Hub:** Internal Enterprise Documentation  
 
 ---
 
@@ -296,8 +294,8 @@ The `${mcp_service_token:service-account-name}` pattern triggers a **token orche
 - **[IAM Setup Guide](./Pages/ServiceAccountSetup.cshtml)** - Identity provider configuration instructions
 - **[Live Demo Application](http://localhost:5000)** - Interactive configuration testing
 
-### Enterprise Documentation Hub
-- **Internal MCP Documentation** - Comprehensive enterprise implementation guide (see your organization's documentation portal)
+### Documentation and Resources
+- **Project Documentation** - Comprehensive implementation guide and best practices
 
 ## 🔒 Security Architecture and Design Decisions
 
@@ -473,8 +471,8 @@ The `${mcp_service_token:service-account-name}` pattern triggers a **token orche
 - **Onboarding Efficiency**: New team members can self-serve secure AI assistant setup
 - **Troubleshooting Speed**: Comprehensive guides reduce time-to-resolution for access issues
 - **Architecture Evolution**: Documentation enables informed decisions about system improvements
-- **IAM Configuration Guide** - Identity provider service account setup (see your organization's documentation)
-- **Security Architecture** - Zero-credential design patterns (see your organization's documentation)
+- **IAM Configuration Guide** - Identity provider service account setup documentation
+- **Security Architecture** - Zero-credential design patterns and best practices
 
 ### External Provider Documentation
 - **[Model Context Protocol Specification](https://modelcontextprotocol.io/docs/concepts/architecture)** - Official MCP architecture
