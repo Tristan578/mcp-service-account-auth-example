@@ -279,7 +279,7 @@
   "mcp.servers": {
     "github-readonly": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "args": ["-y", "@@modelcontextprotocol/server-github"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-readonly-account}",
         "GITHUB_PERMISSIONS": "repo:read,metadata:read"
@@ -287,7 +287,7 @@
     },
     "azure-readonly": {
       "command": "npx", 
-      "args": ["-y", "@modelcontextprotocol/server-azure"],
+      "args": ["-y", "@@modelcontextprotocol/server-azure"],
       "env": {
         "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-readonly-account}",
         "AZURE_SCOPES": "https://dev.azure.com/user_impersonation"
@@ -352,7 +352,7 @@
   "mcpServers": {
     "enterprise-readonly": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-enterprise"],
+      "args": ["-y", "@@modelcontextprotocol/server-enterprise"],
       "env": {
         "GITHUB_TOKEN": "${mcp_service_token:github-readonly-account}",
         "ATLASSIAN_API_TOKEN": "${mcp_service_token:confluence-readonly-account}",
@@ -420,7 +420,7 @@
   "mcpServers": {
     "dev-environment": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-enterprise"],
+      "args": ["-y", "@@modelcontextprotocol/server-enterprise"],
       "env": {
         "ENVIRONMENT": "development",
         "GITHUB_TOKEN": "${mcp_service_token:github-dev-account}",
@@ -432,7 +432,7 @@
     },
     "prod-environment": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-enterprise"],
+      "args": ["-y", "@@modelcontextprotocol/server-enterprise"],
       "env": {
         "ENVIRONMENT": "production",
         "GITHUB_TOKEN": "${mcp_service_token:github-readonly-account}",
@@ -498,7 +498,7 @@
     {
       "name": "enterprise-azure-devops",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-azure-devops"],
+      "args": ["-y", "@@modelcontextprotocol/server-azure-devops"],
       "env": {
         "AZURE_DEVOPS_TOKEN": "${mcp_service_token:azure-devops-contributor}",
         "ROLE_BASED_ACCESS": "ENABLED",
@@ -563,7 +563,7 @@
   "mcpServers": {
     "claude-code-readonly": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-web"],
+      "args": ["-y", "@@modelcontextprotocol/server-web"],
       "env": {
         "GITHUB_TOKEN": "${mcp_service_token:github-public-readonly}",
         "CONFLUENCE_TOKEN": "${mcp_service_token:confluence-public-readonly}",
