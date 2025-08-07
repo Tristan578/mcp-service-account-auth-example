@@ -445,9 +445,9 @@ mcp-auth token --scope "mcp:projects:read"
   "mcp.servers": {
     "project-context": {
       "env": {
-        "OAUTH_TOKEN_ENDPOINT": "https://login.werner.com/oauth2/token",
+        "OAUTH_TOKEN_ENDPOINT": "https://login.company.com/oauth2/token",
         "MCP_SERVICE_ACCOUNT_ID": "mcp-readonly-service",
-        "API_BASE_URL": "https://api.werner.com/v1"
+        "API_BASE_URL": "https://api.company.com/v1"
         // NO credentials stored locally!
       }
     }
@@ -458,7 +458,7 @@ mcp-auth token --scope "mcp:projects:read"
 ### Service Account-Based MCP Server Implementation
 
 ```typescript
-class SecureWernerMCPServer {
+class SecureEnterpriseMCPServer {
   private accessToken: string | null = null;
   private tokenExpires: Date | null = null;
 

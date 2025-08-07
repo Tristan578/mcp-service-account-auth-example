@@ -1,9 +1,9 @@
 # MCP Service Account Authentication for AI-Assisted Development Environments
 
 **Author:** Tristan Nolan  
-**Organization:** Werner Enterprises  
+**Organization:** Enterprise Example  
 **Repository:** [mcp-service-account-auth-example](https://github.com/Tristan578/mcp-service-account-auth-example)  
-**Documentation Hub:** [Confluence DevOps Space](https://wernerent.atlassian.net/wiki/spaces/DEV/pages/6687490055/)  
+**Documentation Hub:** Internal Enterprise Documentation  
 
 ---
 
@@ -296,8 +296,8 @@ The `${mcp_service_token:service-account-name}` pattern triggers a **token orche
 - **[IAM Setup Guide](./Pages/ServiceAccountSetup.cshtml)** - Identity provider configuration instructions
 - **[Live Demo Application](http://localhost:5000)** - Interactive configuration testing
 
-### Confluence Documentation Hub
-- **[Main MCP Documentation](https://wernerent.atlassian.net/wiki/spaces/DEV/pages/6687490055/)** - Comprehensive enterprise implementation guide
+### Enterprise Documentation Hub
+- **Internal MCP Documentation** - Comprehensive enterprise implementation guide (see your organization's documentation portal)
 
 ## 🔒 Security Architecture and Design Decisions
 
@@ -473,8 +473,8 @@ The `${mcp_service_token:service-account-name}` pattern triggers a **token orche
 - **Onboarding Efficiency**: New team members can self-serve secure AI assistant setup
 - **Troubleshooting Speed**: Comprehensive guides reduce time-to-resolution for access issues
 - **Architecture Evolution**: Documentation enables informed decisions about system improvements
-- **[IAM Configuration Guide](https://wernerent.atlassian.net/wiki/spaces/DEV/pages/6686834725/)** - Okta service account setup
-- **[Security Architecture](https://wernerent.atlassian.net/wiki/spaces/NAV/pages/6684672066/)** - Zero-credential design patterns
+- **IAM Configuration Guide** - Identity provider service account setup (see your organization's documentation)
+- **Security Architecture** - Zero-credential design patterns (see your organization's documentation)
 
 ### External Provider Documentation
 - **[Model Context Protocol Specification](https://modelcontextprotocol.io/docs/concepts/architecture)** - Official MCP architecture
@@ -1012,7 +1012,7 @@ This application serves as the **secure authentication foundation** for Model Co
 - 🔗 **VS Code MCP Server Setup**: Complete configuration for secure AI-assisted development
 - 🤖 **GitHub Copilot Integration**: Enhanced context without credential exposure
 - 🔐 **OAuth 2.0 Authentication Flow**: Service account-based security architecture
-- 📊 **Real-time Project Context**: Secure access to Werner APIs, documentation, and team data
+- 📊 **Real-time Project Context**: Secure access to enterprise APIs, documentation, and team data
 - 🛠️ **Custom Tools and Resources**: Authenticated project management without personal tokens
 
 ## License

@@ -249,7 +249,7 @@ Your VS Code settings never contain real tokens - only placeholders!
         "OAUTH_TOKEN_ENDPOINT": "http://localhost:5000",
         "OAUTH_CLIENT_ID": "0oa8f5j3ecb5w3dF35d7",
         "OAUTH_SCOPES": "mcp:projects:read mcp:projects:write",
-        "PROJECT_API_BASE": "https://api.werner.com/v1",
+        "PROJECT_API_BASE": "https://api.company.com/v1",
         "LOG_LEVEL": "info"
       },
       "capabilities": {
@@ -258,16 +258,16 @@ Your VS Code settings never contain real tokens - only placeholders!
         "prompts": true
       }
     },
-    "werner-documentation": {
+    "company-documentation": {
       "command": "node",
       "args": [
-        "/path/to/werner-docs-mcp/dist/index.js"
+        "/path/to/company-docs-mcp/dist/index.js"
       ],
       "env": {
         "OAUTH_TOKEN_ENDPOINT": "http://localhost:5000",
         "OAUTH_CLIENT_ID": "0oa9g2k1idg9x7eE45d8",
         "OAUTH_SCOPES": "mcp:documentation:read",
-        "CONFLUENCE_BASE_URL": "https://wernerent.atlassian.net",
+        "CONFLUENCE_BASE_URL": "https://company.atlassian.net",
         "CONFLUENCE_SPACE_KEY": "NAV"
       },
       "capabilities": {
@@ -291,7 +291,7 @@ Your VS Code settings never contain real tokens - only placeholders!
 version: "1.0"
 
 extensions:
-  - name: "werner-project-context"
+  - name: "company-project-context"
     type: "mcp-server"
     config:
       oauth:
@@ -302,13 +302,13 @@ extensions:
           - "mcp:projects:write"
       endpoints:
         - name: "projects"
-          url: "https://api.werner.com/v1/projects"
+          url: "https://api.company.com/v1/projects"
           methods: ["GET", "POST", "PUT"]
         - name: "requirements" 
-          url: "https://api.werner.com/v1/requirements"
+          url: "https://api.company.com/v1/requirements"
           methods: ["GET"]
       
-  - name: "werner-documentation"
+  - name: "company-documentation"
     type: "mcp-server"
     config:
       oauth:
@@ -318,13 +318,13 @@ extensions:
           - "mcp:documentation:read"
       endpoints:
         - name: "confluence"
-          url: "https://wernerent.atlassian.net/wiki/rest/api"
+          url: "https://company.atlassian.net/wiki/rest/api"
           methods: ["GET"]
 ```
 
 ### 3. MCP Server Implementation Example
 
-**File**: `mcp-servers/werner-project-context/src/index.ts`
+**File**: `mcp-servers/company-project-context/src/index.ts`
 
 ```typescript
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -346,7 +346,7 @@ interface OAuthTokenResponse {
   scope: string;
 }
 
-class WernerProjectContextServer {
+class CompanyProjectContextServer {
   private server: Server;
   private accessToken: string | null = null;
   private tokenExpires: Date | null = null;
@@ -354,7 +354,7 @@ class WernerProjectContextServer {
   constructor() {
     this.server = new Server(
       {
-        name: 'werner-project-context',
+        name: 'company-project-context',
         version: '1.0.0',
       },
       {
@@ -424,19 +424,19 @@ class WernerProjectContextServer {
       return {
         resources: [
           {
-            uri: 'werner://projects',
+            uri: 'company://projects',
             name: 'Active Projects',
-            description: 'List of all active Werner projects',
+            description: 'List of all active Company projects',
             mimeType: 'application/json',
           },
           {
-            uri: 'werner://requirements/current',
+            uri: 'company://requirements/current',
             name: 'Current Requirements',
             description: 'Current project requirements and specifications',
             mimeType: 'application/json',
           },
           {
-            uri: 'werner://team/members',
+            uri: 'company://team/members',
             name: 'Team Members',
             description: 'Active team members and their roles',
             mimeType: 'application/json',
@@ -451,7 +451,7 @@ class WernerProjectContextServer {
 
       try {
         switch (uri) {
-          case 'werner://projects': {
+          case 'company://projects': {
             const response = await this.makeAuthenticatedRequest(
               `${process.env.PROJECT_API_BASE}/projects`
             );
@@ -466,7 +466,7 @@ class WernerProjectContextServer {
             };
           }
 
-          case 'werner://requirements/current': {
+          case 'company://requirements/current': {
             const response = await this.makeAuthenticatedRequest(
               `${process.env.PROJECT_API_BASE}/requirements/current`
             );
@@ -481,7 +481,7 @@ class WernerProjectContextServer {
             };
           }
 
-          case 'werner://team/members': {
+          case 'company://team/members': {
             const response = await this.makeAuthenticatedRequest(
               `${process.env.PROJECT_API_BASE}/team/members`
             );
@@ -513,7 +513,7 @@ class WernerProjectContextServer {
         tools: [
           {
             name: 'create_project',
-            description: 'Create a new Werner project',
+            description: 'Create a new Company project',
             inputSchema: {
               type: 'object',
               properties: {
@@ -612,24 +612,24 @@ class WernerProjectContextServer {
   async run() {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log(`[${new Date().toISOString()}] Werner Project Context MCP Server running`);
+    console.log(`[${new Date().toISOString()}] Company Project Context MCP Server running`);
   }
 }
 
 // Start the server
-const server = new WernerProjectContextServer();
+const server = new CompanyProjectContextServer();
 server.run().catch(console.error);
 ```
 
 ### 4. Package Configuration
 
-**File**: `mcp-servers/werner-project-context/package.json`
+**File**: `mcp-servers/company-project-context/package.json`
 
 ```json
 {
-  "name": "werner-project-context-mcp",
+  "name": "company-project-context-mcp",
   "version": "1.0.0",
-  "description": "MCP server for Werner project context and API integration",
+  "description": "MCP server for Company project context and API integration",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -646,8 +646,8 @@ server.run().catch(console.error);
     "typescript": "^5.0.0",
     "nodemon": "^3.0.0"
   },
-  "keywords": ["mcp", "werner", "oauth", "context", "copilot"],
-  "author": "Tristan Nolan <tnolan@werner.com>",
+  "keywords": ["mcp", "company", "oauth", "context", "copilot"],
+  "author": "Tristan Nolan <tnolan@company.com>",
   "license": "MIT"
 }
 ```
@@ -666,8 +666,8 @@ OAUTH_CLIENT_SECRET=a_very_secret_mock_value_for_alpha
 OAUTH_SCOPES=mcp:projects:read mcp:projects:write
 
 # API Configuration
-PROJECT_API_BASE=https://dev-api.werner.com/v1
-CONFLUENCE_BASE_URL=https://wernerent-dev.atlassian.net
+PROJECT_API_BASE=https://dev-api.company.com/v1
+CONFLUENCE_BASE_URL=https://company-dev.atlassian.net
 CONFLUENCE_SPACE_KEY=DEV
 
 # Logging
@@ -681,14 +681,14 @@ MCP_DEBUG=true
 
 ```bash
 # OAuth Configuration (use Azure Key Vault or similar for secrets)
-OAUTH_TOKEN_ENDPOINT=https://login.werner.com/oauth2/token
+OAUTH_TOKEN_ENDPOINT=https://login.company.com/oauth2/token
 OAUTH_CLIENT_ID=0oa8f5j3ecb5w3dF35d7
 OAUTH_CLIENT_SECRET=${KEY_VAULT_SECRET:oauth-client-secret}
 OAUTH_SCOPES=mcp:projects:read mcp:projects:write
 
 # API Configuration
-PROJECT_API_BASE=https://api.werner.com/v1
-CONFLUENCE_BASE_URL=https://wernerent.atlassian.net
+PROJECT_API_BASE=https://api.company.com/v1
+CONFLUENCE_BASE_URL=https://company.atlassian.net
 CONFLUENCE_SPACE_KEY=NAV
 
 # Logging
@@ -700,14 +700,14 @@ MCP_DEBUG=false
 
 ### Custom Prompts for Enhanced Context
 
-**File**: `.copilot/prompts/werner-context.md`
+**File**: `.copilot/prompts/company-context.md`
 
 ````markdown
-# Werner Enterprise Development Context
+# Company Enterprise Development Context
 
 ## Project Standards
 - Use .NET 8.0 for new backend services
-- Follow Werner coding standards and patterns
+- Follow Company coding standards and patterns
 - Implement OAuth 2.0 for service-to-service authentication
 - Use MCP servers for AI context integration
 
@@ -719,13 +719,13 @@ When implementing authentication:
 4. Follow the patterns established in mcp-service-account-auth-example
 
 ## Code Generation Guidelines
-- Generate code that integrates with existing Werner APIs
+- Generate code that integrates with existing Company APIs
 - Include proper error handling and logging
 - Follow established naming conventions
 - Add appropriate unit tests and documentation
 
 ## Resources Available
-- Werner Project API: Access through MCP for current project data
+- Company Project API: Access through MCP for current project data
 - Team Directory: Real-time team member information
 - Requirements Database: Current project requirements and specs
 - Confluence Documentation: Enterprise knowledge base
@@ -738,14 +738,14 @@ When implementing authentication:
 When working in VS Code with the MCP server configured, GitHub Copilot will have access to:
 
 ```typescript
-// Copilot can now suggest code based on actual Werner project data
+// Copilot can now suggest code based on actual Company project data
 async function getCurrentProjectRequirements() {
   // Copilot knows about actual projects and can suggest relevant code
-  const projects = await mcpClient.getResource('werner://projects');
+  const projects = await mcpClient.getResource('company://projects');
   const currentProject = projects.find(p => p.status === 'active');
   
   if (currentProject) {
-    return await mcpClient.getResource(`werner://requirements/${currentProject.id}`);
+    return await mcpClient.getResource(`company://requirements/${currentProject.id}`);
   }
 }
 ```
@@ -753,7 +753,7 @@ async function getCurrentProjectRequirements() {
 ### 2. Automated API Integration
 
 ```typescript
-// Copilot can generate API calls based on real Werner API schemas
+// Copilot can generate API calls based on real Company API schemas
 async function createNewFeature(featureData: FeatureRequest) {
   // OAuth token handling is suggested based on MCP server patterns
   const authToken = await oauthService.getToken([
@@ -772,8 +772,8 @@ async function createNewFeature(featureData: FeatureRequest) {
 ```csharp
 // Copilot can reference actual Confluence documentation
 /// <summary>
-/// Implements the Werner Project Creation pattern as documented in
-/// https://wernerent.atlassian.net/wiki/spaces/NAV/pages/...
+/// Implements the Company Project Creation pattern as documented in
+/// https://company.atlassian.net/wiki/spaces/NAV/pages/...
 /// 
 /// This follows the OAuth 2.0 service account authentication model
 /// established in the mcp-service-account-auth-example.
@@ -784,7 +784,7 @@ public class ProjectService
     
     public async Task<Project> CreateProjectAsync(CreateProjectRequest request)
     {
-        // Implementation follows Werner standards...
+        // Implementation follows Company standards...
     }
 }
 ```
@@ -798,7 +798,7 @@ public class ProjectService
 ```powershell
 # Health check script for MCP servers
 param(
-    [string]$ServerName = "werner-project-context"
+    [string]$ServerName = "company-project-context"
 )
 
 Write-Host "Checking MCP Server: $ServerName" -ForegroundColor Green
@@ -924,7 +924,7 @@ $clientUsage | Select-Object -First 5 | ForEach-Object {
 
 ### Issue: GitHub Copilot Not Using Context
 
-**Symptoms**: Copilot suggestions don't reflect Werner-specific data
+**Symptoms**: Copilot suggestions don't reflect Company-specific data
 
 **Solutions**:
 1. Verify MCP servers are listed as "connected" in VS Code
@@ -958,4 +958,4 @@ $clientUsage | Select-Object -First 5 | ForEach-Object {
    - Iterate on MCP server capabilities
    - Maintain and update documentation
 
-By implementing this MCP server configuration, development teams can leverage GitHub Copilot with rich, authenticated access to Werner's project data, APIs, and documentation, significantly enhancing the AI-assisted development experience while maintaining enterprise security standards.
+By implementing this MCP server configuration, development teams can leverage GitHub Copilot with rich, authenticated access to Company's project data, APIs, and documentation, significantly enhancing the AI-assisted development experience while maintaining enterprise security standards.
