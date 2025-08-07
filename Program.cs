@@ -73,6 +73,6 @@ catch (Exception ex)
 var startupLogger = app.Services.GetRequiredService<ILogger<Program>>();
 startupLogger.LogInformation("Mock Okta Token Endpoint started successfully");
 startupLogger.LogInformation("Authentication logs will be written to: {LogFilePath}", logFilePath);
-startupLogger.LogInformation("Available test clients: 0oa8f5j3ecb5w3dF35d7, 0oa9g2k1idg9x7eE45d8");
+startupLogger.LogInformation("Available service accounts: github-service-account, sqlserver-service-account, azure-service-account, mulesoft-service-account, sonarqube-service-account, playwright-service-account");
 
 app.Run();

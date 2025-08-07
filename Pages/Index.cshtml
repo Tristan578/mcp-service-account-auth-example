@@ -135,6 +135,92 @@
             font-style: italic;
             color: #28a745;
         }
+        
+        .client-example {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .client-example:hover {
+            background-color: #f8f9fa;
+            border-left-color: #17a2b8;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .selected-service {
+            background-color: #e3f2fd !important;
+            border-left-color: #2196f3 !important;
+            border-left-width: 6px !important;
+        }
+        
+        .config-files {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .config-file {
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .config-header {
+            padding: 12px 16px;
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .config-header:hover {
+            background-color: #5a6268;
+        }
+        
+        .config-content {
+            padding: 16px;
+            display: none;
+        }
+        
+        .config-content.show {
+            display: block;
+        }
+        
+        .json-code {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .copy-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .copy-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -152,14 +238,15 @@
         </p>
         
         <form method="post">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label for="ClientId">Client ID:</label>
-                <input type="text" id="ClientId" name="ClientId" value="@Model.ClientId" required />
+                <input type="text" id="ClientId" name="ClientId" value="@(string.IsNullOrEmpty(Model.ClientId) ? "github-service-account" : Model.ClientId)" required placeholder="Try: github-service-account" />
             </div>
             
             <div class="form-group">
                 <label for="ClientSecret">Client Secret:</label>
-                <input type="password" id="ClientSecret" name="ClientSecret" value="@Model.ClientSecret" required />
+                <input type="password" id="ClientSecret" name="ClientSecret" value="@(string.IsNullOrEmpty(Model.ClientSecret) ? "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" : Model.ClientSecret)" required placeholder="Try: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
             </div>
             
             <button type="submit" class="submit-btn">Get Token</button>
@@ -199,37 +286,703 @@
             <h3>� VS Code MCP Server Examples</h3>
             <p><strong>Use these service accounts in your VS Code settings instead of personal tokens:</strong></p>
             
-            <div class="client-example">
-                <strong>🐙 GitHub Context Server</strong> (for GitHub Copilot)<br />
+            <div class="client-example" data-client-id="github-service-account" data-client-secret="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" data-service-type="github">
+                <strong>🐙 GitHub Context Server</strong> (Personal Access Token authentication)<br />
                 Client ID: <span class="client-id">github-service-account</span><br />
-                Client Secret: <span class="client-secret">service-secret-123</span><br />
-                VS Code config: <span class="scopes">"GITHUB_TOKEN": "${mcp_service_token:github-service-account}"</span>
+                Client Secret: <span class="client-secret">ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span><br />
+                VS Code config: <span class="scopes">"GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"</span><br />
+                <small>✅ PAT stored in service account, not your VS Code settings</small>
+            </div>
+            
+            <div class="client-example" data-client-id="sqlserver-service-account" data-client-secret="Server=server.database.windows.net;Database=MyDb;Authentication=Active Directory Service Principal;User Id=12345678-1234-1234-1234-123456789012;Password=MySecretPassword123!" data-service-type="sqlserver">
+                <strong>🏢 Microsoft SQL Server Context Server</strong> (Azure AD Service Principal)<br />
+                Client ID: <span class="client-id">sqlserver-service-account</span><br />
+                Client Secret: <span class="client-secret">Server=server.database.windows.net;Database=MyDb;Authentication=Active Directory Service Principal;User Id=12345678-1234-1234-1234-123456789012;Password=MySecretPassword123!</span><br />
+                VS Code config: <span class="scopes">"CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"</span><br />
+                <small>✅ Service Principal auth with Entra ID, no SQL auth passwords</small>
+            </div>
+            
+            <div class="client-example" data-client-id="azure-service-account" data-client-secret="12345678-1234-1234-1234-123456789012~abcdefghijklmnopqrstuvwxyz" data-service-type="azure">
+                <strong>☁️ Azure Context Server</strong> (Service Principal with Client Secret)<br />
+                Client ID: <span class="client-id">azure-service-account</span><br />
+                Client Secret: <span class="client-secret">12345678-1234-1234-1234-123456789012~abcdefghijklmnopqrstuvwxyz</span><br />
+                VS Code config: <span class="scopes">"AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}"</span><br />
+                <small>✅ Azure Service Principal for Azure Resource Manager API access</small>
             </div>
             
             <div class="client-example">
-                <strong>🗄️ Database Context Server</strong> (for schema context)<br />
-                Client ID: <span class="client-id">postgres-service-account</span><br />
-                Client Secret: <span class="client-secret">db-service-secret-456</span><br />
-                VS Code config: <span class="scopes">"DATABASE_URL": "${mcp_service_token:postgres-service-account}"</span>
+                <strong>� MuleSoft Context Server</strong> (Connected App Token)<br />
+                Client ID: <span class="client-id">mulesoft-service-account</span><br />
+                Client Secret: <span class="client-secret">mule_bearer_token_abc123def456ghi789jkl012mno345</span><br />
+                VS Code config: <span class="scopes">"MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}"</span><br />
+                <small>✅ Anypoint Platform Connected App for API Management access</small>
             </div>
             
-            <div class="client-example">
-                <strong>☁️ AWS Context Server</strong> (for cloud resources)<br />
-                Client ID: <span class="client-id">aws-service-account-key</span><br />
-                Client Secret: <span class="client-secret">aws-access-key-789</span><br />
-                VS Code config: <span class="scopes">"AWS_ACCESS_KEY_ID": "${mcp_service_token:aws-service-account-key}"</span>
+            <div class="client-example" data-client-id="sonarqube-service-account" data-client-secret="sqp_1234567890abcdef1234567890abcdef12345678" data-service-type="sonarqube">
+                <strong>📊 SonarQube Context Server</strong> (Project Analysis Token)<br />
+                Client ID: <span class="client-id">sonarqube-service-account</span><br />
+                Client Secret: <span class="client-secret">sqp_1234567890abcdef1234567890abcdef12345678</span><br />
+                VS Code config: <span class="scopes">"SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}"</span><br />
+                <small>✅ Project analysis token for code quality integration</small>
+            </div>
+            
+            <div class="client-example" data-client-id="playwright-service-account" data-client-secret="pw_api_key_abcd1234efgh5678ijkl9012mnop3456qrst7890" data-service-type="playwright">
+                <strong>🎭 Playwright Context Server</strong> (API Key)<br />
+                Client ID: <span class="client-id">playwright-service-account</span><br />
+                Client Secret: <span class="client-secret">pw_api_key_abcd1234efgh5678ijkl9012mnop3456qrst7890</span><br />
+                VS Code config: <span class="scopes">"PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}"</span><br />
+                <small>✅ Playwright Test API for browser automation context</small>
             </div>
             
             <div style="margin-top: 20px; padding: 15px; background-color: #e8f5e8; border-radius: 4px; border-left: 4px solid #28a745;">
-                <strong>✨ Benefits for VS Code Developers:</strong><br />
-                • ✅ No personal GitHub tokens in settings.json<br />
-                • ✅ Safe to sync VS Code settings to cloud<br />
-                • ✅ Works with GitHub Copilot automatically<br />
+                <strong>✨ Benefits for AI-Assisted Development Environments:</strong><br />
+                • ✅ No personal GitHub PATs in any IDE configuration files<br />
+                • ✅ No connection strings with passwords in settings<br />
+                • ✅ Safe to sync development environment settings to cloud/GitHub<br />
+                • ✅ Works with GitHub Copilot, Claude, and other AI assistants automatically<br />
                 • ✅ Fresh tokens every time MCP servers start<br />
-                • Complete audit trail for AI context access<br />
-                • Scope-based permissions for AI assistants
+                • ✅ Complete audit trail for AI context access<br />
+                • ✅ Scope-based permissions for AI assistants<br />
+                • ✅ Enterprise-grade authentication with real-world patterns<br />
+                • ✅ Supports VS Code, Visual Studio, Claude Desktop, Claude Code, and Windsurf<br />
+                • ✅ Universal service account pattern across all development environments
+            </div>
+        </div>
+        
+        <div class="config-files" id="config-files">
+            <h3>📁 Configuration Files for Different Environments</h3>
+            <p><strong>Click on any service above to auto-populate these configurations!</strong></p>
+            
+            <div class="config-file">
+                <div class="config-header" onclick="toggleConfig('vscode')">
+                    🔧 VS Code Settings (settings.json)
+                    <span>▼</span>
+                </div>
+                <div class="config-content" id="vscode-config">
+                    <div class="json-code" id="vscode-json">Loading...</div>
+                    <button class="copy-btn" onclick="copyToClipboard('vscode-json')">📋 Copy Configuration</button>
+                </div>
+            </div>
+            
+            <div class="config-file">
+                <div class="config-header" onclick="toggleConfig('claude')">
+                    🤖 Claude Desktop Configuration (claude_desktop_config.json)
+                    <span>▼</span>
+                </div>
+                <div class="config-content" id="claude-config">
+                    <div class="json-code" id="claude-json">Loading...</div>
+                    <button class="copy-btn" onclick="copyToClipboard('claude-json')">📋 Copy Configuration</button>
+                </div>
+            </div>
+            
+            <div class="config-file">
+                <div class="config-header" onclick="toggleConfig('windsurf')">
+                    🌊 Windsurf Configuration (windsurf-mcp.json)
+                    <span>▼</span>
+                </div>
+                <div class="config-content" id="windsurf-config">
+                    <div class="json-code" id="windsurf-json">Loading...</div>
+                    <button class="copy-btn" onclick="copyToClipboard('windsurf-json')">📋 Copy Configuration</button>
+                </div>
+            </div>
+            
+            <div class="config-file">
+                <div class="config-header" onclick="toggleConfig('visualstudio')">
+                    🏢 Visual Studio Configuration (mcp-servers.json)
+                    <span>▼</span>
+                </div>
+                <div class="config-content" id="visualstudio-config">
+                    <div class="json-code" id="visualstudio-json">Loading...</div>
+                    <button class="copy-btn" onclick="copyToClipboard('visualstudio-json')">📋 Copy Configuration</button>
+                </div>
+            </div>
+            
+            <div class="config-file">
+                <div class="config-header" onclick="toggleConfig('claudecode')">
+                    💻 Claude Code Configuration (.claude/settings.json)
+                    <span>▼</span>
+                </div>
+                <div class="config-content" id="claudecode-config">
+                    <div class="json-code" id="claudecode-json">Loading...</div>
+                    <button class="copy-btn" onclick="copyToClipboard('claudecode-json')">📋 Copy Configuration</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Configuration templates for each environment
+        const configTemplates = {
+            vscode: {
+                default: {
+                    "mcp.servers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    },
+                    "github.copilot.advanced": {
+                        "debug": false,
+                        "inlineSuggestEnable": true
+                    },
+                    "github.copilot.enable": {
+                        "*": true,
+                        "yaml": true,
+                        "plaintext": false
+                    }
+                },
+                github: {
+                    "mcp.servers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    },
+                    "github.copilot.advanced": {
+                        "debug": false,
+                        "inlineSuggestEnable": true
+                    }
+                },
+                sqlserver: {
+                    "mcp.servers": {
+                        "sqlserver-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sqlserver"],
+                            "env": {
+                                "CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"
+                            }
+                        }
+                    }
+                },
+                azure: {
+                    "mcp.servers": {
+                        "azure-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-azure"],
+                            "env": {
+                                "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}",
+                                "AZURE_CLIENT_ID": "12345678-1234-1234-1234-123456789012",
+                                "AZURE_TENANT_ID": "87654321-4321-4321-4321-210987654321"
+                            }
+                        }
+                    }
+                },
+                mulesoft: {
+                    "mcp.servers": {
+                        "mulesoft-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-mulesoft"],
+                            "env": {
+                                "MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}",
+                                "ANYPOINT_BASE_URL": "https://anypoint.mulesoft.com"
+                            }
+                        }
+                    }
+                },
+                sonarqube: {
+                    "mcp.servers": {
+                        "sonarqube-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sonarqube"],
+                            "env": {
+                                "SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}",
+                                "SONAR_HOST_URL": "https://sonarqube.company.com"
+                            }
+                        }
+                    }
+                },
+                playwright: {
+                    "mcp.servers": {
+                        "playwright-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-playwright"],
+                            "env": {
+                                "PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}",
+                                "PLAYWRIGHT_BASE_URL": "https://api.playwright.dev"
+                            }
+                        }
+                    }
+                }
+            },
+            claude: {
+                default: {
+                    "mcpServers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    }
+                },
+                github: {
+                    "mcpServers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    }
+                },
+                sqlserver: {
+                    "mcpServers": {
+                        "sqlserver-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sqlserver"],
+                            "env": {
+                                "CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"
+                            }
+                        }
+                    }
+                },
+                azure: {
+                    "mcpServers": {
+                        "azure-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-azure"],
+                            "env": {
+                                "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}",
+                                "AZURE_CLIENT_ID": "12345678-1234-1234-1234-123456789012",
+                                "AZURE_TENANT_ID": "87654321-4321-4321-4321-210987654321"
+                            }
+                        }
+                    }
+                },
+                mulesoft: {
+                    "mcpServers": {
+                        "mulesoft-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-mulesoft"],
+                            "env": {
+                                "MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}",
+                                "ANYPOINT_BASE_URL": "https://anypoint.mulesoft.com"
+                            }
+                        }
+                    }
+                },
+                sonarqube: {
+                    "mcpServers": {
+                        "sonarqube-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sonarqube"],
+                            "env": {
+                                "SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}",
+                                "SONAR_HOST_URL": "https://sonarqube.company.com"
+                            }
+                        }
+                    }
+                },
+                playwright: {
+                    "mcpServers": {
+                        "playwright-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-playwright"],
+                            "env": {
+                                "PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}",
+                                "PLAYWRIGHT_BASE_URL": "https://api.playwright.dev"
+                            }
+                        }
+                    }
+                }
+            },
+            windsurf: {
+                default: {
+                    "mcpServers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    },
+                    "codeium": {
+                        "enableAutocompletions": true,
+                        "enableChatContext": true
+                    }
+                },
+                github: {
+                    "mcpServers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    },
+                    "codeium": {
+                        "enableAutocompletions": true,
+                        "enableChatContext": true
+                    }
+                },
+                sqlserver: {
+                    "mcpServers": {
+                        "sqlserver-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sqlserver"],
+                            "env": {
+                                "CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"
+                            }
+                        }
+                    },
+                    "codeium": {
+                        "enableAutocompletions": true,
+                        "enableChatContext": true
+                    }
+                },
+                azure: {
+                    "mcpServers": {
+                        "azure-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-azure"],
+                            "env": {
+                                "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}",
+                                "AZURE_CLIENT_ID": "12345678-1234-1234-1234-123456789012",
+                                "AZURE_TENANT_ID": "87654321-4321-4321-4321-210987654321"
+                            }
+                        }
+                    },
+                    "codeium": {
+                        "enableAutocompletions": true,
+                        "enableChatContext": true
+                    }
+                },
+                mulesoft: {
+                    "mcpServers": {
+                        "mulesoft-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-mulesoft"],
+                            "env": {
+                                "MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}",
+                                "ANYPOINT_BASE_URL": "https://anypoint.mulesoft.com"
+                            }
+                        }
+                    },
+                    "codeium": {
+                        "enableAutocompletions": true,
+                        "enableChatContext": true
+                    }
+                },
+                sonarqube: {
+                    "mcpServers": {
+                        "sonarqube-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sonarqube"],
+                            "env": {
+                                "SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}",
+                                "SONAR_HOST_URL": "https://sonarqube.company.com"
+                            }
+                        }
+                    },
+                    "codeium": {
+                        "enableAutocompletions": true,
+                        "enableChatContext": true
+                    }
+                },
+                playwright: {
+                    "mcpServers": {
+                        "playwright-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-playwright"],
+                            "env": {
+                                "PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}",
+                                "PLAYWRIGHT_BASE_URL": "https://api.playwright.dev"
+                            }
+                        }
+                    },
+                    "codeium": {
+                        "enableAutocompletions": true,
+                        "enableChatContext": true
+                    }
+                }
+            },
+            visualstudio: {
+                default: {
+                    "mcpServers": [
+                        {
+                            "name": "github-context",
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            },
+                            "description": "GitHub repository context and operations"
+                        }
+                    ],
+                    "agentMode": {
+                        "enabled": true,
+                        "defaultProvider": "github-copilot"
+                    }
+                },
+                github: {
+                    "mcpServers": [
+                        {
+                            "name": "github-context",
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            },
+                            "description": "GitHub repository context and operations"
+                        }
+                    ],
+                    "agentMode": {
+                        "enabled": true,
+                        "defaultProvider": "github-copilot"
+                    }
+                },
+                sqlserver: {
+                    "mcpServers": [
+                        {
+                            "name": "sqlserver-context",
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sqlserver"],
+                            "env": {
+                                "CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"
+                            },
+                            "description": "SQL Server database context and operations"
+                        }
+                    ]
+                },
+                azure: {
+                    "mcpServers": [
+                        {
+                            "name": "azure-context",
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-azure"],
+                            "env": {
+                                "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}",
+                                "AZURE_CLIENT_ID": "12345678-1234-1234-1234-123456789012",
+                                "AZURE_TENANT_ID": "87654321-4321-4321-4321-210987654321"
+                            },
+                            "description": "Azure Resource Manager context and operations"
+                        }
+                    ]
+                },
+                mulesoft: {
+                    "mcpServers": [
+                        {
+                            "name": "mulesoft-context",
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-mulesoft"],
+                            "env": {
+                                "MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}",
+                                "ANYPOINT_BASE_URL": "https://anypoint.mulesoft.com"
+                            },
+                            "description": "MuleSoft Anypoint Platform context and operations"
+                        }
+                    ]
+                },
+                sonarqube: {
+                    "mcpServers": [
+                        {
+                            "name": "sonarqube-context",
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sonarqube"],
+                            "env": {
+                                "SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}",
+                                "SONAR_HOST_URL": "https://sonarqube.company.com"
+                            },
+                            "description": "SonarQube code quality analysis context"
+                        }
+                    ]
+                },
+                playwright: {
+                    "mcpServers": [
+                        {
+                            "name": "playwright-context",
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-playwright"],
+                            "env": {
+                                "PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}",
+                                "PLAYWRIGHT_BASE_URL": "https://api.playwright.dev"
+                            },
+                            "description": "Playwright browser automation context"
+                        }
+                    ]
+                }
+            },
+            claudecode: {
+                default: {
+                    "mcpServers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    },
+                    "hooks": {
+                        "PreToolUse": []
+                    }
+                },
+                github: {
+                    "mcpServers": {
+                        "github-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-github"],
+                            "env": {
+                                "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+                            }
+                        }
+                    },
+                    "hooks": {
+                        "PreToolUse": []
+                    }
+                },
+                sqlserver: {
+                    "mcpServers": {
+                        "sqlserver-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sqlserver"],
+                            "env": {
+                                "CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"
+                            }
+                        }
+                    }
+                },
+                azure: {
+                    "mcpServers": {
+                        "azure-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-azure"],
+                            "env": {
+                                "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}",
+                                "AZURE_CLIENT_ID": "12345678-1234-1234-1234-123456789012",
+                                "AZURE_TENANT_ID": "87654321-4321-4321-4321-210987654321"
+                            }
+                        }
+                    }
+                },
+                mulesoft: {
+                    "mcpServers": {
+                        "mulesoft-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-mulesoft"],
+                            "env": {
+                                "MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}",
+                                "ANYPOINT_BASE_URL": "https://anypoint.mulesoft.com"
+                            }
+                        }
+                    }
+                },
+                sonarqube: {
+                    "mcpServers": {
+                        "sonarqube-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-sonarqube"],
+                            "env": {
+                                "SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}",
+                                "SONAR_HOST_URL": "https://sonarqube.company.com"
+                            }
+                        }
+                    }
+                },
+                playwright: {
+                    "mcpServers": {
+                        "playwright-context": {
+                            "command": "npx",
+                            "args": ["-y", "@@modelcontextprotocol/server-playwright"],
+                            "env": {
+                                "PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}",
+                                "PLAYWRIGHT_BASE_URL": "https://api.playwright.dev"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAllConfigs('default');
+            
+            // Add click handlers to client examples
+            document.querySelectorAll('.client-example').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    // Remove previous selection
+                    document.querySelectorAll('.client-example').forEach(el => el.classList.remove('selected-service'));
+                    
+                    // Mark as selected
+                    element.classList.add('selected-service');
+                    
+                    // Update form fields
+                    const clientId = element.getAttribute('data-client-id');
+                    const clientSecret = element.getAttribute('data-client-secret');
+                    const serviceType = element.getAttribute('data-service-type');
+                    
+                    document.getElementById('ClientId').value = clientId;
+                    document.getElementById('ClientSecret').value = clientSecret;
+                    
+                    // Update configuration files
+                    updateAllConfigs(serviceType);
+                    
+                    // Scroll to config files
+                    document.getElementById('config-files').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        });
+
+        function updateAllConfigs(serviceType) {
+            updateConfig('vscode', serviceType);
+            updateConfig('claude', serviceType);
+            updateConfig('windsurf', serviceType);
+            updateConfig('visualstudio', serviceType);
+            updateConfig('claudecode', serviceType);
+        }
+
+        function updateConfig(environment, serviceType) {
+            const template = configTemplates[environment][serviceType] || configTemplates[environment].default;
+            const jsonElement = document.getElementById(environment + '-json');
+            jsonElement.textContent = JSON.stringify(template, null, 2);
+        }
+
+        function toggleConfig(environment) {
+            const content = document.getElementById(environment + '-config');
+            const header = content.previousElementSibling;
+            const arrow = header.querySelector('span');
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                arrow.textContent = '▼';
+            } else {
+                content.classList.add('show');
+                arrow.textContent = '▲';
+            }
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const textArea = document.createElement('textarea');
+            textArea.value = element.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show feedback
+            const button = element.nextElementSibling;
+            const originalText = button.textContent;
+            button.textContent = '✅ Copied!';
+            button.style.backgroundColor = '#28a745';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '#28a745';
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
+

@@ -1,15 +1,27 @@
-# MCP Service Account Authentication for VS Code Developers
+# MCP Service Account Authentication for AI-Assisted Development Environments
 
-**Stop putting personal tokens in your VS Code MCP server configs!** 
+**Stop putting personal tokens in your development environment MCP server configs!** 
 
-This ASP.NET Core application provides secure authentication for your Visual Studio Code MCP servers, so you can use GitHub Copilot and other AI tools **without storing personal API keys in your settings**.
+This ASP.NET Core application provides secure authentication for MCP servers across multiple AI-assisted development environments, so you can use GitHub Copilot, Claude, and other AI tools **without storing personal API keys in your settings**.
 
-## The Problem: Personal Tokens in VS Code Settings
+## Multi-Environment Support
 
-If you're manually configuring MCP servers in VS Code, you've probably done this:
+This solution supports secure MCP server configuration across all major AI-assisted development environments:
+
+- 🔧 **VS Code** (settings.json)
+- 🤖 **Claude Desktop** (claude_desktop_config.json) 
+- 🌊 **Windsurf** (windsurf-mcp.json)
+- 🏢 **Visual Studio** (mcp-servers.json with agent mode)
+- 💻 **Claude Code** (.claude/settings.json with hooks)
+
+## The Problem: Personal Tokens in Development Environment Settings
+
+If you're manually configuring MCP servers in any development environment, you've probably done this:
 
 ```json
-// ❌ Your current VS Code settings.json probably looks like this:
+// ❌ Your current development environment settings probably look like this:
+
+// VS Code settings.json
 {
   "mcp.servers": {
     "github-context": {
@@ -21,41 +33,157 @@ If you're manually configuring MCP servers in VS Code, you've probably done this
     }
   }
 }
+
+// Claude Desktop claude_desktop_config.json
+{
+  "mcpServers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_your_personal_token_here"  // 🚨 DANGER!
+      }
+    }
+  }
+}
+
+// Visual Studio mcp-servers.json
+{
+  "mcpServers": [
+    {
+      "name": "github-context",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_your_personal_token_here"  // 🚨 DANGER!
+      }
+    }
+  ]
+}
 ```
 
 **Problems with this approach:**
-- ❌ Your personal GitHub token is **stored in plain text** in VS Code settings
-- ❌ If you sync settings, your token gets **uploaded to Microsoft's cloud**
+- ❌ Your personal tokens are **stored in plain text** in development environment settings
+- ❌ If you sync settings, your tokens get **uploaded to cloud services**
 - ❌ Anyone with access to your machine can **steal your credentials**
 - ❌ **No way to rotate tokens** without manually updating every developer's settings
+- ❌ **Same vulnerability** exists across VS Code, Claude Desktop, Visual Studio, Windsurf, and Claude Code
 
-## The Solution: Service Account Authentication
+## The Solution: Universal Service Account Authentication
 
-Instead of personal tokens, this system lets you configure MCP servers like this:
+Instead of personal tokens, this system lets you configure MCP servers securely across all environments:
 
 ```json
-// ✅ Secure VS Code settings with service account authentication:
+// ✅ Secure settings with service account authentication across all environments:
+
+// VS Code settings.json
 {
   "mcp.servers": {
     "github-context": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
       }
     }
   }
 }
+
+// Claude Desktop claude_desktop_config.json
+{
+  "mcpServers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  }
+}
+
+// Visual Studio mcp-servers.json
+{
+  "mcpServers": [
+    {
+      "name": "github-context",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  ],
+  "agentMode": {
+    "enabled": true,
+    "defaultProvider": "github-copilot"
+  }
+}
+
+// Windsurf windsurf-mcp.json
+{
+  "mcpServers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  },
+  "codeium": {
+    "enableAutocompletions": true,
+    "enableChatContext": true
+  }
+}
+
+// Claude Code .claude/settings.json
+{
+  "mcpServers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  },
+  "hooks": {
+    "PreToolUse": []
+  }
+}
 ```
 
-**Benefits for developers:**
-- ✅ **No personal tokens** in your VS Code settings
+**Benefits for developers across all environments:**
+- ✅ **No personal tokens** in any development environment settings
 - ✅ **Dynamic token acquisition** - fresh tokens every time
 - ✅ **Centrally managed** by your DevOps/Security team  
-- ✅ **Works with GitHub Copilot** and all MCP servers
+- ✅ **Works with GitHub Copilot, Claude, and all AI assistants**
 - ✅ **Safe to sync settings** - no credentials exposed
+- ✅ **Universal pattern** works across VS Code, Visual Studio, Claude Desktop, Claude Code, and Windsurf
+- ✅ **Enterprise-grade authentication** with proper audit trails
 
-## How It Works for VS Code + GitHub Copilot
+## Interactive Configuration System
+
+This project includes a comprehensive web interface that automatically generates proper MCP server configurations for all 5 supported development environments. Simply:
+
+1. **Visit the web interface** at `http://localhost:5000`
+2. **Click any service account example** to auto-populate configurations
+3. **Copy the generated JSON** for your specific development environment
+4. **Paste into your environment's configuration file**
+
+### Supported Service Accounts
+
+The system includes enterprise-grade service account examples for:
+
+- **GitHub Context Server** - Repository access with PAT authentication
+- **Microsoft SQL Server** - Azure AD Service Principal authentication
+- **Azure Resources** - Service Principal with client secret
+- **MuleSoft APIs** - Connected App token authentication
+- **SonarQube Analysis** - Project analysis token
+- **Playwright Testing** - API key authentication
+
+## How It Works Across All Development Environments
 
 This mock authentication server demonstrates how to:
 

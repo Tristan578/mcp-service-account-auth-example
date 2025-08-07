@@ -1,0 +1,17 @@
+{
+  "mcpServers": [
+    {
+      "name": "github-context",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+      },
+      "description": "GitHub repository context and operations"
+    }
+  ],
+  "agentMode": {
+    "enabled": true,
+    "defaultProvider": "github-copilot"
+  }
+}

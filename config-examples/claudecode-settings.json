@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "github-context": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"
+      }
+    }
+  },
+  "hooks": {
+    "PreToolUse": []
+  }
+}

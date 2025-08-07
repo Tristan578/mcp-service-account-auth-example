@@ -17,15 +17,35 @@ public class IndexModel : PageModel
     // In production, these would be managed centrally by enterprise identity providers
     private readonly Dictionary<string, OktaClient> _validClients = new()
     {
-        // MCP Read-Only Service Account - for VS Code context servers
-        ["0oa8f5j3ecb5w3dF35d7"] = new OktaClient(
-            ClientSecret: "a_very_secret_mock_value_for_alpha",
-            Scopes: new[] { "mcp:projects:read", "mcp:documentation:read" }
+        // GitHub Context Server - uses Personal Access Token (PAT) in service account
+        ["github-service-account"] = new OktaClient(
+            ClientSecret: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            Scopes: new[] { "repo", "read:org", "read:user", "read:project" }
         ),
-        // MCP Read/Write Service Account - for GitHub Copilot with enhanced capabilities  
-        ["0oa9g2k1idg9x7eE45d8"] = new OktaClient(
-            ClientSecret: "another_super_secret_for_beta_writer",
-            Scopes: new[] { "mcp:projects:read", "mcp:projects:write", "mcp:teams:read" }
+        // Microsoft SQL Server Context Server - for database schema and query context
+        ["sqlserver-service-account"] = new OktaClient(
+            ClientSecret: "Server=server.database.windows.net;Database=MyDb;Authentication=Active Directory Service Principal;User Id=12345678-1234-1234-1234-123456789012;Password=MySecretPassword123!",
+            Scopes: new[] { "db:read", "schema:read", "query:execute" }
+        ),
+        // Azure Context Server - for Azure cloud resources and management
+        ["azure-service-account"] = new OktaClient(
+            ClientSecret: "12345678-1234-1234-1234-123456789012~abcdefghijklmnopqrstuvwxyz",
+            Scopes: new[] { "https://management.azure.com/.default" }
+        ),
+        // MuleSoft Context Server - for API integration and data flows
+        ["mulesoft-service-account"] = new OktaClient(
+            ClientSecret: "mule_bearer_token_abc123def456ghi789jkl012mno345",
+            Scopes: new[] { "read:apis", "read:applications", "read:exchanges" }
+        ),
+        // SonarQube Context Server - for code quality analysis
+        ["sonarqube-service-account"] = new OktaClient(
+            ClientSecret: "sqp_1234567890abcdef1234567890abcdef12345678",
+            Scopes: new[] { "scan", "analysis:read", "issues:read", "projects:read" }
+        ),
+        // Playwright Context Server - for test automation and browser testing
+        ["playwright-service-account"] = new OktaClient(
+            ClientSecret: "pw_api_key_abcd1234efgh5678ijkl9012mnop3456qrst7890",
+            Scopes: new[] { "test:execute", "browser:control", "report:read" }
         )
     };
 
@@ -69,7 +89,8 @@ public class IndexModel : PageModel
             // Check if client exists
             if (!_validClients.TryGetValue(ClientId, out var oktaClient))
             {
-                SetFailureResult("Invalid Client ID or Client Secret.");
+                var availableClients = string.Join(", ", _validClients.Keys);
+                SetFailureResult($"Unknown Client ID '{ClientId}'. Available service accounts: {availableClients}");
                 await LogAuthenticationAttempt(timestamp, "FAILURE", ClientId, clientIp, "Invalid Client ID");
                 return Page();
             }
@@ -77,7 +98,7 @@ public class IndexModel : PageModel
             // Validate client secret
             if (oktaClient.ClientSecret != ClientSecret)
             {
-                SetFailureResult("Invalid Client ID or Client Secret.");
+                SetFailureResult($"Incorrect Client Secret for '{ClientId}'. Check the examples below for the correct secret.");
                 await LogAuthenticationAttempt(timestamp, "FAILURE", ClientId, clientIp, "Invalid Client Secret");
                 return Page();
             }
