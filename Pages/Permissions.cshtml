@@ -211,6 +211,58 @@
             ⚠️ CRITICAL: AI assistants should NEVER have write access to production systems or sensitive enterprise data
         </div>
 
+        <!-- Role-Based Access Control Section -->
+        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 25px 0;">
+            <h3 style="color: #856404; margin-top: 0;">🎭 Role-Based Permission Matrix</h3>
+            <p style="color: #856404; margin-bottom: 15px;"><strong>Different roles require different levels of access for effective AI assistance:</strong></p>
+            
+            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 4px; overflow: hidden;">
+                <thead>
+                    <tr style="background-color: #6c757d; color: white;">
+                        <th style="padding: 12px; text-align: left;">Service</th>
+                        <th style="padding: 12px; text-align: left;">Developer AI</th>
+                        <th style="padding: 12px; text-align: left;">Product Owner/Manager AI</th>
+                        <th style="padding: 12px; text-align: left;">Business Analyst AI</th>
+                        <th style="padding: 12px; text-align: left;">DevOps/SRE AI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 12px;"><strong>Azure DevOps</strong></td>
+                        <td style="padding: 12px;"><span style="background-color: #c6f6d5; color: #2f855a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-ONLY</span><br><small>Code review, build status</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Epic/Feature/Story creation</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Requirements, user stories</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Build/Release pipelines</small></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 12px;"><strong>GitHub</strong></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Code commits, PR creation</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #c6f6d5; color: #2f855a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-ONLY</span><br><small>Repository visibility</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #c6f6d5; color: #2f855a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-ONLY</span><br><small>Documentation review</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Infrastructure as Code</small></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 12px;"><strong>Confluence</strong></td>
+                        <td style="padding: 12px;"><span style="background-color: #c6f6d5; color: #2f855a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-ONLY</span><br><small>Technical documentation</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Product documentation</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Requirements documentation</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Runbooks, procedures</small></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 12px;"><strong>SQL Server</strong></td>
+                        <td style="padding: 12px;"><span style="background-color: #fed7d7; color: #c53030; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-WRITE</span><br><small>Dev/Test databases only</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #c6f6d5; color: #2f855a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-ONLY</span><br><small>Reporting data access</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #c6f6d5; color: #2f855a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-ONLY</span><br><small>Data analysis</small></td>
+                        <td style="padding: 12px;"><span style="background-color: #c6f6d5; color: #2f855a; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">READ-ONLY</span><br><small>Schema monitoring</small></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                <strong>💡 Key Principle:</strong> AI assistant permissions should align with the user's existing role-based access, not be more restrictive than what the human user can already do in their normal workflow.
+            </div>
+        </div>
+
         <p style="text-align: center; color: #666; margin-bottom: 30px;">
             <strong>For enterprise security teams configuring MCP server permissions across development environments</strong><br>
             Secure AI context • Read-only defaults • Audit-ready configurations
@@ -583,6 +635,88 @@
             <button class="copy-btn" onclick="copyToClipboard('claude-code-config')">📋 Copy Claude Code Configuration</button>
         </div>
 
+        <!-- Product Owner/Manager Environment -->
+        <div class="environment-section">
+            <div class="environment-title">
+                <span class="environment-icon">📋</span>
+                Product Owner/Manager AI Configuration
+            </div>
+            
+            <div class="permission-matrix">
+                <table class="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Permission Level</th>
+                            <th>Scope Configuration</th>
+                            <th>Risk Level</th>
+                            <th>Business Justification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Azure DevOps</strong></td>
+                            <td><span class="permission-level read-write">Read-Write</span></td>
+                            <td><code>vso.work_write, vso.analytics</code></td>
+                            <td><div class="risk-indicator risk-medium">🟡 Medium</div></td>
+                            <td>Epic/Feature/Story creation and backlog management</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confluence</strong></td>
+                            <td><span class="permission-level read-write">Read-Write</span></td>
+                            <td><code>write:confluence-content</code></td>
+                            <td><div class="risk-indicator risk-medium">🟡 Medium</div></td>
+                            <td>Product documentation and requirements</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GitHub</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>repo:read, issues:read</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>Repository and issue visibility for planning</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analytics/BI</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>analytics:read, reports:read</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>Product metrics and performance analysis</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="recommendation">
+                <strong>🎯 Product Owner Recommendation:</strong> AI assistants for Product Owners should have write access to Azure DevOps work items and documentation systems, as these are core to their role in managing product backlogs and requirements.
+            </div>
+
+            <div class="config-example">
+{
+  "mcpServers": {
+    "product-manager-ai": {
+      "command": "npx",
+      "args": ["-y", "@@modelcontextprotocol/server-enterprise"],
+      "env": {
+        "AZURE_DEVOPS_TOKEN": "${mcp_service_token:azure-devops-product-write}",
+        "CONFLUENCE_TOKEN": "${mcp_service_token:confluence-product-write}",
+        "GITHUB_TOKEN": "${mcp_service_token:github-readonly-account}",
+        "ROLE": "PRODUCT_OWNER",
+        "PERMISSION_LEVEL": "BUSINESS_WRITE"
+      },
+      "permissions": {
+        "workItems": "read-write",
+        "documentation": "read-write", 
+        "code": "read-only",
+        "builds": "read-only",
+        "analytics": "read-only"
+      }
+    }
+  }
+}
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('product-config')">📋 Copy Product Owner Configuration</button>
+        </div>
+
         <!-- Permission Scope Examples -->
         <div class="scope-examples">
             <div class="scope-card">
@@ -600,15 +734,32 @@ repo:status
 
             <div class="scope-card">
                 <div class="scope-title">
-                    📊 <span>Azure DevOps Read Scopes</span>
+                    📊 <span>Azure DevOps Scopes (Role-Based)</span>
                 </div>
                 <div class="config-example">
-vso.build
-vso.code
-vso.work
-vso.project
+// Developer AI (Read-Only)
+vso.build          // Build status visibility
+vso.code           // Code repository access
+vso.work           // Work item visibility
+vso.project        // Project information
+
+// Product Owner/Manager AI (Read-Write)
+vso.work_write     // Create/edit epics, features, stories
+vso.project        // Project planning
+vso.build          // Build status for release planning
+vso.analytics      // Metrics and reporting
+
+// Business Analyst AI (Read-Write) 
+vso.work_write     // Requirements and user story creation
+vso.test_write     // Test case creation
+vso.wiki_write     // Documentation updates
+
+// DevOps/SRE AI (Read-Write)
+vso.build_execute  // Trigger builds and releases
+vso.release        // Release management
+vso.serviceendpoint_manage // Service connections
                 </div>
-                <p><strong>Use Case:</strong> Development context with build status, work items, and code visibility.</p>
+                <p><strong>Use Case:</strong> Role-appropriate access - Product roles need write access for backlog management, developers need read access for context.</p>
             </div>
 
             <div class="scope-card">
