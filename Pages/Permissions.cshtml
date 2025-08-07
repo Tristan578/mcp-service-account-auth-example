@@ -1,0 +1,705 @@
+@page
+@model mcp_service_account_auth_example.Pages.PermissionsModel
+@{
+    ViewData["Title"] = "MCP Server Permissions & Scope Configuration";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .security-banner {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .warning-banner {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .environment-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #f7fafc;
+        }
+        .environment-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .environment-icon {
+            font-size: 1.8em;
+            margin-right: 15px;
+        }
+        .permission-matrix {
+            margin-bottom: 30px;
+        }
+        .permission-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .permission-table th {
+            background-color: #4a5568;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .permission-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .permission-table tr:hover {
+            background-color: #f7fafc;
+        }
+        .permission-level {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .read-only {
+            background-color: #c6f6d5;
+            color: #2f855a;
+        }
+        .read-write {
+            background-color: #fed7d7;
+            color: #c53030;
+        }
+        .admin {
+            background-color: #feb2b2;
+            color: #9b2c2c;
+        }
+        .config-example {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 16px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .risk-low {
+            color: #38a169;
+        }
+        .risk-medium {
+            color: #ed8936;
+        }
+        .risk-high {
+            color: #e53e3e;
+        }
+        .best-practices {
+            background-color: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .recommendation {
+            background-color: #f0fff4;
+            border-left: 4px solid #38a169;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .scope-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .scope-card {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s ease;
+        }
+        .scope-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .scope-title {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 MCP Server Permissions & Scope Configuration</h1>
+        <div class="subtitle">Enterprise-grade permission management for AI-assisted development</div>
+
+        <div class="security-banner">
+            ✅ Principle of Least Privilege: Grant only the minimum permissions necessary for MCP server functionality
+        </div>
+
+        <div class="warning-banner">
+            ⚠️ CRITICAL: AI assistants should NEVER have write access to production systems or sensitive enterprise data
+        </div>
+
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            <strong>For enterprise security teams configuring MCP server permissions across development environments</strong><br>
+            Secure AI context • Read-only defaults • Audit-ready configurations
+        </p>
+
+        <!-- VS Code Environment -->
+        <div class="environment-section">
+            <div class="environment-title">
+                <span class="environment-icon">🔧</span>
+                Visual Studio Code
+            </div>
+            
+            <div class="permission-matrix">
+                <table class="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Recommended Permission</th>
+                            <th>Scope/Token Configuration</th>
+                            <th>Risk Level</th>
+                            <th>Justification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GitHub</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>repo:read, metadata:read</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>AI can read code context, cannot modify repositories</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Azure DevOps</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>vso.code, vso.work</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>View work items and code, no build/release modification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SQL Server</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>db_datareader</code></td>
+                            <td><div class="risk-indicator risk-medium">🟡 Medium</div></td>
+                            <td>Schema awareness only, no data modification capability</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confluence</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>read:confluence-content.all</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>Documentation context, cannot modify pages</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SonarQube</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>sonar-users</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>Code quality metrics, no project configuration</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="config-example">
+{
+  "mcp.servers": {
+    "github-readonly": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-readonly-account}",
+        "GITHUB_PERMISSIONS": "repo:read,metadata:read"
+      }
+    },
+    "azure-readonly": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-azure"],
+      "env": {
+        "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-readonly-account}",
+        "AZURE_SCOPES": "https://dev.azure.com/user_impersonation"
+      }
+    }
+  }
+}
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('vscode-config')">📋 Copy VS Code Configuration</button>
+        </div>
+
+        <!-- Claude Desktop Environment -->
+        <div class="environment-section">
+            <div class="environment-title">
+                <span class="environment-icon">🤖</span>
+                Claude Desktop
+            </div>
+            
+            <div class="permission-matrix">
+                <table class="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Recommended Permission</th>
+                            <th>Scope Configuration</th>
+                            <th>Risk Level</th>
+                            <th>AI Safety Consideration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GitHub</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>public_repo, read:user</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>Prevents AI from creating unauthorized commits</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confluence</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>read:confluence-content.summary</code></td>
+                            <td><div class="risk-indicator risk-low">🟢 Low</div></td>
+                            <td>Documentation context without edit capabilities</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Azure Analytics</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>https://management.azure.com/.default</code></td>
+                            <td><div class="risk-indicator risk-medium">🟡 Medium</div></td>
+                            <td>Resource visibility only, no provisioning rights</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="recommendation">
+                <strong>🎯 Claude Desktop Recommendation:</strong> Use the most restrictive permissions possible since Claude processes natural language requests that may inadvertently trigger destructive operations.
+            </div>
+
+            <div class="config-example">
+{
+  "mcpServers": {
+    "enterprise-readonly": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-enterprise"],
+      "env": {
+        "GITHUB_TOKEN": "${mcp_service_token:github-readonly-account}",
+        "ATLASSIAN_API_TOKEN": "${mcp_service_token:confluence-readonly-account}",
+        "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-readonly-account}",
+        "PERMISSION_LEVEL": "READ_ONLY",
+        "AI_SAFETY_MODE": "ENABLED"
+      }
+    }
+  }
+}
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('claude-config')">📋 Copy Claude Desktop Configuration</button>
+        </div>
+
+        <!-- Windsurf Environment -->
+        <div class="environment-section">
+            <div class="environment-title">
+                <span class="environment-icon">🌊</span>
+                Windsurf IDE
+            </div>
+            
+            <div class="permission-matrix">
+                <table class="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Development Permission</th>
+                            <th>Production Permission</th>
+                            <th>Scope Differentiation</th>
+                            <th>Environment Controls</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GitHub</strong></td>
+                            <td><span class="permission-level read-write">Read-Write</span></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>repo (dev) | public_repo (prod)</code></td>
+                            <td>Branch protection, PR requirements</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Azure DevOps</strong></td>
+                            <td><span class="permission-level read-write">Read-Write</span></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>vso.build_execute (dev) | vso.build (prod)</code></td>
+                            <td>Environment-specific build definitions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SQL Server</strong></td>
+                            <td><span class="permission-level read-write">Read-Write</span></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td><code>db_datawriter (dev) | db_datareader (prod)</code></td>
+                            <td>Separate databases per environment</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="best-practices">
+                <strong>💡 Windsurf Best Practice:</strong> Use environment detection to automatically apply appropriate permissions based on the workspace context (development vs. production repositories).
+            </div>
+
+            <div class="config-example">
+{
+  "mcpServers": {
+    "dev-environment": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-enterprise"],
+      "env": {
+        "ENVIRONMENT": "development",
+        "GITHUB_TOKEN": "${mcp_service_token:github-dev-account}",
+        "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-dev-account}",
+        "SQL_CONNECTION": "${mcp_service_token:sqlserver-dev-account}",
+        "PERMISSION_SCOPE": "READ_WRITE_DEV_ONLY"
+      },
+      "condition": "workspace.name.includes('dev')"
+    },
+    "prod-environment": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-enterprise"],
+      "env": {
+        "ENVIRONMENT": "production",
+        "GITHUB_TOKEN": "${mcp_service_token:github-readonly-account}",
+        "AZURE_CLIENT_SECRET": "${mcp_service_token:azure-readonly-account}",
+        "SQL_CONNECTION": "${mcp_service_token:sqlserver-readonly-account}",
+        "PERMISSION_SCOPE": "READ_ONLY_PROD"
+      },
+      "condition": "workspace.name.includes('prod')"
+    }
+  }
+}
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('windsurf-config')">📋 Copy Windsurf Configuration</button>
+        </div>
+
+        <!-- Visual Studio Environment -->
+        <div class="environment-section">
+            <div class="environment-title">
+                <span class="environment-icon">🏢</span>
+                Visual Studio Enterprise
+            </div>
+            
+            <div class="permission-matrix">
+                <table class="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Enterprise Permission</th>
+                            <th>Role-Based Access</th>
+                            <th>Integration Level</th>
+                            <th>Compliance Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Azure DevOps</strong></td>
+                            <td><span class="permission-level read-write">Contributor</span></td>
+                            <td>Based on AD group membership</td>
+                            <td>Native integration</td>
+                            <td>SOX compliant, full audit trail</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SQL Server</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td>Database role assignments</td>
+                            <td>SSDT integration</td>
+                            <td>Schema deployment only</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GitHub Enterprise</strong></td>
+                            <td><span class="permission-level read-write">Developer</span></td>
+                            <td>Repository collaborator</td>
+                            <td>Git integration</td>
+                            <td>Enterprise SSO required</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="config-example">
+{
+  "mcpServers": [
+    {
+      "name": "enterprise-azure-devops",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-azure-devops"],
+      "env": {
+        "AZURE_DEVOPS_TOKEN": "${mcp_service_token:azure-devops-contributor}",
+        "ROLE_BASED_ACCESS": "ENABLED",
+        "COMPLIANCE_MODE": "SOX_COMPLIANT"
+      },
+      "permissions": {
+        "builds": "read-write",
+        "releases": "read-only", 
+        "workItems": "read-write",
+        "repositories": "read-only"
+      }
+    }
+  ]
+}
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('vs-config')">📋 Copy Visual Studio Configuration</button>
+        </div>
+
+        <!-- Claude Code Environment -->
+        <div class="environment-section">
+            <div class="environment-title">
+                <span class="environment-icon">💻</span>
+                Claude Code (Web)
+            </div>
+            
+            <div class="permission-matrix">
+                <table class="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Web Permission</th>
+                            <th>Session Scope</th>
+                            <th>Data Retention</th>
+                            <th>Privacy Controls</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>GitHub</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td>Single session only</td>
+                            <td>No server-side storage</td>
+                            <td>GDPR compliant</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confluence</strong></td>
+                            <td><span class="permission-level read-only">Read-Only</span></td>
+                            <td>Public spaces only</td>
+                            <td>No caching</td>
+                            <td>Enterprise data classification</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="warning-banner">
+                ⚠️ Claude Code Restriction: Web-based environments should have the most restrictive permissions due to potential data exposure concerns.
+            </div>
+
+            <div class="config-example">
+{
+  "mcpServers": {
+    "claude-code-readonly": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-web"],
+      "env": {
+        "GITHUB_TOKEN": "${mcp_service_token:github-public-readonly}",
+        "CONFLUENCE_TOKEN": "${mcp_service_token:confluence-public-readonly}",
+        "SESSION_TIMEOUT": "3600",
+        "DATA_RETENTION": "NONE",
+        "PRIVACY_MODE": "STRICT"
+      },
+      "restrictions": {
+        "writeOperations": "DISABLED",
+        "sensitiveData": "BLOCKED",
+        "enterpriseResources": "LIMITED"
+      }
+    }
+  }
+}
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('claude-code-config')">📋 Copy Claude Code Configuration</button>
+        </div>
+
+        <!-- Permission Scope Examples -->
+        <div class="scope-examples">
+            <div class="scope-card">
+                <div class="scope-title">
+                    🔍 <span>GitHub Read-Only Scopes</span>
+                </div>
+                <div class="config-example">
+public_repo
+read:user
+read:org
+repo:status
+                </div>
+                <p><strong>Use Case:</strong> AI context for public repositories and organizational visibility without write access.</p>
+            </div>
+
+            <div class="scope-card">
+                <div class="scope-title">
+                    📊 <span>Azure DevOps Read Scopes</span>
+                </div>
+                <div class="config-example">
+vso.build
+vso.code
+vso.work
+vso.project
+                </div>
+                <p><strong>Use Case:</strong> Development context with build status, work items, and code visibility.</p>
+            </div>
+
+            <div class="scope-card">
+                <div class="scope-title">
+                    🗄️ <span>SQL Server Read Permissions</span>
+                </div>
+                <div class="config-example">
+GRANT SELECT ON SCHEMA::dbo TO [MCP_ReadOnly_Role]
+GRANT VIEW DEFINITION ON SCHEMA::dbo TO [MCP_ReadOnly_Role]
+DENY INSERT, UPDATE, DELETE ON SCHEMA::dbo TO [MCP_ReadOnly_Role]
+                </div>
+                <p><strong>Use Case:</strong> Schema awareness and data structure context without modification capabilities.</p>
+            </div>
+
+            <div class="scope-card">
+                <div class="scope-title">
+                    📚 <span>Confluence Read Permissions</span>
+                </div>
+                <div class="config-example">
+read:confluence-content.all
+read:confluence-space.summary
+read:confluence-props
+                </div>
+                <p><strong>Use Case:</strong> Documentation and knowledge base context for AI-assisted development.</p>
+            </div>
+        </div>
+
+        <!-- Security Guidelines -->
+        <div class="best-practices">
+            <h3>🛡️ Enterprise Security Guidelines</h3>
+            <ul>
+                <li><strong>Default to Read-Only:</strong> Always start with read-only permissions and justify any write access</li>
+                <li><strong>Environment Separation:</strong> Use different service accounts for development, staging, and production</li>
+                <li><strong>Scope Minimization:</strong> Grant only the specific scopes required for intended functionality</li>
+                <li><strong>Regular Reviews:</strong> Quarterly permission audits and access reviews</li>
+                <li><strong>Audit Logging:</strong> All MCP server actions must be logged and monitored</li>
+                <li><strong>Data Classification:</strong> Ensure AI assistants cannot access sensitive or classified data</li>
+                <li><strong>Incident Response:</strong> Have procedures for revoking access in case of compromise</li>
+            </ul>
+        </div>
+
+        <div class="recommendation">
+            <h3>✅ Implementation Recommendations</h3>
+            <ol>
+                <li><strong>Start Conservative:</strong> Begin with read-only access across all services</li>
+                <li><strong>Monitor Usage:</strong> Track which permissions are actually being used</li>
+                <li><strong>Gradual Expansion:</strong> Add write permissions only when business case is clear</li>
+                <li><strong>Role-Based Design:</strong> Align MCP permissions with existing enterprise roles</li>
+                <li><strong>Environment Controls:</strong> Implement automatic permission switching based on workspace context</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.querySelector(`#${elementId} .config-example, .config-example`);
+            if (element) {
+                navigator.clipboard.writeText(element.textContent).then(() => {
+                    // Visual feedback
+                    const button = event.target;
+                    const originalText = button.textContent;
+                    button.textContent = '✅ Copied!';
+                    button.style.backgroundColor = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.backgroundColor = '#28a745';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        }
+
+        // Add click handlers for all copy buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const configExample = this.previousElementSibling;
+                    if (configExample && configExample.classList.contains('config-example')) {
+                        navigator.clipboard.writeText(configExample.textContent).then(() => {
+                            const originalText = this.textContent;
+                            this.textContent = '✅ Copied!';
+                            setTimeout(() => {
+                                this.textContent = originalText;
+                            }, 2000);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
