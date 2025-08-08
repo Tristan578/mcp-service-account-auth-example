@@ -1,0 +1,304 @@
+@page
+@model mcp_service_account_auth_example.Pages.FunctionalExamplesModel
+@{
+    ViewData["Title"] = "Functional Examples - MCP Integration Showcase";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .example-card {
+            background-color: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .example-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #007bff;
+        }
+        .example-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #007bff, #0056b3);
+        }
+        .example-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .example-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        .example-description {
+            color: #4a5568;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .example-tech {
+            font-size: 0.9em;
+            color: #718096;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .example-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .example-link:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+            color: white;
+        }
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .features-list li {
+            padding: 5px 0;
+            color: #4a5568;
+        }
+        .features-list li::before {
+            content: "✅ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+        .coming-soon {
+            opacity: 0.7;
+            background-color: #f8f9fa;
+        }
+        .coming-soon .example-link {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .coming-soon .example-link:hover {
+            background-color: #6c757d;
+        }
+        .nav-link {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        .nav-link.active {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/Permissions" class="nav-link">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" class="nav-link">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" class="nav-link">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" class="nav-link">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" class="nav-link active">🚀 Functional Examples</a>
+        </nav>
+
+        <h1>🚀 Functional Examples</h1>
+        <div class="subtitle">Real-world MCP integration scenarios with complete implementations</div>
+        
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 10px 0;">🎯 Complete MCP Integration Showcase</h3>
+            <p style="margin: 0;">Explore comprehensive examples demonstrating MCP server configurations across different platforms and use cases</p>
+        </div>
+
+        <div class="examples-grid">
+            <!-- GitHub & Azure DevOps Workflow -->
+            <div class="example-card">
+                <span class="example-icon">🔄</span>
+                <div class="example-title">GitHub & Azure DevOps Workflow</div>
+                <div class="example-description">
+                    Complete workflow from repository analysis to feature development using real Azure DevOps work items and GitHub integration.
+                </div>
+                <div class="example-tech">Technologies: GitHub MCP, Azure DevOps MCP, ASP.NET Core</div>
+                <ul class="features-list">
+                    <li>Live repository analysis</li>
+                    <li>Work item integration</li>
+                    <li>AI-assisted development</li>
+                    <li>Complete workflow demo</li>
+                </ul>
+                <a href="/GitHubAzureWorkflow" class="example-link">View Example →</a>
+            </div>
+
+            <!-- Cloud Conductor -->
+            <div class="example-card">
+                <span class="example-icon">☁️</span>
+                <div class="example-title">Cloud Conductor</div>
+                <div class="example-description">
+                    Multi-cloud infrastructure management with AI-powered analysis across Microsoft Azure and Google Cloud Platform.
+                </div>
+                <div class="example-tech">Technologies: Azure SDK, GCP SDK, Python, Multi-cloud APIs</div>
+                <ul class="features-list">
+                    <li>Azure & GCP integration</li>
+                    <li>Cost optimization analysis</li>
+                    <li>Security monitoring</li>
+                    <li>Infrastructure automation</li>
+                </ul>
+                <a href="/CloudConductorExample" class="example-link">View Example →</a>
+            </div>
+
+            <!-- Content Creator -->
+            <div class="example-card">
+                <span class="example-icon">📝</span>
+                <div class="example-title">Content Creator</div>
+                <div class="example-description">
+                    AI-powered documentation and wiki management system with automated content generation for Confluence and SharePoint.
+                </div>
+                <div class="example-tech">Technologies: OpenAI API, Confluence API, SharePoint API, Python</div>
+                <ul class="features-list">
+                    <li>Automated documentation</li>
+                    <li>Multi-platform publishing</li>
+                    <li>AI content generation</li>
+                    <li>Git integration</li>
+                </ul>
+                <a href="/ContentCreatorExample" class="example-link">View Example →</a>
+            </div>
+
+            <!-- ServiceNow Integration -->
+            <div class="example-card">
+                <span class="example-icon">🎫</span>
+                <div class="example-title">ServiceNow Integration</div>
+                <div class="example-description">
+                    AI-powered ITSM automation with intelligent incident management, change requests, and automated ticket creation with OpenAI analysis.
+                </div>
+                <div class="example-tech">Technologies: ServiceNow REST API, Python, OpenAI, OAuth 2.0</div>
+                <ul class="features-list">
+                    <li>AI incident classification</li>
+                    <li>Automated change requests</li>
+                    <li>Risk assessment</li>
+                    <li>ITSM analytics</li>
+                </ul>
+                <a href="/ServiceNowIntegration" class="example-link">View Example →</a>
+            </div>
+
+            <!-- Agile Team Agents -->
+            <div class="example-card">
+                <span class="example-icon">�</span>
+                <div class="example-title">Agile Team Agents</div>
+                <div class="example-description">
+                    Multi-agent development workflows with Product Owner, Scrum Master, Developer, and QA agents for intelligent story refinement and sprint planning.
+                </div>
+                <div class="example-tech">Technologies: Azure DevOps, GitHub, OpenAI, Multi-Agent Systems</div>
+                <ul class="features-list">
+                    <li>Story refinement</li>
+                    <li>Sprint planning</li>
+                    <li>Team collaboration</li>
+                    <li>Process optimization</li>
+                </ul>
+                <a href="/AgileTeamAgents" class="example-link">View Example →</a>
+            </div>
+
+            <!-- Game Design Team Agents -->
+            <div class="example-card">
+                <span class="example-icon">�</span>
+                <div class="example-title">Game Design Team Agents</div>
+                <div class="example-description">
+                    Creative development pipeline with Game Designer, 2.5D Artist, Audio Engineer, and Animator agents for Unity game development.
+                </div>
+                <div class="example-tech">Technologies: Unity, OpenAI, Asset Generation, Creative AI</div>
+                <ul class="features-list">
+                    <li>Game concept creation</li>
+                    <li>Asset generation</li>
+                    <li>Unity integration</li>
+                    <li>Creative collaboration</li>
+                </ul>
+                <a href="/GameDesignTeamAgents" class="example-link">View Example →</a>
+            </div>
+        </div>
+
+        <div style="background-color: #e8f5e8; border-radius: 8px; padding: 20px; margin-top: 30px; border-left: 4px solid #28a745;">
+            <h3 style="color: #28a745; margin-top: 0;">🎯 Why These Examples Matter</h3>
+            <p style="margin-bottom: 15px; color: #155724;">Each example demonstrates real-world enterprise scenarios where MCP integration provides significant value:</p>
+            <ul style="color: #155724; line-height: 1.6;">
+                <li><strong>Security First</strong>: All examples use service account authentication, eliminating personal token requirements</li>
+                <li><strong>Enterprise Ready</strong>: Production-quality code patterns suitable for organizational deployment</li>
+                <li><strong>AI Enhanced</strong>: Leverages GitHub Copilot and other AI tools for accelerated development</li>
+                <li><strong>Comprehensive Documentation</strong>: Complete setup guides, configuration examples, and troubleshooting</li>
+                <li><strong>Scalable Architecture</strong>: Patterns that can be extended and customized for specific needs</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+            <h3>🚀 Ready to Get Started?</h3>
+            <p>Each example includes complete setup instructions, MCP server configurations, and step-by-step implementation guides.</p>
+            <div style="margin-top: 15px;">
+                <a href="/Permissions" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 0 10px;">🔒 Setup Security</a>
+                <a href="/ServiceAccountSetup" style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 0 10px;">⚙️ Configure IAM</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

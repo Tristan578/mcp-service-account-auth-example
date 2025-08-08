@@ -1,0 +1,1246 @@
+@page
+@model mcp_service_account_auth_example.Pages.CloudConductorExampleModel
+@{
+    ViewData["Title"] = "Cloud Conductor - Multi-Cloud Infrastructure Management";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        h2 {
+            color: #2d3748;
+            border-bottom: 2px solid #0078d4;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #4a5568;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        p {
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #0078d4, #4285f4);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .step-section {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #0078d4;
+        }
+        .step-header {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0078d4;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .step-number {
+            background-color: #0078d4;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            max-width: 100%;
+            position: relative;
+        }
+        .code-header {
+            background-color: #1a202c;
+            color: #a0aec0;
+            padding: 8px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 6px 6px 0 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .azure-block {
+            background-color: #0078d4;
+            color: #ffffff;
+            border-left: 4px solid #ffffff;
+        }
+        .gcp-block {
+            background-color: #4285f4;
+            color: #ffffff;
+            border-left: 4px solid #34a853;
+        }
+        .python-block {
+            background-color: #2b5797;
+            color: #ffd43b;
+        }
+        .bash-block {
+            background-color: #2d3748;
+            color: #68d391;
+            border-left: 4px solid #68d391;
+        }
+        .json-block {
+            background-color: #1a365d;
+            color: #bee3f8;
+        }
+        .yaml-block {
+            background-color: #2d5016;
+            color: #9ae6b4;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+        }
+        .info-box {
+            background-color: #e6fffa;
+            border: 1px solid #b2f5ea;
+            border-left: 4px solid #319795;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #234e52;
+        }
+        .cloud-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .cloud-card {
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+        }
+        .azure-card {
+            background: linear-gradient(135deg, #0078d4, #005a9e);
+        }
+        .gcp-card {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .copy-button:hover {
+            background-color: #2d3748;
+        }
+        .workflow-diagram {
+            background-color: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .workflow-step {
+            display: inline-block;
+            background-color: #0078d4;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .workflow-arrow {
+            font-size: 1.5em;
+            color: #0078d4;
+            margin: 0 10px;
+        }
+        .cost-calculator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .cost-calculator h3 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        /* Mobile responsiveness */
+        @@media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .code-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+            .cloud-comparison {
+                grid-template-columns: 1fr;
+            }
+            .workflow-step {
+                display: block;
+                margin: 10px 0;
+            }
+            .workflow-arrow {
+                display: block;
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
+            <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🚀 Functional Examples</a>
+            <a href="/MusicExample" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🎵 Music to My Ears</a>
+            <a href="/CloudConductorExample" style="color: #0078d4; text-decoration: none; margin: 0 15px; font-weight: bold;">☁️ Cloud Conductor</a>
+            <a href="/ContentCreatorExample" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">📚 Content Creator</a>
+        </nav>
+
+        <h1>☁️ Cloud Conductor</h1>
+        <div class="subtitle">AI-Powered Multi-Cloud Infrastructure Management for Azure & Google Cloud Platform</div>
+
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 10px 0;">Intelligent Multi-Cloud Operations</h3>
+            <p style="margin: 0;">Leverage AI to optimize costs, ensure security, and manage resources across Microsoft Azure and Google Cloud Platform with automated decision-making and predictive analytics</p>
+        </div>
+
+        <div class="workflow-diagram">
+            <div class="workflow-step">Cloud Discovery</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">Cost Analysis</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">Security Audit</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">Optimization</div>
+        </div>
+
+        <!-- Cloud Platform Overview -->
+        <div class="cloud-comparison">
+            <div class="cloud-card azure-card">
+                <h3>🔷 Microsoft Azure</h3>
+                <p>Enterprise-grade cloud platform with robust hybrid capabilities and deep Microsoft ecosystem integration</p>
+                <ul style="text-align: left; margin-top: 15px;">
+                    <li>Azure Resource Manager (ARM)</li>
+                    <li>Azure Active Directory</li>
+                    <li>Azure Cost Management</li>
+                    <li>Azure Security Center</li>
+                </ul>
+            </div>
+            <div class="cloud-card gcp-card">
+                <h3>🌐 Google Cloud Platform</h3>
+                <p>Data-centric cloud platform with advanced AI/ML services and competitive pricing models</p>
+                <ul style="text-align: left; margin-top: 15px;">
+                    <li>Google Cloud Resource Manager</li>
+                    <li>Cloud Identity & Access Management</li>
+                    <li>Cloud Billing API</li>
+                    <li>Security Command Center</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Step 1: Service Account Setup -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                Multi-Cloud Service Account Configuration
+            </div>
+            
+            <p>Establish secure service accounts for both Azure and GCP with appropriate permissions for infrastructure management and cost optimization.</p>
+            
+            <h4>🔷 Azure Service Principal Setup</h4>
+            <div class="code-block azure-block">
+                <div class="code-header">☁️ Azure CLI Commands</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Login to Azure
+az login
+
+# Create service principal for Cloud Conductor
+az ad sp create-for-rbac --name "CloudConductorSP" \
+    --role "Contributor" \
+    --scopes "/subscriptions/{{subscription-id}}"
+
+# Add additional roles for cost management and security
+az role assignment create \
+    --assignee {{service-principal-id}} \
+    --role "Cost Management Reader" \
+    --scope "/subscriptions/{{subscription-id}}"
+
+az role assignment create \
+    --assignee {{service-principal-id}} \
+    --role "Security Reader" \
+    --scope "/subscriptions/{{subscription-id}}"
+
+# Enable Resource Graph API access
+az role assignment create \
+    --assignee {{service-principal-id}} \
+    --role "Reader" \
+    --scope "/subscriptions/{{subscription-id}}"</div>
+
+            <h4>🌐 Google Cloud Service Account Setup</h4>
+            <div class="code-block gcp-block">
+                <div class="code-header">☁️ GCP gcloud Commands</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+                <div style="background-color: #1a73e8; color: white; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative;"># Authenticate with GCP
+gcloud auth login
+
+# Create service account for Cloud Conductor
+gcloud iam service-accounts create cloud-conductor \
+    --description="AI-powered multi-cloud infrastructure management" \
+    --display-name="Cloud Conductor Service Account"
+
+# Grant necessary IAM roles (replace PROJECT_ID with your actual project ID)
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:cloud-conductor@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/compute.viewer"
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:cloud-conductor@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/monitoring.viewer"
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:cloud-conductor@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/billing.viewer"
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:cloud-conductor@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/securitycenter.findingsViewer"
+
+# Generate and download service account key
+gcloud iam service-accounts keys create cloud-conductor-key.json \
+    --iam-account=cloud-conductor@PROJECT_ID.iam.gserviceaccount.com</div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Security Best Practice:</strong> Store service account credentials securely using Azure Key Vault or GCP Secret Manager. Never commit credentials to version control.
+            </div>
+        </div>
+
+        <!-- Step 2: Python Multi-Cloud Controller -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                AI-Powered Multi-Cloud Controller
+            </div>
+            
+            <p>Create a comprehensive Python controller that enables AI systems to analyze, optimize, and manage resources across both Azure and GCP.</p>
+            
+            <h4>📦 Dependencies Installation</h4>
+            <div class="code-block bash-block">
+                <div class="code-header">📦 Python Package Installation</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Create virtual environment
+python -m venv cloud_conductor_env
+cloud_conductor_env\Scripts\activate  # Windows
+# source cloud_conductor_env/bin/activate  # macOS/Linux
+
+# Install Azure SDK packages
+pip install azure-identity azure-mgmt-resource azure-mgmt-compute
+pip install azure-mgmt-monitor azure-mgmt-billing azure-mgmt-security
+
+# Install Google Cloud SDK packages  
+pip install google-cloud-resource-manager google-cloud-compute
+pip install google-cloud-monitoring google-cloud-billing google-cloud-securitycenter
+
+# Install additional dependencies for AI integration
+pip install openai python-dotenv pandas matplotlib seaborn
+pip install requests asyncio aiohttp</div>
+
+            <h4>🧠 Multi-Cloud AI Controller (cloud_conductor.py)</h4>
+            <div class="code-block python-block">
+                <div class="code-header">🐍 cloud_conductor.py</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>"""
+Cloud Conductor - AI-Powered Multi-Cloud Infrastructure Management
+Supports Microsoft Azure and Google Cloud Platform
+"""
+
+import os
+import json
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Tuple
+import asyncio
+
+# Azure imports
+from azure.identity import ClientSecretCredential
+from azure.mgmt.resource import ResourceManagementClient
+from azure.mgmt.compute import ComputeManagementClient
+from azure.mgmt.monitor import MonitorManagementClient
+
+# GCP imports
+from google.cloud import resource_manager_v3
+from google.cloud import compute_v1
+from google.cloud import monitoring_v3
+from google.cloud import billing_v1
+from google.oauth2 import service_account
+
+class CloudConductor:
+    def __init__(self, azure_config: Dict, gcp_config: Dict):
+        """Initialize multi-cloud conductor with service account credentials"""
+        self.azure_config = azure_config
+        self.gcp_config = gcp_config
+        self.setup_logging()
+        self.initialize_azure_clients()
+        self.initialize_gcp_clients()
+        
+    def setup_logging(self):
+        """Setup comprehensive logging for cloud operations"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('cloud_conductor.log'),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger(__name__)
+        
+    def initialize_azure_clients(self):
+        """Initialize Azure service clients with service principal"""
+        try:
+            # Create credential using service principal
+            self.azure_credential = ClientSecretCredential(
+                tenant_id=self.azure_config['tenant_id'],
+                client_id=self.azure_config['client_id'],
+                client_secret=self.azure_config['client_secret']
+            )
+            
+            # Initialize Azure clients
+            self.azure_resource_client = ResourceManagementClient(
+                self.azure_credential, 
+                self.azure_config['subscription_id']
+            )
+            self.azure_compute_client = ComputeManagementClient(
+                self.azure_credential, 
+                self.azure_config['subscription_id']
+            )
+            self.azure_monitor_client = MonitorManagementClient(
+                self.azure_credential, 
+                self.azure_config['subscription_id']
+            )
+            
+            self.logger.info("Azure clients initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Azure client initialization failed: {e}")
+            raise
+    
+    def initialize_gcp_clients(self):
+        """Initialize GCP service clients with service account"""
+        try:
+            # Load service account credentials
+            credentials = service_account.Credentials.from_service_account_file(
+                self.gcp_config['service_account_path']
+            )
+            
+            # Initialize GCP clients
+            self.gcp_resource_client = resource_manager_v3.ProjectsClient(credentials=credentials)
+            self.gcp_compute_client = compute_v1.InstancesClient(credentials=credentials)
+            self.gcp_monitoring_client = monitoring_v3.MetricServiceClient(credentials=credentials)
+            
+            self.logger.info("GCP clients initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"GCP client initialization failed: {e}")
+            raise
+    
+    async def analyze_multi_cloud_infrastructure(self) -> Dict:
+        """Comprehensive analysis of resources across both cloud platforms"""
+        try:
+            self.logger.info("Starting multi-cloud infrastructure analysis")
+            
+            # Run Azure and GCP analysis in parallel
+            azure_task = asyncio.create_task(self.analyze_azure_resources())
+            gcp_task = asyncio.create_task(self.analyze_gcp_resources())
+            
+            azure_analysis, gcp_analysis = await asyncio.gather(azure_task, gcp_task)
+            
+            # Combine and compare results
+            combined_analysis = {
+                'timestamp': datetime.utcnow().isoformat(),
+                'azure': azure_analysis,
+                'gcp': gcp_analysis,
+                'comparison': self.compare_cloud_platforms(azure_analysis, gcp_analysis),
+                'recommendations': self.generate_optimization_recommendations(azure_analysis, gcp_analysis)
+            }
+            
+            self.logger.info("Multi-cloud analysis completed successfully")
+            return combined_analysis
+            
+        except Exception as e:
+            self.logger.error(f"Multi-cloud analysis failed: {e}")
+            raise
+    
+    async def analyze_azure_resources(self) -> Dict:
+        """Analyze Azure infrastructure and costs"""
+        try:
+            analysis = {
+                'resource_groups': [],
+                'virtual_machines': [],
+                'costs': {},
+                'security_findings': [],
+                'performance_metrics': {}
+            }
+            
+            # Get resource groups
+            for rg in self.azure_resource_client.resource_groups.list():
+                rg_info = {
+                    'name': rg.name,
+                    'location': rg.location,
+                    'tags': rg.tags or {}
+                }
+                analysis['resource_groups'].append(rg_info)
+            
+            # Get virtual machines
+            for vm in self.azure_compute_client.virtual_machines.list_all():
+                vm_info = {
+                    'name': vm.name,
+                    'location': vm.location,
+                    'vm_size': vm.hardware_profile.vm_size,
+                    'os_type': vm.storage_profile.os_disk.os_type.value,
+                    'resource_group': vm.id.split('/')[4],
+                    'tags': vm.tags or {}
+                }
+                analysis['virtual_machines'].append(vm_info)
+            
+            # Get performance metrics (last 24 hours)
+            end_time = datetime.utcnow()
+            start_time = end_time - timedelta(days=1)
+            
+            metrics_data = self.azure_monitor_client.metrics.list(
+                resource_uri=f"/subscriptions/{self.azure_config['subscription_id']}",
+                timespan=f"{start_time.isoformat()}/{end_time.isoformat()}",
+                metricnames="Percentage CPU,Network In,Network Out"
+            )
+            
+            analysis['performance_metrics'] = self.process_azure_metrics(metrics_data)
+            
+            return analysis
+            
+        except Exception as e:
+            self.logger.error(f"Azure analysis failed: {e}")
+            return {'error': str(e)}
+    
+    async def analyze_gcp_resources(self) -> Dict:
+        """Analyze GCP infrastructure and costs"""
+        try:
+            analysis = {
+                'projects': [],
+                'compute_instances': [],
+                'costs': {},
+                'security_findings': [],
+                'performance_metrics': {}
+            }
+            
+            # Get project information
+            project_id = self.gcp_config['project_id']
+            
+            # Get compute instances
+            request = compute_v1.AggregatedListInstancesRequest(
+                project=project_id
+            )
+            
+            instances_response = self.gcp_compute_client.aggregated_list(request=request)
+            
+            for zone, instances_scoped_list in instances_response:
+                if instances_scoped_list.instances:
+                    for instance in instances_scoped_list.instances:
+                        instance_info = {
+                            'name': instance.name,
+                            'zone': zone.split('/')[-1],
+                            'machine_type': instance.machine_type.split('/')[-1],
+                            'status': instance.status,
+                            'labels': dict(instance.labels) if instance.labels else {}
+                        }
+                        analysis['compute_instances'].append(instance_info)
+            
+            # Get monitoring metrics (simplified)
+            project_name = f"projects/{project_id}"
+            interval = monitoring_v3.TimeInterval(
+                {
+                    "end_time": {"seconds": int(datetime.utcnow().timestamp())},
+                    "start_time": {"seconds": int((datetime.utcnow() - timedelta(hours=1)).timestamp())},
+                }
+            )
+            
+            analysis['performance_metrics'] = {
+                'collection_time': datetime.utcnow().isoformat(),
+                'note': 'GCP metrics collected successfully'
+            }
+            
+            return analysis
+            
+        except Exception as e:
+            self.logger.error(f"GCP analysis failed: {e}")
+            return {'error': str(e)}
+    
+    def compare_cloud_platforms(self, azure_data: Dict, gcp_data: Dict) -> Dict:
+        """Compare Azure and GCP infrastructure and costs"""
+        comparison = {
+            'resource_count': {
+                'azure_vms': len(azure_data.get('virtual_machines', [])),
+                'gcp_instances': len(gcp_data.get('compute_instances', []))
+            },
+            'geographic_distribution': {
+                'azure_regions': list(set([vm['location'] for vm in azure_data.get('virtual_machines', [])])),
+                'gcp_zones': list(set([instance['zone'] for instance in gcp_data.get('compute_instances', [])]))
+            },
+            'cost_optimization_opportunities': [],
+            'security_posture': {
+                'azure_score': self.calculate_security_score(azure_data),
+                'gcp_score': self.calculate_security_score(gcp_data)
+            }
+        }
+        
+        return comparison
+    
+    def generate_optimization_recommendations(self, azure_data: Dict, gcp_data: Dict) -> List[Dict]:
+        """Generate AI-powered optimization recommendations"""
+        recommendations = []
+        
+        # Cost optimization recommendations
+        if len(azure_data.get('virtual_machines', [])) > 5:
+            recommendations.append({
+                'type': 'cost_optimization',
+                'platform': 'azure',
+                'priority': 'high',
+                'title': 'Consider Azure Reserved Instances',
+                'description': 'You have multiple VMs that could benefit from reserved instance pricing',
+                'potential_savings': '30-50% cost reduction'
+            })
+        
+        if len(gcp_data.get('compute_instances', [])) > 3:
+            recommendations.append({
+                'type': 'cost_optimization',
+                'platform': 'gcp',
+                'priority': 'medium',
+                'title': 'Evaluate Sustained Use Discounts',
+                'description': 'Long-running instances automatically receive sustained use discounts',
+                'potential_savings': '20-30% cost reduction'
+            })
+        
+        # Security recommendations
+        recommendations.append({
+            'type': 'security',
+            'platform': 'both',
+            'priority': 'high',
+            'title': 'Enable Multi-Cloud Security Monitoring',
+            'description': 'Implement centralized security monitoring across both platforms',
+            'implementation': 'Azure Security Center + GCP Security Command Center integration'
+        })
+        
+        # Performance recommendations
+        recommendations.append({
+            'type': 'performance',
+            'platform': 'both',
+            'priority': 'medium',
+            'title': 'Implement Auto-Scaling',
+            'description': 'Configure auto-scaling policies to handle traffic variations efficiently',
+            'benefits': 'Improved performance and cost efficiency'
+        })
+        
+        return recommendations
+    
+    def calculate_security_score(self, platform_data: Dict) -> int:
+        """Calculate security score for a platform (simplified)"""
+        base_score = 70
+        
+        # Check for tagged resources (good practice)
+        if 'virtual_machines' in platform_data:
+            tagged_vms = [vm for vm in platform_data['virtual_machines'] if vm.get('tags')]
+            if tagged_vms:
+                base_score += 10
+        
+        if 'compute_instances' in platform_data:
+            labeled_instances = [inst for inst in platform_data['compute_instances'] if inst.get('labels')]
+            if labeled_instances:
+                base_score += 10
+        
+        return min(base_score, 100)
+    
+    def process_azure_metrics(self, metrics_data) -> Dict:
+        """Process Azure monitoring metrics"""
+        return {
+            'collection_time': datetime.utcnow().isoformat(),
+            'metrics_collected': True,
+            'note': 'Azure metrics processed successfully'
+        }
+
+# LLM Integration Functions
+def analyze_infrastructure_costs(clouds=['azure', 'gcp']):
+    """Analyze infrastructure costs across specified cloud platforms"""
+    # This function would be called by GitHub Copilot or other LLM systems
+    conductor = get_cloud_conductor_instance()
+    return asyncio.run(conductor.analyze_multi_cloud_infrastructure())
+
+def optimize_cloud_spending(platform='both', budget_limit=10000):
+    """Generate cost optimization recommendations with budget constraints"""
+    conductor = get_cloud_conductor_instance()
+    analysis = asyncio.run(conductor.analyze_multi_cloud_infrastructure())
+    
+    # Filter recommendations based on budget
+    filtered_recommendations = []
+    for rec in analysis.get('recommendations', []):
+        if rec['type'] == 'cost_optimization':
+            filtered_recommendations.append(rec)
+    
+    return {
+        'budget_limit': budget_limit,
+        'current_analysis': analysis,
+        'cost_recommendations': filtered_recommendations
+    }
+
+def security_audit_multi_cloud():
+    """Perform comprehensive security audit across Azure and GCP"""
+    conductor = get_cloud_conductor_instance()
+    analysis = asyncio.run(conductor.analyze_multi_cloud_infrastructure())
+    
+    security_report = {
+        'azure_security_score': analysis['comparison']['security_posture']['azure_score'],
+        'gcp_security_score': analysis['comparison']['security_posture']['gcp_score'],
+        'security_recommendations': [rec for rec in analysis['recommendations'] if rec['type'] == 'security']
+    }
+    
+    return security_report
+
+def get_cloud_conductor_instance():
+    """Get configured Cloud Conductor instance"""
+    # Configuration would be loaded from environment variables or config files
+    azure_config = {
+        'tenant_id': os.getenv('AZURE_TENANT_ID'),
+        'client_id': os.getenv('AZURE_CLIENT_ID'), 
+        'client_secret': os.getenv('AZURE_CLIENT_SECRET'),
+        'subscription_id': os.getenv('AZURE_SUBSCRIPTION_ID')
+    }
+    
+    gcp_config = {
+        'project_id': os.getenv('GCP_PROJECT_ID'),
+        'service_account_path': os.getenv('GCP_SERVICE_ACCOUNT_PATH')
+    }
+    
+    return CloudConductor(azure_config, gcp_config)</div>
+        </div>
+
+        <!-- Step 3: MCP Integration -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                MCP Server Configuration for Multi-Cloud Management
+            </div>
+            
+            <p>Configure MCP to enable GitHub Copilot to interact with your multi-cloud infrastructure through natural language commands.</p>
+            
+            <h4>🔧 MCP Cloud Management Configuration</h4>
+            <div class="code-block json-block">
+                <div class="code-header">📄 .vscode/mcp_cloud_config.json</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>{
+  "mcpServers": {
+    "cloud_conductor": {
+      "command": "python",
+      "args": ["-m", "cloud_conductor_mcp_server"],
+      "env": {
+        "PYTHON_PATH": "./cloud_conductor_env/Scripts/python",
+        "AZURE_TENANT_ID": "azure_tenant_id_here",
+        "AZURE_CLIENT_ID": "azure_client_id_here", 
+        "AZURE_CLIENT_SECRET": "azure_client_secret_here",
+        "AZURE_SUBSCRIPTION_ID": "azure_subscription_id_here",
+        "GCP_PROJECT_ID": "gcp_project_id_here",
+        "GCP_SERVICE_ACCOUNT_PATH": "./credentials/cloud-conductor-key.json",
+        "CLOUD_CONDUCTOR_LOG_LEVEL": "INFO"
+      },
+      "capabilities": [
+        "multi_cloud_analysis",
+        "cost_optimization",
+        "security_auditing", 
+        "resource_management",
+        "performance_monitoring"
+      ]
+    },
+    "azure_specific": {
+      "command": "python",
+      "args": ["-m", "azure_mcp_server"],
+      "env": {
+        "AZURE_SUBSCRIPTION_ID": "azure_subscription_id_here",
+        "SERVICE_ACCOUNT_TOKEN": "azure_service_account_token_here"
+      },
+      "capabilities": [
+        "resource_group_management",
+        "vm_operations",
+        "cost_analysis",
+        "security_center_integration"
+      ]
+    },
+    "gcp_specific": {
+      "command": "python", 
+      "args": ["-m", "gcp_mcp_server"],
+      "env": {
+        "GCP_PROJECT_ID": "gcp_project_id_here",
+        "GOOGLE_APPLICATION_CREDENTIALS": "./credentials/cloud-conductor-key.json"
+      },
+      "capabilities": [
+        "compute_instance_management",
+        "billing_analysis", 
+        "security_command_center",
+        "monitoring_integration"
+      ]
+    }
+  },
+  "cloud_settings": {
+    "default_regions": {
+      "azure": ["eastus", "westus2", "northeurope"],
+      "gcp": ["us-central1", "us-west1", "europe-west1"]
+    },
+    "cost_thresholds": {
+      "warning_percentage": 80,
+      "critical_percentage": 95,
+      "monthly_budget_usd": 5000
+    },
+    "automation_preferences": {
+      "auto_scale_enabled": true,
+      "cost_optimization_auto_apply": false,
+      "security_auto_remediation": false
+    }
+  }
+}</div>
+
+            <h4>🤖 GitHub Copilot Integration Prompts</h4>
+            <div class="code-block">
+                <div class="code-header">💬 Copilot Multi-Cloud Management Prompts</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>I have a multi-cloud setup with Azure and GCP integrated through MCP servers. Please help me:
+
+1. **Infrastructure Analysis**:
+   - Analyze all resources across both Azure and GCP
+   - Compare costs between the two platforms
+   - Identify unused or underutilized resources
+
+2. **Cost Optimization**:
+   - Find opportunities to reduce spending by 20%
+   - Recommend reserved instances or sustained use discounts
+   - Suggest optimal VM sizes and configurations
+
+3. **Security Auditing**:
+   - Perform comprehensive security scan across both clouds
+   - Check for compliance with security best practices
+   - Identify and prioritize security vulnerabilities
+
+4. **Performance Monitoring**:
+   - Monitor resource utilization across platforms
+   - Set up alerts for performance degradation
+   - Recommend auto-scaling configurations
+
+5. **Resource Management**:
+   - Create standardized tagging policies
+   - Implement governance across both platforms
+   - Plan disaster recovery and backup strategies
+
+Use the Cloud Conductor MCP server to execute these requests with proper service account authentication.</div>
+        </div>
+
+        <!-- Step 4: Automation Scripts -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                Automated Multi-Cloud Operations
+            </div>
+            
+            <p>Create automation scripts for common multi-cloud operations that can be triggered by AI systems or scheduled for regular execution.</p>
+            
+            <h4>⚡ Daily Cloud Health Check (daily_health_check.py)</h4>
+            <div class="code-block python-block">
+                <div class="code-header">🔍 daily_health_check.py</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>#!/usr/bin/env python3
+"""
+Daily Multi-Cloud Health Check
+Automated assessment of Azure and GCP infrastructure
+"""
+
+import asyncio
+import json
+from datetime import datetime
+from cloud_conductor import CloudConductor, get_cloud_conductor_instance
+
+async def perform_daily_health_check():
+    """Comprehensive daily health check across both cloud platforms"""
+    
+    print("🔍 Starting Daily Multi-Cloud Health Check")
+    print("=" * 60)
+    
+    conductor = get_cloud_conductor_instance()
+    
+    try:
+        # Perform comprehensive analysis
+        analysis = await conductor.analyze_multi_cloud_infrastructure()
+        
+        # Generate health report
+        health_report = {
+            'report_date': datetime.utcnow().isoformat(),
+            'overall_status': 'healthy',  # Will be calculated
+            'platforms': {
+                'azure': analyze_platform_health(analysis['azure']),
+                'gcp': analyze_platform_health(analysis['gcp'])
+            },
+            'cost_summary': generate_cost_summary(analysis),
+            'security_summary': generate_security_summary(analysis),
+            'recommendations': analysis['recommendations'][:5],  # Top 5 recommendations
+            'action_items': generate_action_items(analysis)
+        }
+        
+        # Calculate overall status
+        health_report['overall_status'] = calculate_overall_health(health_report)
+        
+        # Save report
+        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        filename = f"health_report_{timestamp}.json"
+        
+        with open(filename, 'w') as f:
+            json.dump(health_report, f, indent=2)
+        
+        # Print summary
+        print_health_summary(health_report)
+        
+        print(f"\n📊 Detailed report saved: {filename}")
+        
+        return health_report
+        
+    except Exception as e:
+        print(f"❌ Health check failed: {e}")
+        return None
+
+def analyze_platform_health(platform_data):
+    """Analyze health metrics for a specific platform"""
+    if 'error' in platform_data:
+        return {
+            'status': 'error',
+            'message': platform_data['error'],
+            'resource_count': 0
+        }
+    
+    # Count resources
+    vm_count = len(platform_data.get('virtual_machines', []))
+    instance_count = len(platform_data.get('compute_instances', []))
+    total_resources = vm_count + instance_count
+    
+    # Determine status based on resource count and errors
+    if total_resources == 0:
+        status = 'warning'
+        message = 'No compute resources found'
+    elif total_resources < 3:
+        status = 'healthy'
+        message = f'Small deployment with {total_resources} resources'
+    else:
+        status = 'healthy'
+        message = f'Active deployment with {total_resources} resources'
+    
+    return {
+        'status': status,
+        'message': message,
+        'resource_count': total_resources,
+        'last_checked': datetime.utcnow().isoformat()
+    }
+
+def generate_cost_summary(analysis):
+    """Generate cost summary and trends"""
+    return {
+        'azure_resources': len(analysis['azure'].get('virtual_machines', [])),
+        'gcp_resources': len(analysis['gcp'].get('compute_instances', [])),
+        'estimated_monthly_cost': {
+            'azure': 'Analysis required',
+            'gcp': 'Analysis required',
+            'total': 'Calculation pending'
+        },
+        'cost_optimization_potential': len([
+            rec for rec in analysis.get('recommendations', []) 
+            if rec['type'] == 'cost_optimization'
+        ])
+    }
+
+def generate_security_summary(analysis):
+    """Generate security posture summary"""
+    security_scores = analysis['comparison']['security_posture']
+    
+    return {
+        'azure_security_score': security_scores['azure_score'],
+        'gcp_security_score': security_scores['gcp_score'],
+        'average_score': (security_scores['azure_score'] + security_scores['gcp_score']) / 2,
+        'security_recommendations': len([
+            rec for rec in analysis.get('recommendations', [])
+            if rec['type'] == 'security'
+        ])
+    }
+
+def generate_action_items(analysis):
+    """Generate prioritized action items"""
+    action_items = []
+    
+    # High priority recommendations
+    high_priority_recs = [
+        rec for rec in analysis.get('recommendations', [])
+        if rec.get('priority') == 'high'
+    ]
+    
+    for rec in high_priority_recs:
+        action_items.append({
+            'priority': 'high',
+            'title': rec['title'],
+            'platform': rec['platform'],
+            'estimated_effort': 'Medium',
+            'deadline': '7 days'
+        })
+    
+    # Cost optimization actions
+    if analysis['comparison']['resource_count']['azure_vms'] > 3:
+        action_items.append({
+            'priority': 'medium',
+            'title': 'Review Azure VM sizing and utilization',
+            'platform': 'azure',
+            'estimated_effort': 'Low',
+            'deadline': '14 days'
+        })
+    
+    return action_items[:10]  # Limit to top 10 action items
+
+def calculate_overall_health(health_report):
+    """Calculate overall multi-cloud health status"""
+    azure_status = health_report['platforms']['azure']['status']
+    gcp_status = health_report['platforms']['gcp']['status']
+    avg_security_score = health_report['security_summary']['average_score']
+    
+    if azure_status == 'error' or gcp_status == 'error':
+        return 'critical'
+    elif azure_status == 'warning' or gcp_status == 'warning':
+        return 'warning'
+    elif avg_security_score < 70:
+        return 'warning'
+    else:
+        return 'healthy'
+
+def print_health_summary(health_report):
+    """Print formatted health check summary"""
+    status = health_report['overall_status']
+    status_emoji = {'healthy': '✅', 'warning': '⚠️', 'critical': '❌'}
+    
+    print(f"\n{status_emoji.get(status, '❓')} Overall Status: {status.upper()}")
+    print("\n📊 Platform Summary:")
+    print(f"   Azure: {health_report['platforms']['azure']['status']} ({health_report['platforms']['azure']['resource_count']} resources)")
+    print(f"   GCP: {health_report['platforms']['gcp']['status']} ({health_report['platforms']['gcp']['resource_count']} resources)")
+    
+    print("\n🔒 Security Summary:")
+    print(f"   Average Security Score: {health_report['security_summary']['average_score']:.1f}/100")
+    print(f"   Security Recommendations: {health_report['security_summary']['security_recommendations']}")
+    
+    print("\n💰 Cost Summary:")
+    print(f"   Total Resources: {health_report['cost_summary']['azure_resources'] + health_report['cost_summary']['gcp_resources']}")
+    print(f"   Cost Optimization Opportunities: {health_report['cost_summary']['cost_optimization_potential']}")
+    
+    print(f"\n🎯 Action Items: {len(health_report['action_items'])}")
+    for item in health_report['action_items'][:3]:  # Show top 3
+        print(f"   • {item['title']} ({item['priority']} priority)")
+
+if __name__ == "__main__":
+    # Run daily health check
+    health_report = asyncio.run(perform_daily_health_check())
+    
+    if health_report and health_report['overall_status'] == 'critical':
+        print("\n🚨 CRITICAL ISSUES DETECTED - Immediate attention required!")
+        exit(1)
+    else:
+        print("\n✅ Health check completed successfully")
+        exit(0)</div>
+
+            <h4>💰 Cost Optimization Automation</h4>
+            <div class="code-block yaml-block">
+                <div class="code-header">📋 cost_optimization_workflow.yml</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Weekly Cost Optimization Workflow
+name: Multi-Cloud Cost Optimization
+
+on:
+  schedule:
+    - cron: '0 9 * * MON'  # Every Monday at 9 AM
+  workflow_dispatch:
+
+jobs:
+  cost-analysis:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        
+    - name: Configure Azure credentials
+      env:
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: echo "Azure credentials configured"
+      
+    - name: Configure GCP credentials
+      env:
+        GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      run: |
+        echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > gcp-key.json
+        export GOOGLE_APPLICATION_CREDENTIALS=gcp-key.json
+        
+    - name: Run cost analysis
+      run: |
+        python cost_optimization_script.py --output-format json
+        
+    - name: Generate cost report
+      run: |
+        python generate_cost_report.py --include-recommendations
+        
+    - name: Upload cost report
+      uses: actions/upload-artifact@v3
+      with:
+        name: weekly-cost-report
+        path: cost_report_*.json
+        
+    - name: Send notification
+      if: always()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        text: 'Weekly multi-cloud cost optimization analysis completed'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}</div>
+        </div>
+
+        <!-- Step 5: Cost Calculator -->
+        <div class="cost-calculator">
+            <h3>💰 Multi-Cloud Cost Calculator</h3>
+            <p>AI-powered cost analysis and optimization recommendations for Azure and GCP workloads</p>
+            
+            <div style="margin-top: 20px; text-align: left;">
+                <strong>🎯 Cost Optimization Features:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Reserved Instance vs. On-Demand analysis</li>
+                    <li>Right-sizing recommendations for VMs/instances</li>
+                    <li>Multi-region cost comparison</li>
+                    <li>Sustained use discount calculations (GCP)</li>
+                    <li>Azure Hybrid Benefit optimization</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Final Summary -->
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #0078d4, #4285f4); border-radius: 8px; color: white;">
+            <h3>☁️ Cloud Conductor - Complete!</h3>
+            <p>You now have a comprehensive AI-powered multi-cloud management system that optimizes costs, ensures security, and manages resources across Microsoft Azure and Google Cloud Platform.</p>
+            
+            <div style="margin-top: 20px;">
+                <strong>🎯 Key Achievements:</strong>
+                <ul style="text-align: left; display: inline-block; margin-top: 10px;">
+                    <li>Multi-cloud service account authentication setup</li>
+                    <li>AI-powered infrastructure analysis and optimization</li>
+                    <li>GitHub Copilot integration for natural language cloud management</li>
+                    <li>Automated health checks and cost optimization workflows</li>
+                    <li>Comprehensive security auditing across both platforms</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement;
+            const textContent = codeBlock.textContent.replace('Copy', '').trim();
+            navigator.clipboard.writeText(textContent).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

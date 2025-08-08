@@ -1,0 +1,918 @@
+@page
+@model mcp_service_account_auth_example.Pages.ContentCreatorExampleModel
+@{
+    ViewData["Title"] = "Content Creator - AI Documentation & Wiki Management";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .workflow-diagram {
+            background-color: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .workflow-step {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .workflow-arrow {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+        
+        /* Mobile responsiveness */
+        @@media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .workflow-step {
+                display: block;
+                margin: 10px 0;
+            }
+            .workflow-arrow {
+                display: block;
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
+            <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🚀 Functional Examples</a>
+            <a href="/MusicExample" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🎵 Music to My Ears</a>
+            <a href="/CloudConductorExample" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">☁️ Cloud Conductor</a>
+            <a href="/ContentCreatorExample" style="color: #667eea; text-decoration: none; margin: 0 15px; font-weight: bold;">📚 Content Creator</a>
+        </nav>
+
+        <h1>📚 Content Creator</h1>
+        <div class="subtitle">AI-Powered Documentation & Wiki Management System</div>
+
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 10px 0;">Intelligent Content Generation</h3>
+            <p style="margin: 0;">Automate documentation creation, wiki management, and knowledge base updates using AI-powered analysis of code, requirements, and team communications</p>
+        </div>
+
+        <div class="workflow-diagram">
+            <div class="workflow-step">Code Analysis</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">Content Generation</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">Wiki Update</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">Knowledge Sync</div>
+        </div>
+
+        <!-- Platform Overview -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 20px 0;">
+            <div style="padding: 20px; border-radius: 8px; background: linear-gradient(135deg, #4285f4, #34a853); color: white; text-align: center;">
+                <h3 style="color: white; margin-top: 0;">📄 Confluence</h3>
+                <p>Enterprise wiki and documentation platform with collaborative editing and structured content organization</p>
+            </div>
+            <div style="padding: 20px; border-radius: 8px; background: linear-gradient(135deg, #0078d4, #005a9e); color: white; text-align: center;">
+                <h3 style="color: white; margin-top: 0;">📚 SharePoint</h3>
+                <p>Microsoft's document management and collaboration platform with integrated Office 365 workflows</p>
+            </div>
+            <div style="padding: 20px; border-radius: 8px; background: linear-gradient(135deg, #6f42c1, #5a2d91); color: white; text-align: center;">
+                <h3 style="color: white; margin-top: 0;">🤖 AI Integration</h3>
+                <p>GitHub Copilot and OpenAI integration for intelligent content generation and automated documentation</p>
+            </div>
+        </div>
+
+        <!-- Step 1: Service Account Configuration -->
+        <div style="margin: 25px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+            <div style="font-size: 1.3em; font-weight: bold; color: #667eea; margin-bottom: 15px; display: flex; align-items: center;">
+                <div style="background-color: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">1</div>
+                Multi-Platform Service Account Setup
+            </div>
+            
+            <p>Configure service accounts for seamless integration with Confluence, SharePoint, and AI services through secure authentication.</p>
+            
+            <h4>🔑 Confluence API Configuration</h4>
+            <div style="background-color: #2d3748; color: #e2e8f0; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative; background-color: #4285f4; color: #ffffff; border-left: 4px solid #34a853;">
+                <div style="background-color: #1a202c; color: #a0aec0; padding: 8px 15px; margin: -20px -20px 15px -20px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: bold;">🔗 Confluence Setup</div>
+# Generate Confluence API token
+# Go to: https://id.atlassian.com/manage/api-tokens
+# Create new token with name: "Content Creator Service Account"
+
+# Configure Confluence connection
+CONFLUENCE_BASE_URL=https://your-domain.atlassian.net/wiki
+CONFLUENCE_USERNAME=content-creator-service@yourcompany.com
+CONFLUENCE_API_TOKEN=your_generated_api_token_here
+
+# Test connection
+curl -u $CONFLUENCE_USERNAME:$CONFLUENCE_API_TOKEN \
+     -X GET \
+     "$CONFLUENCE_BASE_URL/rest/api/content?limit=1" \
+     -H "Accept: application/json"</div>
+
+            <h4>📁 SharePoint Graph API Setup</h4>
+            <div style="background-color: #2d3748; color: #e2e8f0; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative; background-color: #0078d4; color: #ffffff; border-left: 4px solid #ffffff;">
+                <div style="background-color: #1a202c; color: #a0aec0; padding: 8px 15px; margin: -20px -20px 15px -20px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: bold;">🏢 SharePoint Configuration</div># Register Azure AD Application
+# Go to: https://portal.azure.com → Azure Active Directory → App registrations
+
+# Application settings
+APPLICATION_NAME="Content Creator Service"
+REDIRECT_URI="http://localhost:5000/auth/sharepoint/callback"
+
+# Required API permissions:
+# - Sites.ReadWrite.All (Application permission)
+# - Files.ReadWrite.All (Application permission) 
+# - User.Read (Delegated permission)
+
+# Generate client secret and configure
+TENANT_ID=your_azure_tenant_id
+CLIENT_ID=your_application_client_id
+CLIENT_SECRET=your_generated_client_secret
+SHAREPOINT_SITE_URL=https://yourcompany.sharepoint.com/sites/knowledge-base</div>
+
+            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px; color: #856404;">
+                <strong>⚠️ Security Best Practice:</strong> Store all API tokens and secrets securely using Azure Key Vault or your organization's secret management system. Never commit credentials to version control.
+            </div>
+        </div>
+
+        <!-- Step 2: AI Content Controller -->
+        <div style="margin: 25px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+            <div style="font-size: 1.3em; font-weight: bold; color: #667eea; margin-bottom: 15px; display: flex; align-items: center;">
+                <div style="background-color: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">2</div>
+                AI-Powered Content Generation Controller
+            </div>
+            
+            <p>Create a Python controller that enables GitHub Copilot to automatically generate, update, and manage documentation across multiple platforms.</p>
+            
+            <h4>📦 Python Dependencies</h4>
+            <div style="background-color: #2d3748; color: #68d391; border-left: 4px solid #68d391; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative;">
+                <div style="background-color: #1a202c; color: #a0aec0; padding: 8px 15px; margin: -20px -20px 15px -20px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: bold;">📦 Package Installation</div># Create virtual environment
+python -m venv content_creator_env
+content_creator_env\Scripts\activate  # Windows
+
+# Install platform SDKs
+pip install atlassian-python-api  # Confluence integration
+pip install msal requests          # SharePoint Graph API
+pip install openai python-dotenv   # AI integration
+
+# Install content processing libraries
+pip install beautifulsoup4 markdown2 pyyaml
+pip install ast docstring-parser gitpython
+
+# Install MCP integration
+pip install asyncio aiohttp websockets</div>
+
+            <h4>🧠 Content Creator Controller (content_creator.py)</h4>
+            <div style="background-color: #2b5797; color: #ffd43b; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative;">
+                <div style="background-color: #1a202c; color: #a0aec0; padding: 8px 15px; margin: -20px -20px 15px -20px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: bold;">🐍 content_creator.py</div>"""
+Content Creator - AI-Powered Documentation & Wiki Management
+Supports Confluence, SharePoint, and automated content generation
+"""
+
+import os
+import json
+import logging
+from datetime import datetime
+from typing import Dict, List, Optional
+import asyncio
+import ast
+import docstring_parser
+
+# Platform imports
+from atlassian import Confluence
+import msal
+import requests
+import openai
+
+# Content processing imports
+from bs4 import BeautifulSoup
+import markdown2
+import yaml
+import git
+
+class ContentCreator:
+    def __init__(self, config: Dict):
+        """Initialize Content Creator with multi-platform support"""
+        self.config = config
+        self.setup_logging()
+        self.initialize_platforms()
+        self.setup_ai_client()
+        
+    def setup_logging(self):
+        """Setup comprehensive logging for content operations"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('content_creator.log'),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger(__name__)
+        
+    def initialize_platforms(self):
+        """Initialize connections to documentation platforms"""
+        try:
+            # Initialize Confluence client
+            self.confluence = Confluence(
+                url=self.config['confluence']['base_url'],
+                username=self.config['confluence']['username'],
+                password=self.config['confluence']['api_token']
+            )
+            
+            # Initialize SharePoint Graph API client
+            app = msal.ConfidentialClientApplication(
+                client_id=self.config['sharepoint']['client_id'],
+                client_credential=self.config['sharepoint']['client_secret'],
+                authority=f"https://login.microsoftonline.com/{self.config['sharepoint']['tenant_id']}"
+            )
+            
+            # Get access token
+            result = app.acquire_token_for_client(scopes=["https://graph.microsoft.com/.default"])
+            if "access_token" in result:
+                self.sharepoint_token = result["access_token"]
+                self.logger.info("SharePoint authentication successful")
+            else:
+                raise Exception(f"SharePoint auth failed: {result.get('error_description')}")
+            
+            self.logger.info("Platform connections initialized successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Platform initialization failed: {e}")
+            raise
+    
+    def setup_ai_client(self):
+        """Initialize AI client for content generation"""
+        openai.api_key = self.config['openai']['api_key']
+        self.ai_model = self.config['openai'].get('model', 'gpt-4')
+        
+    async def analyze_codebase_documentation(self, repo_path: str) -> Dict:
+        """Analyze codebase and identify documentation opportunities"""
+        try:
+            self.logger.info(f"Analyzing codebase documentation for: {repo_path}")
+            
+            # Initialize git repository
+            repo = git.Repo(repo_path)
+            
+            analysis = {
+                'repository_info': {
+                    'name': os.path.basename(repo_path),
+                    'active_branch': repo.active_branch.name,
+                    'last_commit': repo.head.commit.hexsha[:8],
+                    'last_commit_date': repo.head.commit.committed_datetime.isoformat()
+                },
+                'documentation_gaps': [],
+                'api_documentation': [],
+                'code_examples': [],
+                'outdated_docs': []
+            }
+            
+            # Scan for Python files and extract docstrings
+            for root, dirs, files in os.walk(repo_path):
+                # Skip .git and virtual environment directories
+                dirs[:] = [d for d in dirs if not d.startswith(('.git', 'venv', '__pycache__'))]
+                
+                for file in files:
+                    if file.endswith('.py'):
+                        file_path = os.path.join(root, file)
+                        doc_info = self.analyze_python_file(file_path)
+                        if doc_info:
+                            analysis['api_documentation'].append(doc_info)
+            
+            # Check for README and documentation files
+            self.check_existing_documentation(repo_path, analysis)
+            
+            return analysis
+            
+        except Exception as e:
+            self.logger.error(f"Codebase analysis failed: {e}")
+            return {'error': str(e)}
+    
+    def analyze_python_file(self, file_path: str) -> Optional[Dict]:
+        """Extract documentation from Python file"""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Parse AST to extract functions and classes
+            tree = ast.parse(content)
+            
+            functions = []
+            classes = []
+            
+            for node in ast.walk(tree):
+                if isinstance(node, ast.FunctionDef):
+                    docstring = ast.get_docstring(node)
+                    functions.append({
+                        'name': node.name,
+                        'line_number': node.lineno,
+                        'has_docstring': docstring is not None,
+                        'docstring': docstring if docstring else 'Missing documentation',
+                        'parameters': [arg.arg for arg in node.args.args]
+                    })
+                
+                elif isinstance(node, ast.ClassDef):
+                    docstring = ast.get_docstring(node)
+                    methods = [n.name for n in node.body if isinstance(n, ast.FunctionDef)]
+                    classes.append({
+                        'name': node.name,
+                        'line_number': node.lineno,
+                        'has_docstring': docstring is not None,
+                        'docstring': docstring if docstring else 'Missing documentation',
+                        'methods': methods
+                    })
+            
+            if functions or classes:
+                return {
+                    'file_path': file_path,
+                    'relative_path': os.path.relpath(file_path),
+                    'functions': functions,
+                    'classes': classes,
+                    'needs_documentation': len([f for f in functions if not f['has_docstring']]) > 0
+                }
+            
+            return None
+            
+        except Exception as e:
+            self.logger.error(f"Failed to analyze Python file {file_path}: {e}")
+            return None
+    
+    def check_existing_documentation(self, repo_path: str, analysis: Dict):
+        """Check for existing documentation files and their status"""
+        doc_files = ['README.md', 'CONTRIBUTING.md', 'API.md', 'docs/index.md']
+        
+        for doc_file in doc_files:
+            file_path = os.path.join(repo_path, doc_file)
+            if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # Simple analysis of documentation quality
+                word_count = len(content.split())
+                has_code_examples = '```' in content
+                last_modified = datetime.fromtimestamp(os.path.getmtime(file_path))
+                
+                analysis['code_examples'].append({
+                    'file': doc_file,
+                    'word_count': word_count,
+                    'has_code_examples': has_code_examples,
+                    'last_modified': last_modified.isoformat(),
+                    'needs_update': word_count < 100  # Simple heuristic
+                })
+            else:
+                analysis['documentation_gaps'].append(f"Missing {doc_file}")
+    
+    async def generate_documentation(self, analysis: Dict, doc_type: str = 'api') -> str:
+        """Generate documentation using AI based on code analysis"""
+        try:
+            self.logger.info(f"Generating {doc_type} documentation")
+            
+            if doc_type == 'api':
+                return await self.generate_api_documentation(analysis)
+            elif doc_type == 'readme':
+                return await self.generate_readme(analysis)
+            elif doc_type == 'contributing':
+                return await self.generate_contributing_guide(analysis)
+            else:
+                raise ValueError(f"Unknown documentation type: {doc_type}")
+                
+        except Exception as e:
+            self.logger.error(f"Documentation generation failed: {e}")
+            raise
+    
+    async def generate_api_documentation(self, analysis: Dict) -> str:
+        """Generate comprehensive API documentation"""
+        # Prepare context for AI
+        context = {
+            'repository': analysis['repository_info']['name'],
+            'functions': [],
+            'classes': []
+        }
+        
+        # Extract all functions and classes from analysis
+        for file_info in analysis.get('api_documentation', []):
+            context['functions'].extend(file_info['functions'])
+            context['classes'].extend(file_info['classes'])
+        
+        prompt = f"""
+Generate comprehensive API documentation for the {context['repository']} project.
+
+Based on the code analysis, create documentation that includes:
+
+1. **Overview**: Brief description of the project's purpose
+2. **Installation**: Setup and installation instructions
+3. **API Reference**: Detailed documentation for each function and class
+4. **Usage Examples**: Practical code examples
+5. **Configuration**: Environment variables and configuration options
+
+Functions found:
+{json.dumps(context['functions'][:5], indent=2)}  # Limit to avoid token limits
+
+Classes found:
+{json.dumps(context['classes'][:3], indent=2)}  # Limit to avoid token limits
+
+Please generate markdown documentation that follows industry best practices.
+"""
+        
+        response = openai.ChatCompletion.create(
+            model=self.ai_model,
+            messages=[
+                {"role": "system", "content": "You are a technical documentation expert. Create clear, comprehensive, and well-structured documentation."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=3000,
+            temperature=0.3
+        )
+        
+        return response.choices[0].message.content
+    
+    async def publish_to_confluence(self, title: str, content: str, space_key: str) -> Dict:
+        """Publish generated documentation to Confluence"""
+        try:
+            self.logger.info(f"Publishing to Confluence: {title}")
+            
+            # Convert markdown to Confluence storage format
+            html_content = markdown2.markdown(content, extras=['fenced-code-blocks', 'tables'])
+            
+            # Check if page already exists
+            existing_page = self.confluence.get_page_by_title(space_key, title)
+            
+            if existing_page:
+                # Update existing page
+                result = self.confluence.update_page(
+                    page_id=existing_page['id'],
+                    title=title,
+                    body=html_content,
+                    version_comment="Updated by Content Creator AI"
+                )
+                action = 'updated'
+            else:
+                # Create new page
+                result = self.confluence.create_page(
+                    space=space_key,
+                    title=title,
+                    body=html_content,
+                    parent_id=None
+                )
+                action = 'created'
+            
+            self.logger.info(f"Successfully {action} Confluence page: {title}")
+            
+            return {
+                'status': 'success',
+                'action': action,
+                'page_id': result['id'],
+                'page_url': f"{self.config['confluence']['base_url']}/pages/viewpage.action?pageId={result['id']}"
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Confluence publishing failed: {e}")
+            return {'status': 'error', 'message': str(e)}
+    
+    async def publish_to_sharepoint(self, filename: str, content: str, folder_path: str = '/') -> Dict:
+        """Publish documentation to SharePoint document library"""
+        try:
+            self.logger.info(f"Publishing to SharePoint: {filename}")
+            
+            # SharePoint Graph API endpoint
+            site_id = self.get_sharepoint_site_id()
+            drive_endpoint = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive"
+            
+            # Upload file content
+            upload_url = f"{drive_endpoint}/root:{folder_path}/{filename}:/content"
+            
+            headers = {
+                'Authorization': f'Bearer {self.sharepoint_token}',
+                'Content-Type': 'text/markdown'
+            }
+            
+            response = requests.put(upload_url, headers=headers, data=content.encode('utf-8'))
+            
+            if response.status_code in [200, 201]:
+                result = response.json()
+                self.logger.info(f"Successfully uploaded to SharePoint: {filename}")
+                
+                return {
+                    'status': 'success',
+                    'file_id': result['id'],
+                    'web_url': result['webUrl']
+                }
+            else:
+                raise Exception(f"SharePoint upload failed: {response.status_code} - {response.text}")
+                
+        except Exception as e:
+            self.logger.error(f"SharePoint publishing failed: {e}")
+            return {'status': 'error', 'message': str(e)}
+    
+    def get_sharepoint_site_id(self) -> str:
+        """Get SharePoint site ID for Graph API calls"""
+        # This would be configured in your setup
+        return self.config['sharepoint'].get('site_id', 'your-site-id')
+
+# LLM Integration Functions - Callable by GitHub Copilot
+def analyze_and_document_codebase(repo_path: str, platforms: List[str] = ['confluence']):
+    """Analyze codebase and generate documentation across specified platforms"""
+    creator = get_content_creator_instance()
+    analysis = asyncio.run(creator.analyze_codebase_documentation(repo_path))
+    
+    results = {
+        'analysis': analysis,
+        'documentation_generated': [],
+        'platforms_updated': []
+    }
+    
+    # Generate documentation
+    for doc_type in ['api', 'readme']:
+        content = asyncio.run(creator.generate_documentation(analysis, doc_type))
+        results['documentation_generated'].append({
+            'type': doc_type,
+            'content_length': len(content),
+            'generated_at': datetime.utcnow().isoformat()
+        })
+        
+        # Publish to specified platforms
+        if 'confluence' in platforms:
+            result = asyncio.run(creator.publish_to_confluence(
+                f"{analysis['repository_info']['name']} {doc_type.upper()} Documentation",
+                content,
+                'DEV'  # Default space key
+            ))
+            results['platforms_updated'].append(result)
+    
+    return results
+
+def update_documentation_from_commits(repo_path: str, since_date: str = None):
+    """Update documentation based on recent code changes"""
+    creator = get_content_creator_instance()
+    
+    # This would analyze git commits since a specific date
+    # and update relevant documentation sections
+    
+    return {
+        'status': 'Documentation updated based on recent commits',
+        'updated_sections': ['API Reference', 'Configuration'],
+        'platforms': ['confluence', 'sharepoint']
+    }
+
+def get_content_creator_instance():
+    """Get configured Content Creator instance"""
+    config = {
+        'confluence': {
+            'base_url': os.getenv('CONFLUENCE_BASE_URL'),
+            'username': os.getenv('CONFLUENCE_USERNAME'),
+            'api_token': os.getenv('CONFLUENCE_API_TOKEN')
+        },
+        'sharepoint': {
+            'tenant_id': os.getenv('TENANT_ID'),
+            'client_id': os.getenv('CLIENT_ID'),
+            'client_secret': os.getenv('CLIENT_SECRET'),
+            'site_id': os.getenv('SHAREPOINT_SITE_ID')
+        },
+        'openai': {
+            'api_key': os.getenv('OPENAI_API_KEY'),
+            'model': 'gpt-4'
+        }
+    }
+    
+    return ContentCreator(config)</div>
+        </div>
+
+        <!-- Step 3: MCP Integration -->
+        <div style="margin: 25px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+            <div style="font-size: 1.3em; font-weight: bold; color: #667eea; margin-bottom: 15px; display: flex; align-items: center;">
+                <div style="background-color: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">3</div>
+                MCP Server Configuration for Content Management
+            </div>
+            
+            <p>Configure MCP to enable GitHub Copilot to interact with documentation platforms through natural language commands.</p>
+            
+            <h4>🔧 MCP Content Management Configuration</h4>
+            <div style="background-color: #1a365d; color: #bee3f8; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative;">
+                <div style="background-color: #1a202c; color: #a0aec0; padding: 8px 15px; margin: -20px -20px 15px -20px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: bold;">📄 .vscode/mcp_content_config.json</div>{
+  "mcpServers": {
+    "content_creator": {
+      "command": "python",
+      "args": ["-m", "content_creator_mcp_server"],
+      "env": {
+        "PYTHON_PATH": "./content_creator_env/Scripts/python",
+        "CONFLUENCE_BASE_URL": "https://yourcompany.atlassian.net/wiki",
+        "CONFLUENCE_USERNAME": "content-creator-service@yourcompany.com",
+        "CONFLUENCE_API_TOKEN": "confluence_api_token_here",
+        "TENANT_ID": "azure_tenant_id_here",
+        "CLIENT_ID": "sharepoint_client_id_here",
+        "CLIENT_SECRET": "sharepoint_client_secret_here",
+        "SHAREPOINT_SITE_ID": "sharepoint_site_id_here",
+        "OPENAI_API_KEY": "openai_api_key_here"
+      },
+      "capabilities": [
+        "codebase_analysis",
+        "documentation_generation",
+        "confluence_publishing",
+        "sharepoint_management",
+        "ai_content_creation"
+      ]
+    }
+  },
+  "content_settings": {
+    "default_spaces": {
+      "confluence": "DEV",
+      "sharepoint": "/Shared Documents/Technical Documentation"
+    },
+    "documentation_types": ["api", "readme", "contributing", "architecture"],
+    "auto_update_frequency": "daily",
+    "ai_model_preferences": {
+      "documentation": "gpt-4",
+      "code_examples": "gpt-3.5-turbo",
+      "summaries": "gpt-3.5-turbo"
+    }
+  }
+}</div>
+
+            <h4>🤖 GitHub Copilot Integration Prompts</h4>
+            <div style="background-color: #553c9a; color: #e9d8fd; border-left: 4px solid #9f7aea; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative;">
+                <div style="background-color: #1a202c; color: #a0aec0; padding: 8px 15px; margin: -20px -20px 15px -20px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: bold;">💬 Copilot Content Management Prompts</div>I have a Content Creator system integrated with Confluence and SharePoint. Please help me:
+
+1. **Documentation Generation**:
+   - Analyze my current codebase for missing documentation
+   - Generate comprehensive API documentation from code comments
+   - Create user-friendly README files with examples
+   - Generate contributing guidelines for new developers
+
+2. **Content Management**:
+   - Update Confluence pages with latest API changes
+   - Sync documentation between GitHub and SharePoint
+   - Create technical architecture documentation
+   - Generate release notes from git commit history
+
+3. **Quality Assurance**:
+   - Review existing documentation for completeness
+   - Identify outdated content that needs updating
+   - Suggest improvements for unclear sections
+   - Ensure consistent formatting across platforms
+
+4. **Automation**:
+   - Set up automated documentation updates on code changes
+   - Create templates for different document types
+   - Implement approval workflows for documentation changes
+   - Schedule regular content audits and updates
+
+Use the Content Creator MCP server to execute these requests with proper service account authentication.</div>
+        </div>
+
+        <!-- Step 4: Workflow Example -->
+        <div style="margin: 25px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+            <div style="font-size: 1.3em; font-weight: bold; color: #667eea; margin-bottom: 15px; display: flex; align-items: center;">
+                <div style="background-color: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">4</div>
+                Complete Documentation Workflow Example
+            </div>
+            
+            <p>Demonstrate a complete workflow from code analysis to published documentation across multiple platforms.</p>
+            
+            <h4>🎬 End-to-End Workflow Script</h4>
+            <div style="background-color: #2b5797; color: #ffd43b; border-radius: 6px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; overflow-x: auto; overflow-wrap: break-word; word-wrap: break-word; max-width: 100%; position: relative;">
+                <div style="background-color: #1a202c; color: #a0aec0; padding: 8px 15px; margin: -20px -20px 15px -20px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: bold;">🎭 complete_documentation_workflow.py</div>#!/usr/bin/env python3
+"""
+Complete Documentation Workflow
+Demonstrates end-to-end content creation and publishing
+"""
+
+import asyncio
+from content_creator import get_content_creator_instance
+
+async def create_complete_documentation_suite():
+    """Generate and publish comprehensive documentation suite"""
+    
+    print("📚 Starting Complete Documentation Workflow")
+    print("=" * 60)
+    
+    creator = get_content_creator_instance()
+    
+    try:
+        # Step 1: Analyze current codebase
+        print("🔍 Step 1: Analyzing codebase...")
+        repo_path = "."  # Current repository
+        analysis = await creator.analyze_codebase_documentation(repo_path)
+        
+        print(f"   ✅ Found {len(analysis.get('api_documentation', []))} Python files")
+        print(f"   ✅ Identified {len(analysis.get('documentation_gaps', []))} documentation gaps")
+        
+        # Step 2: Generate comprehensive documentation
+        print("\n📝 Step 2: Generating documentation...")
+        
+        documentation_suite = {}
+        
+        # Generate API documentation
+        api_docs = await creator.generate_documentation(analysis, 'api')
+        documentation_suite['api'] = api_docs
+        print("   ✅ API documentation generated")
+        
+        # Generate README
+        readme_docs = await creator.generate_documentation(analysis, 'readme')
+        documentation_suite['readme'] = readme_docs
+        print("   ✅ README documentation generated")
+        
+        # Generate contributing guide
+        contributing_docs = await creator.generate_documentation(analysis, 'contributing')
+        documentation_suite['contributing'] = contributing_docs
+        print("   ✅ Contributing guide generated")
+        
+        # Step 3: Publish to Confluence
+        print("\n🌐 Step 3: Publishing to Confluence...")
+        
+        confluence_results = []
+        for doc_type, content in documentation_suite.items():
+            result = await creator.publish_to_confluence(
+                f"{analysis['repository_info']['name']} - {doc_type.title()}",
+                content,
+                'DEV'
+            )
+            confluence_results.append(result)
+            if result['status'] == 'success':
+                print(f"   ✅ {doc_type.title()} published to Confluence")
+            else:
+                print(f"   ❌ Failed to publish {doc_type}: {result['message']}")
+        
+        # Step 4: Publish to SharePoint
+        print("\n📁 Step 4: Publishing to SharePoint...")
+        
+        sharepoint_results = []
+        for doc_type, content in documentation_suite.items():
+            filename = f"{analysis['repository_info']['name']}_{doc_type}.md"
+            result = await creator.publish_to_sharepoint(
+                filename,
+                content,
+                '/Technical Documentation'
+            )
+            sharepoint_results.append(result)
+            if result['status'] == 'success':
+                print(f"   ✅ {doc_type.title()} uploaded to SharePoint")
+            else:
+                print(f"   ❌ Failed to upload {doc_type}: {result['message']}")
+        
+        # Step 5: Generate summary report
+        print("\n📊 Step 5: Generating workflow report...")
+        
+        workflow_report = {
+            'timestamp': datetime.utcnow().isoformat(),
+            'repository': analysis['repository_info'],
+            'analysis_summary': {
+                'files_analyzed': len(analysis.get('api_documentation', [])),
+                'documentation_gaps': analysis.get('documentation_gaps', []),
+                'documentation_generated': list(documentation_suite.keys())
+            },
+            'publishing_results': {
+                'confluence': confluence_results,
+                'sharepoint': sharepoint_results
+            },
+            'success_metrics': {
+                'confluence_success': len([r for r in confluence_results if r['status'] == 'success']),
+                'sharepoint_success': len([r for r in sharepoint_results if r['status'] == 'success']),
+                'total_documents': len(documentation_suite)
+            }
+        }
+        
+        # Save workflow report
+        import json
+        with open('documentation_workflow_report.json', 'w') as f:
+            json.dump(workflow_report, f, indent=2)
+        
+        print("\n🎉 Documentation Workflow Complete!")
+        print(f"📊 Report saved: documentation_workflow_report.json")
+        print(f"📈 Success Rate: {(workflow_report['success_metrics']['confluence_success'] + workflow_report['success_metrics']['sharepoint_success']) / (workflow_report['success_metrics']['total_documents'] * 2) * 100:.1f}%")
+        
+        return workflow_report
+        
+    except Exception as e:
+        print(f"\n❌ Workflow Error: {e}")
+        return None
+
+# GitHub Copilot callable functions
+def generate_project_documentation():
+    """Generate complete project documentation suite"""
+    return asyncio.run(create_complete_documentation_suite())
+
+def update_api_docs_from_code():
+    """Update API documentation based on current code"""
+    creator = get_content_creator_instance()
+    analysis = asyncio.run(creator.analyze_codebase_documentation('.'))
+    api_docs = asyncio.run(creator.generate_documentation(analysis, 'api'))
+    
+    # Publish to both platforms
+    confluence_result = asyncio.run(creator.publish_to_confluence(
+        'API Documentation',
+        api_docs,
+        'DEV'
+    ))
+    
+    sharepoint_result = asyncio.run(creator.publish_to_sharepoint(
+        'API_Documentation.md',
+        api_docs,
+        '/Technical Documentation'
+    ))
+    
+    return {
+        'api_docs_length': len(api_docs),
+        'confluence_status': confluence_result['status'],
+        'sharepoint_status': sharepoint_result['status']
+    }
+
+if __name__ == "__main__":
+    # Run complete documentation workflow
+    report = asyncio.run(create_complete_documentation_suite())
+    
+    if report:
+        success_rate = (report['success_metrics']['confluence_success'] + 
+                       report['success_metrics']['sharepoint_success']) / \
+                      (report['success_metrics']['total_documents'] * 2) * 100
+        
+        if success_rate >= 80:
+            print("✅ Documentation workflow completed successfully!")
+            exit(0)
+        else:
+            print("⚠️ Documentation workflow completed with some failures")
+            exit(1)
+    else:
+        print("❌ Documentation workflow failed")
+        exit(1)</div>
+        </div>
+
+        <!-- Final Summary -->
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; color: white;">
+            <h3>📚 Content Creator - Complete!</h3>
+            <p>You now have a comprehensive AI-powered documentation and wiki management system that automatically generates, updates, and publishes content across Confluence and SharePoint.</p>
+            
+            <div style="margin-top: 20px;">
+                <strong>🎯 Key Achievements:</strong>
+                <ul style="text-align: left; display: inline-block; margin-top: 10px;">
+                    <li>Multi-platform service account authentication (Confluence + SharePoint)</li>
+                    <li>AI-powered codebase analysis and documentation gap identification</li>
+                    <li>Automated content generation with OpenAI integration</li>
+                    <li>GitHub Copilot integration for natural language content management</li>
+                    <li>Complete workflow automation for enterprise documentation</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

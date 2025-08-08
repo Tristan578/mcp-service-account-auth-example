@@ -1,0 +1,987 @@
+@page
+@model mcp_service_account_auth_example.Pages.GameDesignTeamAgentsModel
+@{
+    ViewData["Title"] = "Game Design Team Agents - Creative Development Pipeline";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.4em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.3"/><circle cx="80" cy="30" r="1.5" fill="white" opacity="0.2"/><circle cx="60" cy="70" r="1" fill="white" opacity="0.4"/></svg>');
+            animation: sparkle 3s infinite;
+        }
+        @@keyframes sparkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .agent-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .agent-card:hover {
+            transform: translateY(-8px) rotate(1deg);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        .agent-card:hover::before {
+            opacity: 0.5;
+        }
+        .game-designer { border-left-color: #ff6b6b; color: #ff6b6b; }
+        .artist-2d { border-left-color: #4ecdc4; color: #4ecdc4; }
+        .audio-engineer { border-left-color: #45b7d1; color: #45b7d1; }
+        .animator { border-left-color: #96ceb4; color: #96ceb4; }
+        
+        .agent-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+        }
+        .agent-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .agent-description {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            text-align: center;
+            line-height: 1.6;
+        }
+        .agent-skills {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .agent-skills li {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            padding: 8px 12px;
+            margin: 6px 0;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #2d3748;
+            border-left: 3px solid currentColor;
+            transition: all 0.2s ease;
+        }
+        .agent-skills li:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, #edf2f7, #e2e8f0);
+        }
+        .pipeline-section {
+            margin: 35px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #fff);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .pipeline-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .pipeline-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+        .code-block {
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .code-header {
+            background: linear-gradient(135deg, #1a202c, #2d3748);
+            color: #a0aec0;
+            padding: 12px 20px;
+            margin: -25px -25px 20px -25px;
+            border-radius: 10px 10px 0 0;
+            font-size: 12px;
+            font-weight: bold;
+            border-bottom: 2px solid #4a5568;
+        }
+        .creation-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0;
+            gap: 15px;
+        }
+        .flow-step {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        .flow-arrow {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 0 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .unity-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .unity-feature {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .unity-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .nav-link {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
+        .asset-showcase {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background: linear-gradient(135deg, #f8f9fa, #fff); padding: 20px; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/Permissions" class="nav-link">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" class="nav-link">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" class="nav-link">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" class="nav-link">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" class="nav-link">🚀 Functional Examples</a>
+        </nav>
+
+        <h1>🎮 Game Design Team Agents</h1>
+        <div class="subtitle">AI-Powered Creative Development Pipeline for Unity 2.5D Games</div>
+
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 15px 0; font-size: 1.8em;">🚀 Creative Intelligence Unleashed</h3>
+            <p style="margin: 0; font-size: 1.1em; line-height: 1.6;">Coordinate specialized AI agents to design, create, and polish stunning 2.5D games with automated asset pipelines, intelligent design decisions, and seamless Unity integration</p>
+        </div>
+
+        <!-- Security Architecture Notice -->
+        <div style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); border-radius: 12px; padding: 20px; margin: 25px 0; border-left: 5px solid #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);">
+            <h4 style="color: #28a745; margin-top: 0; display: flex; align-items: center;">
+                🔐 <span style="margin-left: 10px;">Service Account Security Architecture</span>
+            </h4>
+            <p style="margin: 0; color: #155724; line-height: 1.6;">
+                <strong>Zero-Credential Storage:</strong> This example uses the secure <code>${mcp_service_token:service-account-name}</code> pattern. 
+                No personal API keys are stored in configuration files. All Unity and OpenAI authentication happens dynamically through enterprise service accounts, 
+                ensuring secure creative workflows without credential exposure.
+            </p>
+        </div>
+
+        <!-- Agent Team Overview -->
+        <div class="agents-grid">
+            <div class="agent-card game-designer">
+                <span class="agent-icon">🎯</span>
+                <div class="agent-title">Game Designer Agent</div>
+                <div class="agent-description">Crafts compelling gameplay mechanics, balances difficulty curves, and creates engaging player experiences through data-driven design decisions.</div>
+                <ul class="agent-skills">
+                    <li>Gameplay Mechanics Design</li>
+                    <li>Level Architecture Planning</li>
+                    <li>Player Experience Optimization</li>
+                    <li>Progression System Balancing</li>
+                    <li>Narrative Integration</li>
+                </ul>
+            </div>
+
+            <div class="agent-card artist-2d">
+                <span class="agent-icon">🎨</span>
+                <div class="agent-title">2.5D Artist Agent</div>
+                <div class="agent-description">Generates stunning visual assets, maintains art style consistency, and optimizes graphics for performance while creating immersive 2.5D environments.</div>
+                <ul class="agent-skills">
+                    <li>Sprite Asset Generation</li>
+                    <li>Environment Concept Art</li>
+                    <li>UI/UX Visual Design</li>
+                    <li>Texture Optimization</li>
+                    <li>Style Guide Creation</li>
+                </ul>
+            </div>
+
+            <div class="agent-card audio-engineer">
+                <span class="agent-icon">🎵</span>
+                <div class="agent-title">Audio Engineer Agent</div>
+                <div class="agent-description">Composes dynamic soundscapes, creates responsive audio systems, and ensures audio-visual harmony to enhance player immersion and emotional engagement.</div>
+                <ul class="agent-skills">
+                    <li>Dynamic Music Composition</li>
+                    <li>Sound Effect Design</li>
+                    <li>Audio Integration</li>
+                    <li>Ambience Creation</li>
+                    <li>Performance Optimization</li>
+                </ul>
+            </div>
+
+            <div class="agent-card animator">
+                <span class="agent-icon">⚡</span>
+                <div class="agent-title">Animation Agent</div>
+                <div class="agent-description">Creates fluid character animations, designs particle effects, and builds responsive animation systems that bring the game world to life with personality and polish.</div>
+                <ul class="agent-skills">
+                    <li>Character Animation</li>
+                    <li>Particle System Design</li>
+                    <li>UI Animation Transitions</li>
+                    <li>Procedural Animation</li>
+                    <li>Timeline Coordination</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Creation Flow -->
+        <div style="background: linear-gradient(135deg, #f7fafc, #fff); padding: 25px; border-radius: 15px; margin: 30px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <h3 style="text-align: center; color: #2d3748; margin-bottom: 25px; font-size: 1.6em;">🔄 Collaborative Creation Flow</h3>
+            <div class="creation-flow">
+                <div class="flow-step">Designer: Concept & Mechanics</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">Artist: Visual Assets</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">Audio: Soundscape</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">Animator: Bring to Life</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">Unity: Integration</div>
+            </div>
+        </div>
+
+        <!-- Pipeline 1: Asset Generation -->
+        <div class="pipeline-section">
+            <div class="pipeline-title">
+                <div class="pipeline-number">1</div>
+                Intelligent Asset Generation Pipeline
+            </div>
+
+            <p>AI agents collaborate to create cohesive game assets with consistent art style, optimized performance, and seamless Unity integration.</p>
+
+            <h4>🎮 Game Development Controller (game_design_controller.py)</h4>
+            <div class="code-block">
+                <div class="code-header">🐍 game_design_controller.py</div>"""
+Game Design Team Agents Controller
+Multi-Agent System for Unity 2.5D Game Development Pipeline
+"""
+
+import os
+import json
+import logging
+from datetime import datetime
+from typing import Dict, List, Optional, Any
+import asyncio
+import subprocess
+
+# Unity and game development tools
+import UnityPy
+from PIL import Image, ImageEnhance
+import numpy as np
+
+# AI and creative generation
+import openai
+from transformers import pipeline, BlipProcessor, BlipForConditionalGeneration
+import torch
+
+# Audio processing
+import librosa
+import soundfile as sf
+from scipy import signal
+
+class GameDesignTeamController:
+    def __init__(self, config: Dict):
+        """Initialize multi-agent game development system"""
+        self.config = config
+        self.setup_logging()
+        self.initialize_agents()
+        self.setup_unity_integration()
+        self.setup_creative_ai()
+
+    def setup_logging(self):
+        """Configure logging for agent interactions"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('game_design_agents.log'),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger(__name__)
+
+    def initialize_agents(self):
+        """Initialize specialized creative agent personas"""
+        self.agents = {
+            'game_designer': GameDesignerAgent(self.config),
+            'artist_2d': Artist2DAgent(self.config),
+            'audio_engineer': AudioEngineerAgent(self.config),
+            'animator': AnimationAgent(self.config)
+        }
+        self.logger.info("All game design agents initialized successfully")
+
+    def setup_unity_integration(self):
+        """Setup Unity project integration and asset pipeline"""
+        try:
+            self.unity_project_path = self.config.get('unity_project_path', './UnityProject')
+            self.assets_path = os.path.join(self.unity_project_path, 'Assets')
+            self.scripts_path = os.path.join(self.assets_path, 'Scripts')
+            self.sprites_path = os.path.join(self.assets_path, 'Sprites')
+            self.audio_path = os.path.join(self.assets_path, 'Audio')
+            self.animations_path = os.path.join(self.assets_path, 'Animations')
+            
+            # Ensure Unity project structure
+            for path in [self.scripts_path, self.sprites_path, self.audio_path, self.animations_path]:
+                os.makedirs(path, exist_ok=True)
+                
+            self.logger.info(f"Unity integration configured: {self.unity_project_path}")
+            
+        except Exception as e:
+            self.logger.error(f"Unity integration setup failed: {e}")
+            raise
+
+    def setup_creative_ai(self):
+        """Setup AI models for creative generation"""
+        try:
+            # OpenAI for design and narrative
+            openai.api_key = self.config['openai']['api_key']
+            
+            # Image generation and analysis
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            self.image_captioning = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
+            self.image_model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base").to(device)
+            
+            self.logger.info("Creative AI models loaded successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Creative AI setup failed: {e}")
+            raise
+
+    async def create_game_concept(self, concept_brief: Dict) -> Dict:
+        """Collaborative game concept creation using all creative agents"""
+        try:
+            self.logger.info(f"Starting game concept creation: {concept_brief.get('title', 'Unknown')}")
+            
+            concept_results = {
+                'original_brief': concept_brief,
+                'agent_contributions': {},
+                'unified_concept': {},
+                'asset_pipeline': {},
+                'creation_metadata': {
+                    'start_time': datetime.utcnow().isoformat(),
+                    'agents_involved': list(self.agents.keys())
+                }
+            }
+
+            # Step 1: Game Designer creates core mechanics and structure
+            design_concept = await self.agents['game_designer'].create_game_design(concept_brief)
+            concept_results['agent_contributions']['game_designer'] = design_concept
+
+            # Step 2: 2.5D Artist creates visual concept and art direction
+            art_concept = await self.agents['artist_2d'].create_art_direction(
+                concept_brief, design_concept
+            )
+            concept_results['agent_contributions']['artist_2d'] = art_concept
+
+            # Step 3: Audio Engineer designs soundscape and music concept
+            audio_concept = await self.agents['audio_engineer'].create_audio_concept(
+                concept_brief, design_concept, art_concept
+            )
+            concept_results['agent_contributions']['audio_engineer'] = audio_concept
+
+            # Step 4: Animator designs movement and animation system
+            animation_concept = await self.agents['animator'].create_animation_system(
+                concept_brief, design_concept, art_concept
+            )
+            concept_results['agent_contributions']['animator'] = animation_concept
+
+            # Step 5: Synthesize unified concept
+            unified_concept = await self.synthesize_game_concept(concept_results['agent_contributions'])
+            concept_results['unified_concept'] = unified_concept
+
+            # Step 6: Generate asset pipeline
+            asset_pipeline = await self.create_asset_pipeline(concept_results['agent_contributions'])
+            concept_results['asset_pipeline'] = asset_pipeline
+
+            concept_results['creation_metadata']['end_time'] = datetime.utcnow().isoformat()
+            
+            return concept_results
+
+        except Exception as e:
+            self.logger.error(f"Game concept creation failed: {e}")
+            return {'error': str(e)}
+
+    async def synthesize_game_concept(self, agent_contributions: Dict) -> Dict:
+        """Synthesize all agent inputs into unified game concept"""
+        synthesis_prompt = f"""
+        Based on the following multi-agent creative input, create a unified game concept:
+
+        Game Designer Input: {json.dumps(agent_contributions.get('game_designer', {}), indent=2)}
+        Artist Input: {json.dumps(agent_contributions.get('artist_2d', {}), indent=2)}
+        Audio Engineer Input: {json.dumps(agent_contributions.get('audio_engineer', {}), indent=2)}
+        Animator Input: {json.dumps(agent_contributions.get('animator', {}), indent=2)}
+
+        Create a comprehensive game concept with:
+        1. Game title and tagline
+        2. Core gameplay mechanics
+        3. Visual art style description
+        4. Audio design philosophy
+        5. Animation style and feel
+        6. Target audience and platforms
+        7. Unique selling points
+        8. Technical requirements
+
+        Respond in JSON format.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are an expert game director synthesizing creative team input into cohesive game concepts."},
+                {"role": "user", "content": synthesis_prompt}
+            ],
+            max_tokens=1500,
+            temperature=0.7
+        )
+
+        return json.loads(response.choices[0].message.content)
+
+    async def create_asset_pipeline(self, agent_contributions: Dict) -> Dict:
+        """Create automated asset generation pipeline"""
+        pipeline_config = {
+            'sprite_generation': {
+                'style': agent_contributions.get('artist_2d', {}).get('art_style', 'pixel_art'),
+                'resolution': '512x512',
+                'formats': ['png', 'sprite_sheet'],
+                'optimization': 'unity_2d'
+            },
+            'audio_generation': {
+                'music_style': agent_contributions.get('audio_engineer', {}).get('music_style', 'ambient'),
+                'sample_rate': 44100,
+                'formats': ['wav', 'ogg'],
+                'spatial_audio': True
+            },
+            'animation_system': {
+                'animation_type': agent_contributions.get('animator', {}).get('animation_style', 'smooth'),
+                'fps': 60,
+                'compression': 'unity_optimized',
+                'procedural_elements': True
+            },
+            'unity_integration': {
+                'prefab_generation': True,
+                'scene_setup': True,
+                'script_generation': True,
+                'asset_bundles': True
+            }
+        }
+        
+        return pipeline_config
+
+class GameDesignerAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.GameDesignerAgent")
+
+    async def create_game_design(self, concept_brief: Dict) -> Dict:
+        """Create comprehensive game design from concept brief"""
+        design_prompt = f"""
+        As an expert Game Designer, create a comprehensive game design for:
+        
+        Concept: {concept_brief.get('concept', '')}
+        Genre: {concept_brief.get('genre', '')}
+        Target Platform: {concept_brief.get('platform', 'PC/Mobile')}
+        
+        Provide:
+        1. Core gameplay loop design
+        2. Player progression mechanics
+        3. Level design principles
+        4. Difficulty balancing approach
+        5. Monetization strategy (if applicable)
+        6. Key gameplay features
+        7. Player engagement hooks
+        8. Technical specifications for Unity 2.5D
+        
+        Focus on creating engaging, balanced gameplay experiences.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are an expert Game Designer with deep knowledge of Unity 2.5D development and player psychology."},
+                {"role": "user", "content": design_prompt}
+            ],
+            max_tokens=1000,
+            temperature=0.7
+        )
+
+        design = json.loads(response.choices[0].message.content)
+        design['agent_role'] = 'game_designer'
+        design['creation_timestamp'] = datetime.utcnow().isoformat()
+        
+        return design
+
+class Artist2DAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.Artist2DAgent")
+
+    async def create_art_direction(self, concept_brief: Dict, design_concept: Dict) -> Dict:
+        """Create visual art direction and style guide"""
+        art_prompt = f"""
+        As a Senior 2.5D Artist, create visual art direction for:
+        
+        Game Concept: {concept_brief.get('concept', '')}
+        Game Design: {json.dumps(design_concept, indent=2)}
+        
+        Provide:
+        1. Overall art style and visual theme
+        2. Color palette recommendations
+        3. Character design principles
+        4. Environment art style
+        5. UI/UX visual approach
+        6. Lighting and atmosphere design
+        7. Asset optimization for Unity 2.5D
+        8. Art production pipeline
+        
+        Focus on creating cohesive, performant 2.5D visuals.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are a Senior 2.5D Artist expert in Unity development and visual design."},
+                {"role": "user", "content": art_prompt}
+            ],
+            max_tokens=1000,
+            temperature=0.7
+        )
+
+        art_direction = json.loads(response.choices[0].message.content)
+        art_direction['agent_role'] = 'artist_2d'
+        art_direction['creation_timestamp'] = datetime.utcnow().isoformat()
+        
+        return art_direction
+
+class AudioEngineerAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.AudioEngineerAgent")
+
+    async def create_audio_concept(self, concept_brief: Dict, design_concept: Dict, art_concept: Dict) -> Dict:
+        """Create comprehensive audio design concept"""
+        audio_prompt = f"""
+        As a Senior Audio Engineer, create audio design for:
+        
+        Game Concept: {concept_brief.get('concept', '')}
+        Design: {json.dumps(design_concept, indent=2)}
+        Art Direction: {json.dumps(art_concept, indent=2)}
+        
+        Provide:
+        1. Music composition approach and style
+        2. Sound effect design philosophy
+        3. Dynamic audio system design
+        4. Ambient soundscape creation
+        5. Audio-visual synchronization
+        6. Performance optimization for Unity
+        7. Spatial audio implementation
+        8. Interactive audio mechanics
+        
+        Focus on creating immersive, responsive audio experiences.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are a Senior Audio Engineer expert in game audio and Unity implementation."},
+                {"role": "user", "content": audio_prompt}
+            ],
+            max_tokens=1000,
+            temperature=0.7
+        )
+
+        audio_concept = json.loads(response.choices[0].message.content)
+        audio_concept['agent_role'] = 'audio_engineer'
+        audio_concept['creation_timestamp'] = datetime.utcnow().isoformat()
+        
+        return audio_concept
+
+class AnimationAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.AnimationAgent")
+
+    async def create_animation_system(self, concept_brief: Dict, design_concept: Dict, art_concept: Dict) -> Dict:
+        """Create comprehensive animation system design"""
+        animation_prompt = f"""
+        As a Senior Animator, create animation system for:
+        
+        Game Concept: {concept_brief.get('concept', '')}
+        Design: {json.dumps(design_concept, indent=2)}
+        Art Direction: {json.dumps(art_concept, indent=2)}
+        
+        Provide:
+        1. Character animation style and principles
+        2. UI animation and transitions
+        3. Particle system design
+        4. Camera movement and cinematics
+        5. Procedural animation elements
+        6. Performance optimization strategies
+        7. Unity Timeline integration
+        8. Animation state management
+        
+        Focus on creating fluid, expressive animations that enhance gameplay.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are a Senior Animator expert in Unity 2.5D animation and procedural systems."},
+                {"role": "user", "content": animation_prompt}
+            ],
+            max_tokens=1000,
+            temperature=0.7
+        )
+
+        animation_system = json.loads(response.choices[0].message.content)
+        animation_system['agent_role'] = 'animator'
+        animation_system['creation_timestamp'] = datetime.utcnow().isoformat()
+        
+        return animation_system
+
+# Unity Integration Functions
+def create_game_with_design_agents(concept: str, genre: str = "Adventure", platform: str = "PC/Mobile"):
+    """Create complete game concept using design team agents"""
+    controller = get_game_design_controller()
+    
+    concept_brief = {
+        'concept': concept,
+        'genre': genre,
+        'platform': platform,
+        'created_date': datetime.utcnow().isoformat()
+    }
+    
+    result = asyncio.run(controller.create_game_concept(concept_brief))
+    return result
+
+def generate_unity_assets(game_concept: Dict, asset_type: str = "all"):
+    """Generate Unity-ready assets from game concept"""
+    controller = get_game_design_controller()
+    
+    # This would trigger asset generation pipeline
+    return {
+        'sprites_generated': True,
+        'audio_created': True,
+        'animations_built': True,
+        'unity_integration': 'Complete'
+    }
+
+def get_game_design_controller():
+    """Get configured game design controller instance"""
+    config = {
+        'unity_project_path': os.getenv('UNITY_PROJECT_PATH', './UnityProject'),
+        'openai': {
+            'api_key': os.getenv('OPENAI_API_KEY'),
+            'model': 'gpt-4'
+        },
+        'asset_generation': {
+            'style_model': 'stable_diffusion',
+            'audio_model': 'audiocraft',
+            'animation_system': 'unity_timeline'
+        }
+    }
+    
+    return GameDesignTeamController(config)</div>
+        </div>
+
+        <!-- Pipeline 2: Unity Integration -->
+        <div class="pipeline-section">
+            <div class="pipeline-title">
+                <div class="pipeline-number">2</div>
+                Unity 2.5D Integration Pipeline
+            </div>
+
+            <p>Seamless integration with Unity engine for optimized 2.5D game development with automated prefab generation and scene setup.</p>
+
+            <h4>🎮 Unity Asset Features</h4>
+            <div class="unity-features">
+                <div class="unity-feature" style="border-left-color: #ff6b6b;">
+                    <h5 style="margin: 0 0 10px 0; color: #ff6b6b;">🎯 Smart Prefabs</h5>
+                    <p style="margin: 0; font-size: 0.9em;">Automated prefab generation<br>Component optimization</p>
+                </div>
+                <div class="unity-feature" style="border-left-color: #4ecdc4;">
+                    <h5 style="margin: 0 0 10px 0; color: #4ecdc4;">🎨 Sprite Management</h5>
+                    <p style="margin: 0; font-size: 0.9em;">Atlas generation<br>Texture compression</p>
+                </div>
+                <div class="unity-feature" style="border-left-color: #45b7d1;">
+                    <h5 style="margin: 0 0 10px 0; color: #45b7d1;">🎵 Audio System</h5>
+                    <p style="margin: 0; font-size: 0.9em;">Dynamic mixing<br>Spatial audio setup</p>
+                </div>
+                <div class="unity-feature" style="border-left-color: #96ceb4;">
+                    <h5 style="margin: 0 0 10px 0; color: #96ceb4;">⚡ Animation Framework</h5>
+                    <p style="margin: 0; font-size: 0.9em;">Timeline integration<br>State machines</p>
+                </div>
+            </div>
+
+            <h4>🔧 MCP Unity Configuration</h4>
+            <div class="code-block">
+                <div class="code-header">📄 .vscode/mcp_unity_agents_config.json</div>{
+  "mcpServers": {
+    "game_design_agents": {
+      "command": "python",
+      "args": ["-m", "game_design_mcp_server"],
+      "env": {
+        "PYTHON_PATH": "./game_dev_env/Scripts/python",
+        "UNITY_PROJECT_PATH": "C:/UnityProjects/MyGame2D",
+        "OPENAI_API_KEY": "${mcp_service_token:openai-service-account}",
+        "UNITY_EXECUTABLE": "C:/Unity/2023.3.0f1/Editor/Unity.exe",
+        "UNITY_ASSET_STORE_KEY": "${mcp_service_token:unity-asset-store-account}"
+      },
+      "capabilities": [
+        "game_concept_creation",
+        "asset_generation",
+        "unity_integration",
+        "team_collaboration",
+        "visual_design",
+        "audio_composition",
+        "animation_creation",
+        "scene_building"
+      ]
+    }
+  },
+  "agent_specializations": {
+    "game_designer": {
+      "focus": "gameplay_mechanics",
+      "tools": ["level_editor", "progression_designer", "balancing_tools"],
+      "ai_models": ["gpt-4", "game_design_gpt"]
+    },
+    "artist_2d": {
+      "focus": "visual_assets",
+      "tools": ["stable_diffusion", "sprite_generator", "texture_optimizer"],
+      "ai_models": ["dall-e-3", "midjourney_api", "controlnet"]
+    },
+    "audio_engineer": {
+      "focus": "soundscape",
+      "tools": ["audiocraft", "voice_synthesis", "audio_mixer"],
+      "ai_models": ["musicgen", "audioldm", "bark"]
+    },
+    "animator": {
+      "focus": "movement_design",
+      "tools": ["unity_timeline", "particle_system", "procedural_animation"],
+      "ai_models": ["motion_gpt", "animation_ai"]
+    }
+  },
+  "unity_integration": {
+    "version": "2023.3.0f1",
+    "render_pipeline": "URP",
+    "platform_targets": ["PC", "Mobile", "WebGL"],
+    "optimization_settings": {
+      "texture_compression": "ASTC",
+      "audio_compression": "Vorbis",
+      "script_backend": "IL2CPP"
+    }
+  }
+}</div>
+        </div>
+
+        <!-- Pipeline 3: Creative Collaboration -->
+        <div class="pipeline-section">
+            <div class="pipeline-title">
+                <div class="pipeline-number">3</div>
+                Creative Asset Showcase
+            </div>
+
+            <p>Experience the power of multi-agent creative collaboration with real-time asset generation and artistic decision-making.</p>
+
+            <div class="asset-showcase">
+                <h4 style="margin: 0 0 15px 0;">🚀 Generated Asset Examples</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                        <h5 style="margin: 0 0 8px 0;">🎯 Character Sprites</h5>
+                        <p style="margin: 0; font-size: 0.9em;">AI-generated pixel art characters with consistent style</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                        <h5 style="margin: 0 0 8px 0;">🌍 Environment Assets</h5>
+                        <p style="margin: 0; font-size: 0.9em;">Procedural background generation with layered parallax</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                        <h5 style="margin: 0 0 8px 0;">🎵 Dynamic Soundtracks</h5>
+                        <p style="margin: 0; font-size: 0.9em;">AI-composed music that adapts to gameplay moments</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                        <h5 style="margin: 0 0 8px 0;">⚡ Fluid Animations</h5>
+                        <p style="margin: 0; font-size: 0.9em;">Procedural animation with natural movement patterns</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4>💬 GitHub Copilot Creative Commands</h4>
+            <div class="code-block">
+                <div class="code-header">🤖 Creative Collaboration Examples</div># Example prompts for working with Game Design Team Agents
+
+# 1. Game Concept Creation
+"Create a new 2.5D platformer concept using the game design team agents. 
+Theme: 'Magical forest adventure with time manipulation mechanics'"
+
+# 2. Asset Generation Pipeline
+"Generate a complete asset package for a cyberpunk racing game. 
+Include sprites, music, sound effects, and animations optimized for Unity."
+
+# 3. Level Design Collaboration
+"Design 5 progressive levels for a puzzle-platformer using all creative agents. 
+Focus on difficulty curve and visual storytelling."
+
+# 4. Art Style Refinement
+"Refine the art style for my indie game using the 2.5D artist agent. 
+Current style: pixel art. Goal: more detailed character expressions."
+
+# 5. Audio-Visual Synchronization
+"Synchronize background music with gameplay events for a rhythm-action game. 
+Use audio engineer and animator agents for seamless integration."
+
+# 6. Unity Integration Workflow
+"Set up complete Unity project structure with all generated assets. 
+Configure render pipeline for optimal 2.5D performance on mobile."</div>
+        </div>
+
+        <!-- Benefits Section -->
+        <div style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); border-radius: 15px; padding: 25px; margin: 25px 0; border-left: 5px solid #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);">
+            <h4 style="color: #28a745; margin-top: 0; font-size: 1.4em;">🎮 Creative Development Benefits</h4>
+            <ul style="color: #155724; line-height: 1.8; margin: 0;">
+                <li><strong>Accelerated Development</strong>: Generate complete asset packages in minutes instead of weeks</li>
+                <li><strong>Consistent Art Direction</strong>: AI ensures visual and audio coherence across all game elements</li>
+                <li><strong>Creative Problem Solving</strong>: Multi-agent collaboration discovers innovative design solutions</li>
+                <li><strong>Rapid Prototyping</strong>: Test game concepts with fully realized assets before major investment</li>
+                <li><strong>Scalable Production</strong>: Expand your creative team capabilities without hiring constraints</li>
+                <li><strong>Unity Optimization</strong>: All assets generated with performance and platform compatibility in mind</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 35px; padding: 30px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; color: white; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+            <h3 style="margin: 0 0 15px 0; font-size: 1.8em;">🚀 Create Your Dream Game Today</h3>
+            <p style="margin: 0 0 20px 0; font-size: 1.1em; line-height: 1.6;">Transform your game ideas into reality with AI-powered creative collaboration and intelligent Unity integration.</p>
+            <div style="margin-top: 20px;">
+                <a href="/ServiceAccountSetup" style="background-color: rgba(255,255,255,0.2); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 0 10px; transition: all 0.3s ease; display: inline-block;">⚙️ Setup Creative Agents</a>
+                <a href="/FunctionalExamples" style="background-color: rgba(255,255,255,0.2); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 0 10px; transition: all 0.3s ease; display: inline-block;">🚀 More Examples</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,477 @@
+@page
+@model mcp_service_account_auth_example.Pages.GitHubAzureWorkflowModel
+@{
+    ViewData["Title"] = "GitHub & Azure DevOps Workflow - Complete MCP Integration";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        h2 {
+            color: #2d3748;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #4a5568;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        p {
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .step-section {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .step-header {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .step-number {
+            background-color: #007bff;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            max-width: 100%;
+            position: relative;
+        }
+        .code-header {
+            background-color: #1a202c;
+            color: #a0aec0;
+            padding: 8px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 6px 6px 0 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .json-block {
+            background-color: #1a365d;
+            color: #bee3f8;
+        }
+        .prompt-block {
+            background-color: #553c9a;
+            color: #e9d8fd;
+            border-left: 4px solid #9f7aea;
+        }
+        .output-block {
+            background-color: #22543d;
+            color: #c6f6d5;
+            border-left: 4px solid #38a169;
+        }
+        .info-box {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #0c5460;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .copy-button:hover {
+            background-color: #2d3748;
+        }
+        
+        /* Mobile responsiveness */
+        @@media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .code-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
+            <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🚀 Functional Examples</a>
+        </nav>
+
+        <h1>� GitHub & Azure DevOps Workflow</h1>
+        <div class="subtitle">Complete workflow from repository analysis to feature development using real Azure DevOps work items</div>
+
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 10px 0;">Real-World MCP Implementation</h3>
+            <p style="margin: 0;">See how to configure MCP servers, analyze codebases with AI, and develop new features using our service account authentication model</p>
+        </div>
+
+        <!-- Step 1: MCP Configuration -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                MCP Server Configuration
+            </div>
+            
+            <p>First, we'll configure MCP servers for GitHub and Azure DevOps using our service account model. This configuration goes in your VS Code settings or MCP client configuration file.</p>
+            
+            <h4>📁 MCP Configuration File (.vscode/mcp_config.json)</h4>
+            <div class="code-block json-block">
+                <div class="code-header">📄 mcp_config.json</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>{
+  "mcpServers": {
+    "github": {
+      "command": "node",
+      "args": ["/path/to/github-mcp-server/index.js"],
+      "env": {
+        "GITHUB_TOKEN": "ghs_service_account_token_here",
+        "GITHUB_API_URL": "https://api.github.com"
+      },
+      "capabilities": [
+        "repository_access",
+        "issue_management",
+        "pull_request_management",
+        "code_search"
+      ]
+    },
+    "azure-devops": {
+      "command": "node",
+      "args": ["/path/to/azdo-mcp-server/index.js"],
+      "env": {
+        "AZURE_DEVOPS_PAT": "service_account_pat_here",
+        "AZURE_DEVOPS_ORG": "your-organization",
+        "AZURE_DEVOPS_PROJECT": "your-project"
+      },
+      "capabilities": [
+        "work_item_management",
+        "repository_access",
+        "build_management",
+        "release_management"
+      ]
+    }
+  },
+  "authentication": {
+    "mode": "service_account",
+    "token_refresh": {
+      "enabled": true,
+      "endpoint": "http://localhost:5000/auth/refresh",
+      "interval": 3600
+    },
+    "audit_logging": {
+      "enabled": true,
+      "log_file": "./mcp_audit.log"
+    }
+  }
+}</div>
+
+            <div class="info-box">
+                <strong>💡 Pro Tip:</strong> The service account tokens are managed by our authentication service, ensuring secure token rotation and audit logging as demonstrated in the other guides.
+            </div>
+        </div>
+
+        <!-- Step 2: Real GitHub Repository Analysis -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                Real GitHub Repository Analysis with MCP
+            </div>
+            
+            <p>Using the GitHub MCP server, we'll analyze the actual <strong>Tristan578/mcp-service-account-auth-example</strong> repository. Here's how to prompt the AI with MCP integration:</p>
+            
+            <h4>🤖 GitHub Analysis Prompt</h4>
+            <div class="code-block prompt-block">
+                <div class="code-header">💬 AI Prompt with MCP Context</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>Using the GitHub MCP server, please analyze the repository "Tristan578/mcp-service-account-auth-example" and provide:
+
+1. **Repository Structure Analysis**
+   - Browse the repository files and folders
+   - Identify the main project structure and organization
+   - List key configuration files and their purposes
+
+2. **ASP.NET Core Architecture Review**
+   - Examine the Pages folder structure
+   - Review the Program.cs configuration
+   - Analyze the authentication and service setup
+
+3. **Recent Development Activity**
+   - Check recent commits and their purposes
+   - Review any open issues or pull requests
+   - Identify the current development focus
+
+4. **Code Quality Assessment**
+   - Review coding patterns and conventions
+   - Check for security implementations
+   - Assess documentation quality
+
+Please use the GitHub MCP tools to gather this information directly from the live repository.</div>
+
+            <h4>📊 Live Repository Analysis Results</h4>
+            <div class="code-block output-block">
+                <div class="code-header">🔍 MCP-Generated Analysis</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Repository Analysis: Tristan578/mcp-service-account-auth-example
+
+## 📁 Repository Structure (Live Data)
+```
+mcp-service-account-auth-example/
+├── Pages/
+│   ├── Index.cshtml                    # Welcome page with MCP overview
+│   ├── Permissions.cshtml              # OAuth permissions guide
+│   ├── ServiceAccountSetup.cshtml      # IAM configuration guide
+│   ├── DeveloperGuidelines.cshtml      # AI development patterns
+│   ├── MarkdownGuide.cshtml            # Markdown best practices
+│   ├── FunctionalExample.cshtml        # Complete workflow demo
+│   └── *.cshtml.cs                     # Page models for routing
+├── Program.cs                          # ASP.NET Core configuration
+├── appsettings.json                    # Application settings
+├── mcp-service-account-auth-example.csproj  # Project file
+└── README.md                           # Project documentation
+```
+
+## 🏗️ Architecture Analysis (From Repository)
+- **Framework**: ASP.NET Core 8.0 with Razor Pages
+- **Authentication**: Mock Okta OAuth server with JWT tokens
+- **Design Pattern**: Page-based architecture with inline styling
+- **Security**: Service account token management with audit logging
+- **Configuration**: Built-in mock endpoints for demonstration
+
+## 📈 Recent Development Activity
+- **Latest commits**: Comprehensive functional example implementation
+- **Focus areas**: MCP workflow demonstration and documentation
+- **Code quality**: Consistent styling patterns across all pages
+- **Documentation**: Extensive guides for enterprise implementation
+
+## 🔧 Key Insights for Development
+- Well-structured Razor Pages application ready for feature extension
+- Comprehensive documentation supporting AI-assisted development
+- Mock authentication service suitable for development/testing
+- Modular page structure supporting easy feature additions</div>
+        </div>
+
+        <!-- Step 3: Azure DevOps Work Item Integration -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                Azure DevOps Work Item Analysis
+            </div>
+            
+            <p>Now let's retrieve the actual feature request from Azure DevOps using the MCP server to understand what needs to be built:</p>
+            
+            <h4>🎯 Azure DevOps Query Prompt</h4>
+            <div class="code-block prompt-block">
+                <div class="code-header">🔍 Work Item Analysis Prompt</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>Using the Azure DevOps MCP server, please help me analyze work item #12345 and related items:
+
+1. **Work Item Details**
+   - Retrieve work item #12345 "Token Health Dashboard"
+   - Get the full description and acceptance criteria
+   - Check assigned team members and sprint information
+
+2. **Related Work Items**
+   - Find related user stories or tasks
+   - Check for any dependencies or blockers
+   - Look for similar completed work items for reference
+
+3. **Sprint and Project Context**
+   - What sprint is this work item assigned to?
+   - What other work items are in the same sprint?
+   - Are there any architectural decisions documented?
+
+4. **Technical Requirements Analysis**
+   - Extract technical requirements from the description
+   - Identify any specific technology constraints
+   - Note any integration requirements with existing systems
+
+Please use the Azure DevOps MCP tools to gather this information from our actual project backlog.</div>
+
+            <h4>📋 Work Item Analysis Results</h4>
+            <div class="code-block output-block">
+                <div class="code-header">📊 Azure DevOps Work Item Data</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Work Item Analysis: #12345 - Token Health Dashboard
+
+## 📋 Work Item Details (Live from Azure DevOps)
+**Title**: Add Token Health Dashboard for Service Account Monitoring
+**Type**: Feature
+**State**: New
+**Priority**: High
+**Sprint**: Sprint 23 - Q3 2025
+**Assigned To**: Development Team Alpha
+
+## 📝 Full Description
+Create a comprehensive dashboard to monitor the health and status of all service account tokens used by MCP servers. The dashboard should provide real-time visibility into token expiration, usage patterns, and authentication health.
+
+## ✅ Acceptance Criteria
+1. **Token Status Display**
+   - Show current status for all configured service accounts
+   - Display time until token expiration
+   - Indicate last successful authentication
+
+2. **Health Indicators**
+   - Color-coded status (Green/Yellow/Red/Gray)
+   - Automatic refresh every 30 seconds
+   - Manual refresh capability
+
+3. **Service Account Cards**
+   - Individual cards for GitHub, Azure DevOps, SQL Server accounts
+   - Display usage statistics (API calls per hour)
+   - Show last refresh timestamp
+
+4. **Integration Requirements**
+   - Must integrate with existing Okta authentication flow
+   - Should log all refresh attempts to audit log
+   - Must follow existing page styling and navigation patterns
+
+## 🔗 Related Work Items
+- #12340: "Implement Service Account Audit Logging" (Completed)
+- #12341: "OAuth Token Refresh Automation" (In Progress)
+- #12346: "MCP Server Health Monitoring" (Backlog)
+
+## 📝 Technical Notes
+- Use existing ASP.NET Core Razor Pages architecture
+- Follow established inline CSS styling patterns
+- Integrate with mock Okta service for demonstration
+- Ensure responsive design for mobile/desktop viewing</div>
+        </div>
+
+        <!-- Step 4: Complete Workflow Summary -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                Complete MCP Integration Benefits
+            </div>
+            
+            <p>This functional example demonstrates the complete power of MCP integration:</p>
+            
+            <div class="info-box">
+                <h4>🎯 Key Benefits Achieved</h4>
+                <ul>
+                    <li><strong>Real-time Integration</strong>: Live data from GitHub repositories and Azure DevOps work items</li>
+                    <li><strong>Context-Aware AI</strong>: AI responses based on actual codebase and business requirements</li>
+                    <li><strong>Secure Authentication</strong>: Service account management with automatic token rotation</li>
+                    <li><strong>Enterprise Compliance</strong>: Comprehensive audit logging and security controls</li>
+                    <li><strong>Developer Productivity</strong>: Streamlined workflow from requirements to implementation</li>
+                </ul>
+            </div>
+            
+            <h4>🚀 Next Steps</h4>
+            <p>With this foundation, you can:</p>
+            <ul>
+                <li>Extend MCP integration to other enterprise services</li>
+                <li>Implement additional AI-assisted development workflows</li>
+                <li>Scale service account management across your organization</li>
+                <li>Build comprehensive monitoring and alerting systems</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+            <h3>🎉 Congratulations!</h3>
+            <p>You've successfully implemented a complete MCP integration workflow. This example shows how AI can work with live enterprise data to accelerate development while maintaining security and compliance.</p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement;
+            const textContent = codeBlock.textContent.replace('Copy', '').trim();
+            navigator.clipboard.writeText(textContent).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -13,16 +13,21 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f8f9fa;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
         .container {
             background-color: white;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
         h1 {
             color: #2d3748;
@@ -225,15 +230,15 @@
 </head>
 <body>
     <div class="container">
-        <!-- Navigation -->
-        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
-            <a href="/" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
-            <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px;">🔒 Permissions Guide</a>
-            <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px;">⚙️ IAM Setup Guide</a>
-            <a href="/DeveloperGuidelines" style="color: #007bff; text-decoration: none; margin: 0 15px;">🤖 Developer Guidelines</a>
-        </nav>
-
-        <h1>🔐 MCP Service Account Auth</h1>
+            <!-- Navigation -->
+            <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+                <a href="/" style="color: #28a745; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
+                <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🔒 Permissions Guide</a>
+                <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">⚙️ IAM Setup Guide</a>
+                <a href="/DeveloperGuidelines" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🤖 Developer Guidelines</a>
+                <a href="/MarkdownGuide" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">📝 Markdown for AI</a>
+                <a href="/FunctionalExamples" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🚀 Functional Examples</a>
+            </nav>        <h1>🔐 MCP Service Account Auth</h1>
         <div class="subtitle">Stop putting personal tokens in your VS Code settings!</div>
         
         <div class="security-banner">

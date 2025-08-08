@@ -1,0 +1,797 @@
+@page
+@model mcp_service_account_auth_example.Pages.AgileTeamAgentsModel
+@{
+    ViewData["Title"] = "Agile Team Agents - Multi-Agent Development Workflows";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .agent-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .agent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .product-owner { border-left-color: #e53e3e; }
+        .scrum-master { border-left-color: #38a169; }
+        .developer { border-left-color: #3182ce; }
+        .qa-engineer { border-left-color: #9f7aea; }
+        
+        .agent-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .agent-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .agent-description {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .agent-skills {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .agent-skills li {
+            background-color: #f7fafc;
+            padding: 4px 8px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-size: 0.8em;
+            color: #2d3748;
+        }
+        .workflow-section {
+            margin: 30px 0;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .workflow-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .workflow-number {
+            background-color: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .code-header {
+            background-color: #1a202c;
+            color: #a0aec0;
+            padding: 8px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 6px 6px 0 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .collaboration-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        .flow-step {
+            background-color: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .flow-arrow {
+            font-size: 1.2em;
+            color: #667eea;
+            margin: 0 5px;
+        }
+        .nav-link {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/Permissions" class="nav-link">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" class="nav-link">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" class="nav-link">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" class="nav-link">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" class="nav-link">🚀 Functional Examples</a>
+        </nav>
+
+        <h1>👥 Agile Team Agents</h1>
+        <div class="subtitle">Multi-Agent Development Workflows with Intelligent Collaboration</div>
+
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 10px 0;">🤖 Intelligent Development Teams</h3>
+            <p style="margin: 0;">Coordinate specialized AI agents working together to manage sprints, refine stories, and deliver high-quality software through automated agile workflows</p>
+        </div>
+
+        <!-- Security Architecture Notice -->
+        <div style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); border-radius: 12px; padding: 20px; margin: 25px 0; border-left: 5px solid #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);">
+            <h4 style="color: #28a745; margin-top: 0; display: flex; align-items: center;">
+                🔐 <span style="margin-left: 10px;">Service Account Security Architecture</span>
+            </h4>
+            <p style="margin: 0; color: #155724; line-height: 1.6;">
+                <strong>Zero-Credential Storage:</strong> This example uses the secure <code>${mcp_service_token:service-account-name}</code> pattern. 
+                No personal tokens are stored in configuration files. All authentication happens dynamically through enterprise service accounts, 
+                ensuring enterprise-grade security and compliance.
+            </p>
+        </div>
+
+        <!-- Agent Team Overview -->
+        <div class="agents-grid">
+            <div class="agent-card product-owner">
+                <span class="agent-icon">📊</span>
+                <div class="agent-title">Product Owner Agent</div>
+                <div class="agent-description">Manages product backlog, prioritizes features, and defines acceptance criteria with stakeholder input analysis.</div>
+                <ul class="agent-skills">
+                    <li>Backlog Prioritization</li>
+                    <li>User Story Creation</li>
+                    <li>Stakeholder Communication</li>
+                    <li>Business Value Analysis</li>
+                </ul>
+            </div>
+
+            <div class="agent-card scrum-master">
+                <span class="agent-icon">⚡</span>
+                <div class="agent-title">Scrum Master Agent</div>
+                <div class="agent-description">Facilitates ceremonies, removes impediments, and ensures team velocity through process optimization.</div>
+                <ul class="agent-skills">
+                    <li>Sprint Planning</li>
+                    <li>Impediment Resolution</li>
+                    <li>Team Velocity Tracking</li>
+                    <li>Process Improvement</li>
+                </ul>
+            </div>
+
+            <div class="agent-card developer">
+                <span class="agent-icon">💻</span>
+                <div class="agent-title">Developer Agent</div>
+                <div class="agent-description">Analyzes technical requirements, estimates effort, and provides implementation guidance with code quality insights.</div>
+                <ul class="agent-skills">
+                    <li>Technical Analysis</li>
+                    <li>Effort Estimation</li>
+                    <li>Code Architecture</li>
+                    <li>Technical Documentation</li>
+                </ul>
+            </div>
+
+            <div class="agent-card qa-engineer">
+                <span class="agent-icon">🔍</span>
+                <div class="agent-title">QA Engineer Agent</div>
+                <div class="agent-description">Defines test strategies, creates acceptance criteria, and ensures quality standards through automated testing plans.</div>
+                <ul class="agent-skills">
+                    <li>Test Strategy Design</li>
+                    <li>Acceptance Criteria</li>
+                    <li>Quality Assurance</li>
+                    <li>Risk Assessment</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Collaboration Flow -->
+        <div style="background-color: #f7fafc; padding: 20px; border-radius: 10px; margin: 25px 0;">
+            <h3 style="text-align: center; color: #2d3748; margin-bottom: 20px;">🔄 Agent Collaboration Flow</h3>
+            <div class="collaboration-flow">
+                <div class="flow-step">PO: Story Creation</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">Dev: Technical Analysis</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">QA: Test Planning</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">SM: Sprint Planning</div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">Team: Execution</div>
+            </div>
+        </div>
+
+        <!-- Workflow 1: Story Refinement -->
+        <div class="workflow-section">
+            <div class="workflow-title">
+                <div class="workflow-number">1</div>
+                Intelligent Story Refinement Workflow
+            </div>
+
+            <p>Multi-agent collaboration for refining user stories with comprehensive analysis from product, technical, and quality perspectives.</p>
+
+            <h4>🧠 Agent Collaboration Controller (agile_team_controller.py)</h4>
+            <div class="code-block">
+                <div class="code-header">🐍 agile_team_controller.py</div>"""
+Agile Team Agents Controller
+Multi-Agent System for Intelligent Sprint Management and Story Refinement
+"""
+
+import os
+import json
+import logging
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Any
+import asyncio
+
+# Azure DevOps and collaboration tools
+import requests
+from azure.devops.connection import Connection
+from msrest.authentication import BasicAuthentication
+
+# AI and natural language processing
+import openai
+from transformers import pipeline
+
+class AgileTeamController:
+    def __init__(self, config: Dict):
+        """Initialize multi-agent agile team system"""
+        self.config = config
+        self.setup_logging()
+        self.initialize_agents()
+        self.setup_integrations()
+
+    def setup_logging(self):
+        """Configure logging for agent interactions"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('agile_team_agents.log'),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger(__name__)
+
+    def initialize_agents(self):
+        """Initialize specialized agent personas with unique capabilities"""
+        self.agents = {
+            'product_owner': ProductOwnerAgent(self.config),
+            'scrum_master': ScrumMasterAgent(self.config),
+            'developer': DeveloperAgent(self.config),
+            'qa_engineer': QAEngineerAgent(self.config)
+        }
+        self.logger.info("All agile team agents initialized successfully")
+
+    def setup_integrations(self):
+        """Setup integrations with Azure DevOps, GitHub, and other tools"""
+        try:
+            # Azure DevOps connection
+            credentials = BasicAuthentication('', self.config['azure_devops']['personal_access_token'])
+            self.devops_connection = Connection(
+                base_url=self.config['azure_devops']['organization_url'],
+                creds=credentials
+            )
+            
+            # OpenAI for agent intelligence
+            openai.api_key = self.config['openai']['api_key']
+            
+            self.logger.info("External integrations configured successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Integration setup failed: {e}")
+            raise
+
+    async def refine_user_story(self, story_data: Dict) -> Dict:
+        """Collaborative story refinement using all team agents"""
+        try:
+            self.logger.info(f"Starting story refinement: {story_data.get('title', 'Unknown')}")
+            
+            refinement_results = {
+                'original_story': story_data,
+                'agent_analyses': {},
+                'refined_story': {},
+                'collaboration_metadata': {
+                    'start_time': datetime.utcnow().isoformat(),
+                    'agents_involved': list(self.agents.keys())
+                }
+            }
+
+            # Step 1: Product Owner analysis
+            po_analysis = await self.agents['product_owner'].analyze_story(story_data)
+            refinement_results['agent_analyses']['product_owner'] = po_analysis
+
+            # Step 2: Developer technical analysis
+            dev_analysis = await self.agents['developer'].analyze_technical_requirements(
+                story_data, po_analysis
+            )
+            refinement_results['agent_analyses']['developer'] = dev_analysis
+
+            # Step 3: QA Engineer test planning
+            qa_analysis = await self.agents['qa_engineer'].create_test_strategy(
+                story_data, po_analysis, dev_analysis
+            )
+            refinement_results['agent_analyses']['qa_engineer'] = qa_analysis
+
+            # Step 4: Scrum Master facilitation and consensus
+            sm_facilitation = await self.agents['scrum_master'].facilitate_consensus(
+                story_data, refinement_results['agent_analyses']
+            )
+            refinement_results['agent_analyses']['scrum_master'] = sm_facilitation
+
+            # Step 5: Generate refined story with all inputs
+            refined_story = await self.synthesize_refined_story(refinement_results['agent_analyses'])
+            refinement_results['refined_story'] = refined_story
+
+            refinement_results['collaboration_metadata']['end_time'] = datetime.utcnow().isoformat()
+            
+            return refinement_results
+
+        except Exception as e:
+            self.logger.error(f"Story refinement failed: {e}")
+            return {'error': str(e)}
+
+    async def synthesize_refined_story(self, agent_analyses: Dict) -> Dict:
+        """Synthesize all agent inputs into a refined user story"""
+        synthesis_prompt = f"""
+        Based on the following multi-agent analysis, create a refined user story:
+
+        Product Owner Analysis: {json.dumps(agent_analyses.get('product_owner', {}), indent=2)}
+        Developer Analysis: {json.dumps(agent_analyses.get('developer', {}), indent=2)}
+        QA Analysis: {json.dumps(agent_analyses.get('qa_engineer', {}), indent=2)}
+        Scrum Master Facilitation: {json.dumps(agent_analyses.get('scrum_master', {}), indent=2)}
+
+        Create a refined user story with:
+        1. Clear title and description
+        2. Detailed acceptance criteria
+        3. Technical considerations
+        4. Test scenarios
+        5. Effort estimation
+        6. Dependencies and risks
+        7. Definition of done
+
+        Respond in JSON format.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are an expert agile coach synthesizing team input into refined user stories."},
+                {"role": "user", "content": synthesis_prompt}
+            ],
+            max_tokens=1500,
+            temperature=0.3
+        )
+
+        return json.loads(response.choices[0].message.content)
+
+class ProductOwnerAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.ProductOwnerAgent")
+
+    async def analyze_story(self, story_data: Dict) -> Dict:
+        """Analyze story from product perspective"""
+        analysis_prompt = f"""
+        As an experienced Product Owner, analyze this user story:
+        
+        Title: {story_data.get('title', '')}
+        Description: {story_data.get('description', '')}
+        
+        Provide:
+        1. Business value assessment (1-10)
+        2. User impact analysis
+        3. Priority recommendation (High/Medium/Low)
+        4. Acceptance criteria suggestions
+        5. Stakeholder considerations
+        6. Market alignment assessment
+        
+        Focus on business value and user needs.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are an expert Product Owner focused on business value and user needs."},
+                {"role": "user", "content": analysis_prompt}
+            ],
+            max_tokens=800,
+            temperature=0.3
+        )
+
+        analysis = json.loads(response.choices[0].message.content)
+        analysis['agent_role'] = 'product_owner'
+        analysis['analysis_timestamp'] = datetime.utcnow().isoformat()
+        
+        return analysis
+
+class DeveloperAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.DeveloperAgent")
+
+    async def analyze_technical_requirements(self, story_data: Dict, po_analysis: Dict) -> Dict:
+        """Analyze technical implementation requirements"""
+        tech_prompt = f"""
+        As a Senior Developer, analyze this user story for technical implementation:
+        
+        Story: {story_data.get('title', '')}
+        Description: {story_data.get('description', '')}
+        Product Owner Input: {json.dumps(po_analysis, indent=2)}
+        
+        Provide:
+        1. Technical complexity assessment (1-10)
+        2. Effort estimation (story points)
+        3. Implementation approach
+        4. Technical dependencies
+        5. Architecture considerations
+        6. Potential technical risks
+        7. Required skills/expertise
+        
+        Focus on technical feasibility and implementation details.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are a Senior Developer expert in technical analysis and implementation planning."},
+                {"role": "user", "content": tech_prompt}
+            ],
+            max_tokens=800,
+            temperature=0.3
+        )
+
+        analysis = json.loads(response.choices[0].message.content)
+        analysis['agent_role'] = 'developer'
+        analysis['analysis_timestamp'] = datetime.utcnow().isoformat()
+        
+        return analysis
+
+class QAEngineerAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.QAEngineerAgent")
+
+    async def create_test_strategy(self, story_data: Dict, po_analysis: Dict, dev_analysis: Dict) -> Dict:
+        """Create comprehensive test strategy"""
+        qa_prompt = f"""
+        As a Senior QA Engineer, create a test strategy for this user story:
+        
+        Story: {story_data.get('title', '')}
+        Product Owner Analysis: {json.dumps(po_analysis, indent=2)}
+        Developer Analysis: {json.dumps(dev_analysis, indent=2)}
+        
+        Provide:
+        1. Test strategy overview
+        2. Test scenarios (positive/negative/edge cases)
+        3. Acceptance criteria validation
+        4. Quality risk assessment
+        5. Test automation recommendations
+        6. Performance testing considerations
+        7. Definition of done from QA perspective
+        
+        Focus on comprehensive quality assurance.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are a Senior QA Engineer expert in comprehensive test strategy and quality assurance."},
+                {"role": "user", "content": qa_prompt}
+            ],
+            max_tokens=800,
+            temperature=0.3
+        )
+
+        analysis = json.loads(response.choices[0].message.content)
+        analysis['agent_role'] = 'qa_engineer'
+        analysis['analysis_timestamp'] = datetime.utcnow().isoformat()
+        
+        return analysis
+
+class ScrumMasterAgent:
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger(f"{__name__}.ScrumMasterAgent")
+
+    async def facilitate_consensus(self, story_data: Dict, all_analyses: Dict) -> Dict:
+        """Facilitate team consensus and identify conflicts"""
+        facilitation_prompt = f"""
+        As an experienced Scrum Master, facilitate consensus on this story refinement:
+        
+        Story: {story_data.get('title', '')}
+        All Team Analyses: {json.dumps(all_analyses, indent=2)}
+        
+        Provide:
+        1. Consensus assessment
+        2. Conflict identification and resolution
+        3. Sprint readiness evaluation
+        4. Impediment identification
+        5. Process improvement suggestions
+        6. Team collaboration assessment
+        7. Final sprint planning recommendations
+        
+        Focus on team dynamics and process optimization.
+        """
+
+        response = openai.ChatCompletion.create(
+            model='gpt-4',
+            messages=[
+                {"role": "system", "content": "You are an expert Scrum Master focused on team facilitation and process optimization."},
+                {"role": "user", "content": facilitation_prompt}
+            ],
+            max_tokens=800,
+            temperature=0.3
+        )
+
+        analysis = json.loads(response.choices[0].message.content)
+        analysis['agent_role'] = 'scrum_master'
+        analysis['analysis_timestamp'] = datetime.utcnow().isoformat()
+        
+        return analysis
+
+# LLM Integration Functions
+def refine_story_with_team_agents(title: str, description: str, additional_context: str = ""):
+    """Refine user story using multi-agent team collaboration"""
+    controller = get_agile_team_controller()
+    
+    story_data = {
+        'title': title,
+        'description': description,
+        'additional_context': additional_context,
+        'created_date': datetime.utcnow().isoformat()
+    }
+    
+    result = asyncio.run(controller.refine_user_story(story_data))
+    return result
+
+def plan_sprint_with_agents(backlog_items: List[Dict], sprint_capacity: int = 40):
+    """Plan sprint using agent team insights"""
+    controller = get_agile_team_controller()
+    
+    # This would involve all agents collaborating on sprint planning
+    return {
+        'sprint_plan': 'Generated with multi-agent input',
+        'capacity_allocation': sprint_capacity,
+        'risk_assessment': 'Provided by all agents',
+        'success_metrics': 'Defined collaboratively'
+    }
+
+def get_agile_team_controller():
+    """Get configured agile team controller instance"""
+    config = {
+        'azure_devops': {
+            'organization_url': os.getenv('AZURE_DEVOPS_ORG_URL'),
+            'personal_access_token': os.getenv('AZURE_DEVOPS_PAT'),
+            'project': os.getenv('AZURE_DEVOPS_PROJECT')
+        },
+        'openai': {
+            'api_key': os.getenv('OPENAI_API_KEY'),
+            'model': 'gpt-4'
+        },
+        'github': {
+            'token': os.getenv('GITHUB_TOKEN'),
+            'organization': os.getenv('GITHUB_ORG')
+        }
+    }
+    
+    return AgileTeamController(config)</div>
+        </div>
+
+        <!-- Workflow 2: Sprint Planning -->
+        <div class="workflow-section">
+            <div class="workflow-title">
+                <div class="workflow-number">2</div>
+                Collaborative Sprint Planning
+            </div>
+
+            <p>AI agents work together to analyze backlog items, estimate effort, and create optimized sprint plans with risk assessment.</p>
+
+            <h4>🎯 MCP Agent Configuration</h4>
+            <div class="code-block">
+                <div class="code-header">📄 .vscode/mcp_agile_agents_config.json</div>{
+  "mcpServers": {
+    "agile_team_agents": {
+      "command": "python",
+      "args": ["-m", "agile_team_mcp_server"],
+      "env": {
+        "PYTHON_PATH": "./agile_agents_env/Scripts/python",
+        "AZURE_DEVOPS_ORG_URL": "https://dev.azure.com/yourorg",
+        "AZURE_DEVOPS_PAT": "${mcp_service_token:azure-devops-service-account}",
+        "AZURE_DEVOPS_PROJECT": "${mcp_service_token:azure-devops-project-config}",
+        "GITHUB_TOKEN": "${mcp_service_token:github-service-account}",
+        "GITHUB_ORG": "${mcp_service_token:github-org-config}",
+        "OPENAI_API_KEY": "${mcp_service_token:openai-service-account}"
+      },
+      "capabilities": [
+        "story_refinement",
+        "sprint_planning",
+        "backlog_management",
+        "team_collaboration",
+        "effort_estimation",
+        "risk_assessment"
+      ]
+    }
+  },
+  "agent_settings": {
+    "collaboration_mode": "consensus",
+    "estimation_method": "planning_poker",
+    "sprint_duration": 2,
+    "team_capacity": 40,
+    "agent_personalities": {
+      "product_owner": {
+        "focus": "business_value",
+        "communication_style": "strategic",
+        "decision_making": "data_driven"
+      },
+      "scrum_master": {
+        "focus": "process_optimization",
+        "communication_style": "facilitative",
+        "decision_making": "consensus_building"
+      },
+      "developer": {
+        "focus": "technical_feasibility",
+        "communication_style": "analytical",
+        "decision_making": "evidence_based"
+      },
+      "qa_engineer": {
+        "focus": "quality_assurance",
+        "communication_style": "detail_oriented",
+        "decision_making": "risk_based"
+      }
+    }
+  }
+}</div>
+        </div>
+
+        <!-- Workflow 3: Continuous Improvement -->
+        <div class="workflow-section">
+            <div class="workflow-title">
+                <div class="workflow-number">3</div>
+                Continuous Process Improvement
+            </div>
+
+            <p>Agents analyze team performance metrics and suggest process improvements for enhanced productivity and quality.</p>
+
+            <h4>💬 Agent Collaboration Examples</h4>
+            <div class="code-block">
+                <div class="code-header">🤖 GitHub Copilot Integration</div># Example prompts for working with Agile Team Agents
+
+# 1. Story Refinement
+"Refine this user story with input from the full agile team: 
+'As a customer, I want to reset my password so that I can regain access to my account.'"
+
+# 2. Sprint Planning
+"Plan the next sprint using the agile team agents. 
+Analyze the top 10 backlog items and recommend sprint content based on team capacity of 40 points."
+
+# 3. Retrospective Analysis
+"Conduct a sprint retrospective using the team agents. 
+Analyze velocity trends, identify impediments, and suggest process improvements."
+
+# 4. Risk Assessment
+"Have the team agents assess risks for this epic: 
+'Implement single sign-on integration with Azure Active Directory'"
+
+# 5. Definition of Done Validation
+"Validate the definition of done for this feature using all team agent perspectives: 
+'User profile management with photo upload and privacy settings'"</div>
+
+            <h4>📊 Team Performance Analytics</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #e53e3e;">
+                    <h5 style="margin: 0 0 10px 0; color: #e53e3e;">📈 Velocity Tracking</h5>
+                    <p style="margin: 0; font-size: 0.9em;">AI-powered velocity prediction<br>Sprint capacity optimization</p>
+                </div>
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #38a169;">
+                    <h5 style="margin: 0 0 10px 0; color: #38a169;">🎯 Quality Metrics</h5>
+                    <p style="margin: 0; font-size: 0.9em;">Defect rate analysis<br>Test coverage insights</p>
+                </div>
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #3182ce;">
+                    <h5 style="margin: 0 0 10px 0; color: #3182ce;">⚡ Process Efficiency</h5>
+                    <p style="margin: 0; font-size: 0.9em;">Cycle time reduction<br>Bottleneck identification</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits Section -->
+        <div style="background-color: #e8f5e8; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #28a745;">
+            <h4 style="color: #28a745; margin-top: 0;">🎯 Multi-Agent Team Benefits</h4>
+            <ul style="color: #155724; line-height: 1.8;">
+                <li><strong>Comprehensive Analysis</strong>: Each agent provides specialized perspective for well-rounded decisions</li>
+                <li><strong>Automated Consensus</strong>: AI facilitation reduces meeting time and improves decision quality</li>
+                <li><strong>Consistent Quality</strong>: Every story receives expert-level analysis from all disciplines</li>
+                <li><strong>Predictive Insights</strong>: AI agents identify risks and opportunities proactively</li>
+                <li><strong>Scalable Expertise</strong>: Access to senior-level insights regardless of team composition</li>
+                <li><strong>Process Optimization</strong>: Continuous improvement through AI-powered retrospectives</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+            <h3>🚀 Transform Your Agile Process</h3>
+            <p>Experience the power of AI-driven agile development with specialized agents that work together to deliver exceptional results.</p>
+            <div style="margin-top: 15px;">
+                <a href="/ServiceAccountSetup" style="background-color: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 0 10px;">⚙️ Setup Agents</a>
+                <a href="/FunctionalExamples" style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 0 10px;">🚀 More Examples</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

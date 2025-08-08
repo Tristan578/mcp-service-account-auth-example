@@ -1,0 +1,674 @@
+@page
+@model mcp_service_account_auth_example.Pages.MarkdownGuideModel
+@{
+    ViewData["Title"] = "Markdown for AI Tools & Agents";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown for AI Tools & Agents</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        h2 {
+            color: #2d3748;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #4a5568;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        p {
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .example-box {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            position: relative;
+        }
+        .output-box {
+            background-color: #22543d;
+            color: #c6f6d5;
+            border-left: 4px solid #38a169;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .tool-section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .tool-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .tool-icon {
+            margin-right: 10px;
+            font-size: 1.4em;
+        }
+        ul, ol {
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .best-practice {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+        }
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .pattern-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pattern-title {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .code-inline {
+            background-color: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d73a49;
+        }
+        .nav-link {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .copy-button:hover {
+            background-color: #2d3748;
+        }
+        .info-box {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #0c5460;
+        }
+        .success-box {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #155724;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
+            <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" style="color: #28a745; text-decoration: none; margin: 0 15px; font-weight: bold;">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🚀 Functional Examples</a>
+        </nav>
+
+        <h1>📝 Markdown for AI Tools & Agents</h1>
+        <div class="subtitle">Leveraging Markdown for efficient AI-assisted development patterns</div>
+
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 10px 0;">📚 Master Markdown for AI Development</h3>
+            <p style="margin: 0;">Unlock powerful AI collaboration patterns in modern development environments</p>
+        </div>
+
+        <div class="section">
+            <h2>🔍 What is Markdown?</h2>
+            <p>
+                Markdown (.md) is a lightweight markup language that uses plain text formatting syntax to create structured documents. 
+                It was designed to be easy to read and write, while being convertible to HTML and other formats.
+            </p>
+            
+            <div class="example-box"># This is a heading
+## This is a subheading
+**Bold text** and *italic text*
+- Bullet point
+- Another bullet point
+[Link text](https://example.com)
+`code snippet`</div>
+
+            <div class="output-box">
+                <strong>Renders as:</strong><br>
+                Large heading, medium subheading, <strong>Bold text</strong> and <em>italic text</em>, bulleted lists, clickable links, and highlighted code snippets.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤖 Why Markdown Matters for AI Development</h2>
+            
+            <div class="pattern-grid">
+                <div class="pattern-card">
+                    <div class="pattern-title">🎯 Context Clarity</div>
+                    <p>AI tools understand structured content better. Markdown provides clear hierarchy and organization that AI can parse effectively.</p>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">⚡ Faster Communication</div>
+                    <p>Well-structured Markdown allows AI to quickly understand requirements, specifications, and documentation.</p>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">🔄 Version Control</div>
+                    <p>Markdown files work seamlessly with Git, enabling AI to track changes and understand project evolution.</p>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">📖 Universal Format</div>
+                    <p>All major AI development tools (VS Code, Claude, Cursor, Windsurf) natively support Markdown rendering.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ AI Tool-Specific Markdown Patterns</h2>
+
+            <div class="tool-section">
+                <div class="tool-header">
+                    <span class="tool-icon">🔵</span>
+                    VS Code with GitHub Copilot
+                </div>
+                <div class="best-practice">
+                    <strong>Best Practice:</strong> Use README.md files with clear project structure, API documentation, and code examples. 
+                    Copilot reads these files to understand your project context.
+                </div>
+                <div class="example-box"># Project: E-commerce API
+## Architecture
+- **Frontend**: React.js
+- **Backend**: Node.js + Express
+- **Database**: PostgreSQL
+
+## Key Features
+- User authentication via JWT
+- Product catalog with search
+- Shopping cart and checkout
+
+## API Endpoints
+```javascript
+// Get all products
+GET /api/products
+
+// Create new user
+POST /api/users
+```</div>
+            </div>
+
+            <div class="tool-section">
+                <div class="tool-header">
+                    <span class="tool-icon">🟠</span>
+                    Claude Desktop & Claude Code
+                </div>
+                <div class="best-practice">
+                    <strong>Best Practice:</strong> Create detailed requirement documents and specification files. 
+                    Claude excels at understanding comprehensive Markdown documentation.
+                </div>
+                <div class="example-box"># Feature Specification: User Dashboard
+
+## Overview
+Create a responsive user dashboard for the e-commerce platform.
+
+## Requirements
+### Functional Requirements
+1. **User Profile Management**
+   - Display user information
+   - Edit profile functionality
+   - Avatar upload
+
+2. **Order History**
+   - List all previous orders
+   - Order status tracking
+   - Reorder functionality
+
+### Technical Requirements
+- Responsive design (mobile-first)
+- React.js components
+- Integration with REST API
+- State management with Redux
+
+## Acceptance Criteria
+- [ ] User can view their profile information
+- [ ] User can edit and save profile changes
+- [ ] Order history displays correctly
+- [ ] Page loads in under 2 seconds</div>
+            </div>
+
+            <div class="tool-section">
+                <div class="tool-header">
+                    <span class="tool-icon">🟣</span>
+                    Cursor AI
+                </div>
+                <div class="best-practice">
+                    <strong>Best Practice:</strong> Use inline documentation and code comments in Markdown format. 
+                    Cursor reads comments to understand code intent.
+                </div>
+                <div class="example-box">```typescript
+/**
+ * # User Authentication Service
+ * 
+ * ## Purpose
+ * Handles user login, registration, and JWT token management
+ * 
+ * ## Key Methods
+ * - `login()`: Authenticates user credentials
+ * - `register()`: Creates new user account
+ * - `refreshToken()`: Renews JWT token
+ * 
+ * ## Security Features
+ * - Password hashing with bcrypt
+ * - JWT token expiration
+ * - Rate limiting for login attempts
+ */
+export class AuthService {
+  // Implementation here
+}
+```</div>
+            </div>
+
+            <div class="tool-section">
+                <div class="tool-header">
+                    <span class="tool-icon">🟢</span>
+                    Windsurf by Codeium
+                </div>
+                <div class="best-practice">
+                    <strong>Best Practice:</strong> Create workflow documentation that describes development processes. 
+                    Windsurf uses this context for better code suggestions.
+                </div>
+                <div class="example-box"># Development Workflow
+
+## Branch Strategy
+1. **main** - Production ready code
+2. **develop** - Integration branch
+3. **feature/** - Feature development
+4. **hotfix/** - Critical fixes
+
+## Code Review Process
+1. Create feature branch from develop
+2. Implement feature with tests
+3. Create pull request
+4. Code review by team lead
+5. Merge to develop after approval
+
+## Testing Strategy
+- Unit tests: Jest + React Testing Library
+- Integration tests: Cypress
+- Coverage threshold: 80%
+
+## Deployment Pipeline
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to Production
+on:
+  push:
+    branches: [main]
+steps:
+  - name: Run tests
+  - name: Build application
+  - name: Deploy to AWS
+```</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📋 Essential Markdown Patterns for AI Development</h2>
+
+            <h3>1. Project Documentation Structure</h3>
+            <div class="example-box">project-root/
+├── README.md              # Project overview and setup
+├── CONTRIBUTING.md        # Development guidelines
+├── API.md                # API documentation
+├── ARCHITECTURE.md       # System design
+├── CHANGELOG.md          # Version history
+└── docs/
+    ├── user-guide.md     # End-user documentation
+    ├── developer-guide.md # Developer onboarding
+    └── troubleshooting.md # Common issues</div>
+
+            <h3>2. Feature Request Template</h3>
+            <div class="example-box">## Feature Request: [Feature Name]
+
+### Problem Statement
+Describe the problem this feature solves.
+
+### Proposed Solution
+Detailed description of the proposed feature.
+
+### Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+
+### Technical Considerations
+- **Performance Impact**: Low/Medium/High
+- **Security Implications**: None/Minor/Major
+- **Dependencies**: List any new dependencies
+
+### Implementation Notes
+```javascript
+// Pseudo-code or technical approach
+```</div>
+
+            <h3>3. Code Documentation Pattern</h3>
+            <div class="example-box">```typescript
+/**
+ * # Component: UserDashboard
+ * 
+ * ## Purpose
+ * Main dashboard component for authenticated users
+ * 
+ * ## Props
+ * - `user: User` - Current user object
+ * - `onLogout: () => void` - Logout callback
+ * 
+ * ## State Management
+ * - Uses Redux for user state
+ * - Local state for UI interactions
+ * 
+ * ## Performance Notes
+ * - Memoized with React.memo
+ * - Lazy loads order history
+ */
+export const UserDashboard: React.FC<Props> = ({ user, onLogout }) => {
+  // Component implementation
+};
+```</div>
+
+            <h3>4. Bug Report Template</h3>
+            <div class="example-box">## Bug Report: [Brief Description]
+
+### Environment
+- **OS**: Windows 11 / macOS / Linux
+- **Browser**: Chrome 120.0
+- **App Version**: v2.1.3
+
+### Steps to Reproduce
+1. Navigate to dashboard
+2. Click on "Profile" tab
+3. Upload new avatar
+4. Save changes
+
+### Expected Behavior
+Avatar should update immediately
+
+### Actual Behavior
+Page shows error message: "Upload failed"
+
+### Screenshots
+![Error Screenshot](./screenshots/avatar-error.png)
+
+### Console Logs
+```
+Error: Failed to upload file
+  at uploadAvatar (UserProfile.tsx:45)
+  at onClick (AvatarUpload.tsx:23)
+```</div>
+        </div>
+
+        <div class="section">
+            <h2>⚡ Advanced AI Collaboration Techniques</h2>
+
+            <div class="warning">
+                <strong>Pro Tip:</strong> AI tools read your entire project context. Well-structured Markdown files 
+                act as a "knowledge base" that improves AI suggestions and code generation.
+            </div>
+
+            <h3>1. Context Files for AI</h3>
+            <p>Create <span class="code-inline">.ai-context.md</span> files in your project root:</p>
+            <div class="example-box"># AI Context: E-commerce Platform
+
+## Current Focus
+Working on user authentication and dashboard features.
+
+## Code Style Preferences
+- Use TypeScript for all new code
+- Prefer functional components with hooks
+- Follow ESLint configuration
+- Use Jest for testing
+
+## Architecture Decisions
+- RESTful API design
+- PostgreSQL for data persistence
+- Redis for session management
+- AWS S3 for file storage
+
+## Common Patterns
+- Use custom hooks for API calls
+- Implement error boundaries
+- Lazy load components for performance
+- Use React Query for data fetching</div>
+
+            <h3>2. AI Prompt Templates</h3>
+            <div class="example-box"># AI Prompt Templates
+
+## Code Review Request
+```
+Please review this code for:
+- [ ] Security vulnerabilities
+- [ ] Performance optimizations
+- [ ] Code quality improvements
+- [ ] Test coverage
+
+Code:
+[paste code here]
+```
+
+## Feature Implementation
+```
+Implement a [feature name] with the following requirements:
+
+**Functional Requirements:**
+- Requirement 1
+- Requirement 2
+
+**Technical Constraints:**
+- Use existing design system
+- Follow current architecture patterns
+- Maintain 80%+ test coverage
+
+**Acceptance Criteria:**
+- [ ] Criteria 1
+- [ ] Criteria 2
+```</div>
+
+            <h3>3. Documentation-Driven Development</h3>
+            <div class="best-practice">
+                <strong>Best Practice:</strong> Write documentation first, then ask AI to implement based on the specs.
+                This approach leads to better code quality and clearer requirements.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Quick Reference: Markdown Syntax for AI</h2>
+            
+            <div class="pattern-grid">
+                <div class="pattern-card">
+                    <div class="pattern-title">Headers</div>
+                    <div class="example-box"># H1 - Main title
+## H2 - Section
+### H3 - Subsection</div>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">Code Blocks</div>
+                    <div class="example-box">```javascript
+const example = "code";
+```
+
+`inline code`</div>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">Lists & Tasks</div>
+                    <div class="example-box">- Bullet point
+1. Numbered list
+- [ ] Todo item
+- [x] Completed</div>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">Emphasis</div>
+                    <div class="example-box">**Bold text**
+*Italic text*
+~~Strikethrough~~</div>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">Links & Images</div>
+                    <div class="example-box">[Link text](url)
+![Alt text](image.png)</div>
+                </div>
+                
+                <div class="pattern-card">
+                    <div class="pattern-title">Tables</div>
+                    <div class="example-box">| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background-color: #e8f5e8; border-radius: 8px;">
+            <h3 style="color: #28a745; margin-bottom: 15px;">🚀 Ready to supercharge your AI development workflow?</h3>
+            <p style="margin-bottom: 20px;">Start creating structured Markdown documentation and watch your AI tools become more effective!</p>
+            <div>
+                <a href="/DeveloperGuidelines" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 0 10px;">🤖 AI Guidelines</a>
+                <a href="/Permissions" style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 0 10px;">🔒 Security Setup</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

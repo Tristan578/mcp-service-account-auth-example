@@ -1,0 +1,1089 @@
+@page
+@model mcp_service_account_auth_example.Pages.MusicExampleModel
+@{
+    ViewData["Title"] = "Music to My Ears - AI Audio Generation";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        h2 {
+            color: #2d3748;
+            border-bottom: 2px solid #9f7aea;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #4a5568;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        p {
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #9f7aea, #805ad5);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .step-section {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #9f7aea;
+        }
+        .step-header {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #9f7aea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .step-number {
+            background-color: #9f7aea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            max-width: 100%;
+            position: relative;
+        }
+        .code-header {
+            background-color: #1a202c;
+            color: #a0aec0;
+            padding: 8px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 6px 6px 0 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .python-block {
+            background-color: #2b5797;
+            color: #ffd43b;
+        }
+        .bash-block {
+            background-color: #2d3748;
+            color: #68d391;
+            border-left: 4px solid #68d391;
+        }
+        .lua-block {
+            background-color: #1e3a8a;
+            color: #ddd6fe;
+            border-left: 4px solid #8b5cf6;
+        }
+        .json-block {
+            background-color: #1a365d;
+            color: #bee3f8;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+        }
+        .info-box {
+            background-color: #e6fffa;
+            border: 1px solid #b2f5ea;
+            border-left: 4px solid #319795;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #234e52;
+        }
+        .audio-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .audio-demo h3 {
+            color: white;
+            margin-top: 0;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .copy-button:hover {
+            background-color: #2d3748;
+        }
+        .workflow-diagram {
+            background-color: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .workflow-step {
+            display: inline-block;
+            background-color: #9f7aea;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .workflow-arrow {
+            font-size: 1.5em;
+            color: #9f7aea;
+            margin: 0 10px;
+        }
+        
+        /* Mobile responsiveness */
+        @@media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .code-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+            .workflow-step {
+                display: block;
+                margin: 10px 0;
+            }
+            .workflow-arrow {
+                display: block;
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
+            <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🚀 Functional Examples</a>
+            <a href="/MusicExample" style="color: #9f7aea; text-decoration: none; margin: 0 15px; font-weight: bold;">🎵 Music to My Ears</a>
+        </nav>
+
+        <h1>🎵 Music to My Ears</h1>
+        <div class="subtitle">AI-Powered Audio Generation with Meta AudioCraft & Reaper Integration</div>
+
+        <div class="hero-banner">
+            <h3 style="margin: 0 0 10px 0;">AI-Generated Audio Workflow</h3>
+            <p style="margin: 0;">Learn how to integrate Meta's AudioCraft with GitHub Copilot for AI-powered sound generation and seamless Reaper DAW integration using MCP service accounts</p>
+        </div>
+
+        <div class="workflow-diagram">
+            <div class="workflow-step">Python Environment</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">AudioCraft Setup</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">AI Audio Generation</div>
+            <span class="workflow-arrow">→</span>
+            <div class="workflow-step">Reaper Integration</div>
+        </div>
+
+        <!-- Step 1: Python Environment Setup -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                Python Virtual Environment & AudioCraft Installation
+            </div>
+            
+            <p>First, we'll set up a Python virtual environment with the correct version to support Meta's AudioCraft. This ensures compatibility and isolated dependency management.</p>
+            
+            <h4>🐍 Create Python Virtual Environment</h4>
+            <div class="code-block bash-block">
+                <div class="code-header">💻 Terminal Commands</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Check Python version (AudioCraft requires Python 3.8+)
+python --version
+
+# Create virtual environment for audio project
+python -m venv audio_ai_env
+
+# Activate virtual environment (Windows)
+audio_ai_env\Scripts\activate
+
+# Activate virtual environment (macOS/Linux)
+source audio_ai_env/bin/activate
+
+# Upgrade pip to latest version
+python -m pip install --upgrade pip</div>
+
+            <h4>📦 Install AudioCraft and Dependencies</h4>
+            <div class="code-block bash-block">
+                <div class="code-header">📦 Package Installation</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Install AudioCraft from Meta
+pip install audiocraft
+
+# Install additional audio processing libraries
+pip install torchaudio librosa soundfile
+
+# Install Jupyter for interactive development
+pip install jupyter ipykernel
+
+# Install MCP integration dependencies
+pip install openai python-dotenv requests
+
+# Verify installation
+python -c "import audiocraft; print('AudioCraft installed successfully!')"</div>
+
+            <div class="warning-box">
+                <strong>⚠️ System Requirements:</strong> AudioCraft requires a CUDA-capable GPU for optimal performance. CPU-only mode is available but significantly slower for audio generation.
+            </div>
+        </div>
+
+        <!-- Step 2: AudioCraft Integration Code -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                AI Audio Generation with LLM Integration
+            </div>
+            
+            <p>Create a Python module that enables GitHub Copilot and other LLMs to execute AudioCraft commands through function calls and service account authentication.</p>
+            
+            <h4>🎛️ AudioCraft Controller (audio_controller.py)</h4>
+            <div class="code-block python-block">
+                <div class="code-header">🐍 audio_controller.py</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>"""
+AI Audio Generation Controller for Meta AudioCraft
+Enables LLM integration with secure service account authentication
+"""
+
+import os
+import torch
+from audiocraft.models import MusicGen, AudioGen
+from audiocraft.data.audio import audio_write
+import torchaudio
+from datetime import datetime
+import json
+import logging
+
+class AudioCraftController:
+    def __init__(self, service_account_token=None):
+        """Initialize AudioCraft with MCP service account authentication"""
+        self.service_account_token = service_account_token
+        self.setup_logging()
+        self.load_models()
+        
+    def setup_logging(self):
+        """Setup comprehensive logging for MCP integration"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('audio_generation.log'),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger(__name__)
+        
+    def load_models(self):
+        """Load AudioCraft models with error handling"""
+        try:
+            # Load MusicGen model for music generation
+            self.music_model = MusicGen.get_pretrained('melody')
+            self.logger.info("MusicGen model loaded successfully")
+            
+            # Load AudioGen model for sound effects
+            self.audio_model = AudioGen.get_pretrained('audiogen-medium')
+            self.logger.info("AudioGen model loaded successfully")
+            
+        except Exception as e:
+            self.logger.error(f"Model loading failed: {e}")
+            raise
+    
+    def generate_music(self, prompt, duration=30, temperature=1.0, top_k=250):
+        """
+        Generate music from text prompt
+        
+        Args:
+            prompt (str): Text description of desired music
+            duration (int): Length in seconds
+            temperature (float): Creativity level (0.1-2.0)
+            top_k (int): Sampling parameter for diversity
+        """
+        try:
+            self.logger.info(f"Generating music: {prompt}")
+            
+            # Set generation parameters
+            self.music_model.set_generation_params(
+                duration=duration,
+                temperature=temperature,
+                top_k=top_k
+            )
+            
+            # Generate audio
+            wav = self.music_model.generate([prompt])
+            
+            # Save with timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"generated_music_{timestamp}"
+            
+            # Export audio file
+            audio_write(filename, wav[0].cpu(), self.music_model.sample_rate, strategy="loudness")
+            
+            self.logger.info(f"Music generated: {filename}.wav")
+            return f"{filename}.wav"
+            
+        except Exception as e:
+            self.logger.error(f"Music generation failed: {e}")
+            raise
+    
+    def generate_sound_effect(self, prompt, duration=10):
+        """Generate sound effects from text description"""
+        try:
+            self.logger.info(f"Generating sound effect: {prompt}")
+            
+            self.audio_model.set_generation_params(duration=duration)
+            wav = self.audio_model.generate([prompt])
+            
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"generated_sfx_{timestamp}"
+            
+            audio_write(filename, wav[0].cpu(), self.audio_model.sample_rate)
+            
+            self.logger.info(f"Sound effect generated: {filename}.wav")
+            return f"{filename}.wav"
+            
+        except Exception as e:
+            self.logger.error(f"Sound effect generation failed: {e}")
+            raise
+    
+    def batch_generate(self, prompts_config):
+        """
+        Generate multiple audio files from configuration
+        Enables GitHub Copilot to create complex audio projects
+        """
+        results = []
+        
+        for config in prompts_config:
+            if config['type'] == 'music':
+                result = self.generate_music(
+                    config['prompt'], 
+                    config.get('duration', 30),
+                    config.get('temperature', 1.0)
+                )
+            elif config['type'] == 'sfx':
+                result = self.generate_sound_effect(
+                    config['prompt'],
+                    config.get('duration', 10)
+                )
+            
+            results.append({
+                'prompt': config['prompt'],
+                'type': config['type'],
+                'file': result
+            })
+        
+        return results
+
+# LLM Integration Functions - callable by GitHub Copilot
+def create_ambient_soundtrack(theme, duration=60):
+    """Create ambient music for specific themes"""
+    controller = AudioCraftController()
+    
+    prompts = {
+        'forest': 'peaceful forest ambience with gentle acoustic guitar',
+        'ocean': 'calming ocean waves with soft piano melody',
+        'space': 'ethereal space ambient with synthesizer pads',
+        'cafe': 'cozy coffee shop jazz with soft background chatter'
+    }
+    
+    prompt = prompts.get(theme, f"ambient {theme} soundscape")
+    return controller.generate_music(prompt, duration)
+
+def create_game_audio_pack(game_type):
+    """Generate complete audio pack for game development"""
+    controller = AudioCraftController()
+    
+    configs = {
+        'rpg': [
+            {'type': 'music', 'prompt': 'epic fantasy adventure theme', 'duration': 120},
+            {'type': 'sfx', 'prompt': 'sword clashing metal sound', 'duration': 3},
+            {'type': 'sfx', 'prompt': 'magical spell casting sound', 'duration': 5}
+        ],
+        'arcade': [
+            {'type': 'music', 'prompt': 'upbeat electronic game music', 'duration': 60},
+            {'type': 'sfx', 'prompt': 'coin collection sound', 'duration': 1},
+            {'type': 'sfx', 'prompt': 'power-up activation sound', 'duration': 2}
+        ]
+    }
+    
+    if game_type in configs:
+        return controller.batch_generate(configs[game_type])
+    else:
+        return "Game type not supported"</div>
+
+            <div class="info-box">
+                <strong>💡 LLM Integration:</strong> These functions are designed to be called by GitHub Copilot through MCP servers, enabling natural language audio generation within your development workflow.
+            </div>
+        </div>
+
+        <!-- Step 3: MCP Configuration -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                MCP Server Configuration for Audio Generation
+            </div>
+            
+            <p>Configure MCP to enable GitHub Copilot and VS Code to interact with your AudioCraft setup through secure service account authentication.</p>
+            
+            <h4>🔧 MCP Audio Server Configuration</h4>
+            <div class="code-block json-block">
+                <div class="code-header">📄 .vscode/mcp_audio_config.json</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>{
+  "mcpServers": {
+    "audiocraft": {
+      "command": "python",
+      "args": ["-m", "audiocraft_mcp_server"],
+      "env": {
+        "PYTHON_PATH": "./audio_ai_env/Scripts/python",
+        "AUDIOCRAFT_MODEL_CACHE": "./models/",
+        "AUDIO_OUTPUT_DIR": "./generated_audio/",
+        "SERVICE_ACCOUNT_TOKEN": "audio_service_account_token_here"
+      },
+      "capabilities": [
+        "audio_generation",
+        "music_creation",
+        "sound_effects",
+        "batch_processing",
+        "reaper_integration"
+      ]
+    },
+    "reaper": {
+      "command": "python",
+      "args": ["-m", "reaper_mcp_server"],
+      "env": {
+        "REAPER_INSTALL_PATH": "C:\\Program Files\\REAPER",
+        "REAPER_SCRIPTS_PATH": "C:\\Users\\%USERNAME%\\AppData\\Roaming\\REAPER\\Scripts",
+        "SERVICE_ACCOUNT_TOKEN": "reaper_service_account_token_here"
+      },
+      "capabilities": [
+        "lua_script_generation",
+        "project_automation",
+        "audio_import",
+        "effect_application"
+      ]
+    }
+  },
+  "audio_settings": {
+    "default_sample_rate": 32000,
+    "default_duration": 30,
+    "output_format": "wav",
+    "auto_normalize": true,
+    "reaper_auto_import": true
+  }
+}</div>
+
+            <h4>🤖 GitHub Copilot Integration Prompt</h4>
+            <div class="code-block">
+                <div class="code-header">💬 Copilot Audio Generation Prompt</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>I have Meta's AudioCraft integrated with MCP servers. Please help me:
+
+1. **Generate Background Music**:
+   - Create a 2-minute lofi hip-hop track for coding
+   - Generate ambient forest sounds for relaxation
+   - Produce upbeat electronic music for gaming
+
+2. **Create Sound Effects**:
+   - Door opening and closing sounds
+   - Notification chimes and alerts
+   - Mechanical robot movement sounds
+
+3. **Batch Audio Generation**:
+   - Create a complete UI sound pack
+   - Generate podcast intro/outro music
+   - Produce audio for video transitions
+
+4. **Reaper Integration**:
+   - Import generated audio into Reaper project
+   - Apply basic mixing and effects
+   - Export final processed audio
+
+Use the AudioCraft MCP server to execute these requests with proper service account authentication.</div>
+        </div>
+
+        <!-- Step 4: Reaper Integration -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                Reaper DAW Integration with Lua Scripting
+            </div>
+            
+            <p>Create Lua scripts that enable automatic import and processing of AI-generated audio in Reaper, with MCP-powered automation.</p>
+            
+            <h4>🎚️ Reaper Automation Script (reaper_ai_integration.lua)</h4>
+            <div class="code-block lua-block">
+                <div class="code-header">🌙 reaper_ai_integration.lua</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>-- Reaper AI Audio Integration Script
+-- Automatically imports and processes AI-generated audio
+-- Compatible with Meta AudioCraft outputs
+
+-- Configuration
+local AI_AUDIO_DIR = "C:\\path\\to\\generated_audio\\"
+local PROJECT_SAMPLE_RATE = 44100
+local AUTO_NORMALIZE = true
+local APPLY_BASIC_EQ = true
+
+-- Main integration function
+function ImportAIAudio(audio_files)
+    reaper.Undo_BeginBlock()
+    
+    -- Create new project if needed
+    if reaper.CountTracks(0) == 0 then
+        CreateDefaultProject()
+    end
+    
+    for i = 1, #audio_files do
+        local file_path = AI_AUDIO_DIR .. audio_files[i]
+        local track_name = GetFileNameWithoutExtension(audio_files[i])
+        
+        -- Create new track for each audio file
+        local track_index = reaper.CountTracks(0)
+        reaper.InsertTrackAtIndex(track_index, false)
+        local track = reaper.GetTrack(0, track_index)
+        
+        -- Set track name
+        reaper.GetSetMediaTrackInfo_String(track, "P_NAME", track_name, true)
+        
+        -- Import audio file
+        local item = reaper.CreateNewMIDIItemInProj(track, 0, 10, false)
+        local take = reaper.GetActiveTake(item)
+        
+        if reaper.ValidatePtr2(0, take, "MediaItem_Take*") then
+            reaper.GetSetMediaItemTakeInfo_String(take, "P_NAME", track_name, true)
+            
+            -- Insert audio
+            local media_item = reaper.AddMediaItemToTrack(track)
+            local media_take = reaper.AddTakeToMediaItem(media_item)
+            local pcm_source = reaper.PCM_Source_CreateFromFile(file_path)
+            
+            if pcm_source then
+                reaper.SetMediaItemTake_Source(media_take, pcm_source)
+                reaper.SetMediaItemInfo_Value(media_item, "D_POSITION", 0)
+                
+                -- Get source length and set item length
+                local source_length = reaper.GetMediaSourceLength(pcm_source, false)
+                reaper.SetMediaItemInfo_Value(media_item, "D_LENGTH", source_length)
+                
+                -- Apply automatic processing
+                if AUTO_NORMALIZE then
+                    ApplyNormalization(media_item)
+                end
+                
+                if APPLY_BASIC_EQ then
+                    ApplyBasicEQ(track)
+                end
+                
+                reaper.ShowConsoleMsg("Imported: " .. track_name .. "\n")
+            else
+                reaper.ShowConsoleMsg("Failed to import: " .. file_path .. "\n")
+            end
+        end
+    end
+    
+    -- Update project view
+    reaper.UpdateArrange()
+    reaper.Undo_EndBlock("Import AI Generated Audio", -1)
+end
+
+-- Create default project structure
+function CreateDefaultProject()
+    -- Set project sample rate
+    reaper.SetProjectSampleRate(0, PROJECT_SAMPLE_RATE, 1)
+    
+    -- Create master bus setup
+    local master_track = reaper.GetMasterTrack(0)
+    reaper.GetSetMediaTrackInfo_String(master_track, "P_NAME", "AI Audio Master", true)
+    
+    reaper.ShowConsoleMsg("Created new AI audio project\n")
+end
+
+-- Apply normalization to audio item
+function ApplyNormalization(media_item)
+    local take = reaper.GetActiveTake(media_item)
+    if take then
+        -- Normalize to -3dB
+        reaper.SetMediaItemTakeInfo_Value(take, "D_VOL", 0.707)
+        reaper.ShowConsoleMsg("Applied normalization\n")
+    end
+end
+
+-- Apply basic EQ to track
+function ApplyBasicEQ(track)
+    -- Add ReaEQ plugin
+    local fx_index = reaper.TrackFX_AddByName(track, "ReaEQ", false, -1)
+    
+    if fx_index >= 0 then
+        -- Configure basic EQ settings
+        -- High-pass filter at 80Hz
+        reaper.TrackFX_SetParam(track, fx_index, 0, 1) -- Enable band 1
+        reaper.TrackFX_SetParam(track, fx_index, 1, 80) -- Frequency
+        reaper.TrackFX_SetParam(track, fx_index, 2, 2) -- High-pass filter type
+        
+        -- Gentle high-shelf at 10kHz
+        reaper.TrackFX_SetParam(track, fx_index, 12, 1) -- Enable band 4
+        reaper.TrackFX_SetParam(track, fx_index, 13, 10000) -- Frequency
+        reaper.TrackFX_SetParam(track, fx_index, 14, 4) -- High-shelf type
+        reaper.TrackFX_SetParam(track, fx_index, 15, 2) -- Gain +2dB
+        
+        reaper.ShowConsoleMsg("Applied basic EQ\n")
+    end
+end
+
+-- Utility function to extract filename without extension
+function GetFileNameWithoutExtension(file_path)
+    local filename = file_path:match("([^/\\]+)$") or file_path
+    return filename:match("(.+)%..+$") or filename
+end
+
+-- Batch processing function for multiple AI generations
+function ProcessAIBatch(batch_config)
+    local imported_files = {}
+    
+    for category, files in pairs(batch_config) do
+        -- Create group track for category
+        local group_track_index = reaper.CountTracks(0)
+        reaper.InsertTrackAtIndex(group_track_index, false)
+        local group_track = reaper.GetTrack(0, group_track_index)
+        reaper.GetSetMediaTrackInfo_String(group_track, "P_NAME", category:upper(), true)
+        
+        -- Set group track color
+        local color = GetCategoryColor(category)
+        reaper.SetTrackColor(group_track, color)
+        
+        -- Import files in this category
+        ImportAIAudio(files)
+        
+        table.insert(imported_files, {category = category, files = files})
+    end
+    
+    return imported_files
+end
+
+-- Get color for different audio categories
+function GetCategoryColor(category)
+    local colors = {
+        music = 0x00FF00,      -- Green
+        sfx = 0xFF0000,        -- Red  
+        voice = 0x0000FF,      -- Blue
+        ambient = 0xFFFF00     -- Yellow
+    }
+    return colors[category] or 0x808080 -- Default gray
+end
+
+-- MCP Integration - Called by AI systems
+function HandleMCPAudioRequest(request)
+    local request_data = reaper.JSON_Parse(request)
+    
+    if request_data.action == "import_batch" then
+        return ProcessAIBatch(request_data.files)
+    elseif request_data.action == "import_single" then
+        return ImportAIAudio({request_data.file})
+    elseif request_data.action == "apply_effects" then
+        return ApplyEffectsChain(request_data.track_name, request_data.effects)
+    end
+    
+    return {status = "error", message = "Unknown action"}
+end
+
+-- Advanced effects application
+function ApplyEffectsChain(track_name, effects_config)
+    local track = GetTrackByName(track_name)
+    if not track then
+        return {status = "error", message = "Track not found"}
+    end
+    
+    for i = 1, #effects_config do
+        local effect = effects_config[i]
+        local fx_index = reaper.TrackFX_AddByName(track, effect.plugin, false, -1)
+        
+        if fx_index >= 0 and effect.params then
+            for param_id, value in pairs(effect.params) do
+                reaper.TrackFX_SetParam(track, fx_index, param_id, value)
+            end
+        end
+    end
+    
+    return {status = "success", message = "Effects applied"}
+end
+
+-- Find track by name
+function GetTrackByName(name)
+    for i = 0, reaper.CountTracks(0) - 1 do
+        local track = reaper.GetTrack(0, i)
+        local _, track_name = reaper.GetSetMediaTrackInfo_String(track, "P_NAME", "", false)
+        if track_name == name then
+            return track
+        end
+    end
+    return nil
+end
+
+-- Export function for AI-processed audio
+function ExportAIProcessedAudio(output_path, format)
+    -- Render project to specified format
+    local render_cfg = {
+        bounds = 0, -- Time selection
+        format = format or "wav",
+        path = output_path,
+        samplerate = PROJECT_SAMPLE_RATE,
+        channels = 2
+    }
+    
+    reaper.RenderFileToProject(0, output_path, 0, render_cfg)
+    reaper.ShowConsoleMsg("Exported processed audio to: " .. output_path .. "\n")
+end
+
+-- Example usage - Called by MCP server
+-- ImportAIAudio({"generated_music_20250808_143022.wav", "generated_sfx_20250808_143045.wav"})
+
+reaper.ShowConsoleMsg("AI Audio Integration Script Loaded\n")</div>
+
+            <h4>📋 Reaper Script Installation</h4>
+            <div class="code-block bash-block">
+                <div class="code-header">💾 Installation Commands</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button># Copy Lua script to Reaper Scripts directory
+copy reaper_ai_integration.lua "%APPDATA%\REAPER\Scripts\"
+
+# Register script in Reaper (run in Reaper's Actions window)
+# Actions → Load ReaScript → Select reaper_ai_integration.lua
+
+# Create keyboard shortcut (optional)
+# Actions → Add/Edit Shortcut → Assign key to "Script: reaper_ai_integration.lua"
+
+# Test integration
+# Run script and check console for "AI Audio Integration Script Loaded" message</div>
+        </div>
+
+        <!-- Step 5: Complete Workflow -->
+        <div class="step-section">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                Complete AI Audio Workflow
+            </div>
+            
+            <p>Put it all together with a complete workflow that demonstrates AI audio generation, processing, and DAW integration.</p>
+            
+            <div class="audio-demo">
+                <h3>🎵 End-to-End Audio Generation Example</h3>
+                <p>Generate a complete podcast intro with music, effects, and professional processing</p>
+            </div>
+            
+            <h4>🎬 Complete Workflow Script (complete_audio_workflow.py)</h4>
+            <div class="code-block python-block">
+                <div class="code-header">🎭 complete_audio_workflow.py</div>
+                <button class="copy-button" onclick="copyToClipboard(this)">Copy</button>#!/usr/bin/env python3
+"""
+Complete AI Audio Workflow
+Demonstrates integration between AudioCraft, MCP, and Reaper
+"""
+
+import os
+import json
+from audio_controller import AudioCraftController
+import subprocess
+import time
+
+def create_podcast_intro_suite():
+    """Generate complete podcast intro with music and effects"""
+    
+    controller = AudioCraftController()
+    
+    # Define podcast audio requirements
+    audio_suite = [
+        {
+            'type': 'music',
+            'prompt': 'upbeat professional podcast intro music with guitar and drums',
+            'duration': 15,
+            'temperature': 0.8,
+            'filename': 'podcast_intro_music'
+        },
+        {
+            'type': 'sfx',
+            'prompt': 'smooth audio transition whoosh sound',
+            'duration': 3,
+            'filename': 'transition_whoosh'
+        },
+        {
+            'type': 'sfx', 
+            'prompt': 'notification bell chime for announcements',
+            'duration': 2,
+            'filename': 'notification_chime'
+        },
+        {
+            'type': 'music',
+            'prompt': 'gentle background ambient music for talking segments',
+            'duration': 60,
+            'temperature': 0.6,
+            'filename': 'background_ambient'
+        }
+    ]
+    
+    generated_files = []
+    
+    print("🎵 Generating podcast audio suite...")
+    
+    for item in audio_suite:
+        print(f"Generating: {item['prompt']}")
+        
+        if item['type'] == 'music':
+            filename = controller.generate_music(
+                item['prompt'],
+                item['duration'],
+                item.get('temperature', 1.0)
+            )
+        else:
+            filename = controller.generate_sound_effect(
+                item['prompt'],
+                item['duration']
+            )
+        
+        generated_files.append({
+            'original_name': filename,
+            'category': item['type'],
+            'purpose': item['filename']
+        })
+        
+        time.sleep(2)  # Brief pause between generations
+    
+    return generated_files
+
+def integrate_with_reaper(audio_files):
+    """Send generated audio to Reaper for professional processing"""
+    
+    # Prepare file list for Reaper Lua script
+    reaper_files = [f['original_name'] for f in audio_files]
+    
+    # Create batch configuration
+    batch_config = {
+        'music': [f['original_name'] for f in audio_files if f['category'] == 'music'],
+        'sfx': [f['original_name'] for f in audio_files if f['category'] == 'sfx']
+    }
+    
+    # Generate Reaper project file
+    project_config = {
+        'project_name': 'AI_Podcast_Suite',
+        'sample_rate': 44100,
+        'files': batch_config,
+        'auto_process': True,
+        'effects_chain': [
+            {
+                'plugin': 'ReaEQ',
+                'params': {'high_pass': 80, 'high_shelf': 10000}
+            },
+            {
+                'plugin': 'ReaComp',
+                'params': {'ratio': 3.0, 'threshold': -18}
+            }
+        ]
+    }
+    
+    # Save configuration for Reaper script
+    with open('reaper_import_config.json', 'w') as f:
+        json.dump(project_config, f, indent=2)
+    
+    print("📁 Reaper configuration saved: reaper_import_config.json")
+    print("🎚️ Import files into Reaper using the integration script")
+    
+    return project_config
+
+def demonstrate_llm_integration():
+    """Show how GitHub Copilot can interact with this system"""
+    
+    copilot_examples = [
+        {
+            'request': 'Create epic fantasy battle music',
+            'function_call': 'create_ambient_soundtrack("epic_battle", 90)',
+            'expected_output': 'Generated orchestral battle music with drums and brass'
+        },
+        {
+            'request': 'Generate UI sound pack for mobile app',
+            'function_call': 'create_game_audio_pack("mobile_ui")',
+            'expected_output': 'Button clicks, notifications, success/error sounds'
+        },
+        {
+            'request': 'Create relaxing study music',
+            'function_call': 'create_ambient_soundtrack("study", 1800)',  # 30 minutes
+            'expected_output': 'Calm instrumental music perfect for concentration'
+        }
+    ]
+    
+    print("\n🤖 GitHub Copilot Integration Examples:")
+    print("=" * 50)
+    
+    for example in copilot_examples:
+        print(f"\n💬 User Request: {example['request']}")
+        print(f"🔧 Function Call: {example['function_call']}")
+        print(f"✅ Expected Output: {example['expected_output']}")
+    
+    return copilot_examples
+
+def main():
+    """Run complete AI audio workflow demonstration"""
+    
+    print("🎵 AI Audio Generation Workflow Starting...")
+    print("=" * 60)
+    
+    try:
+        # Step 1: Generate podcast audio suite
+        audio_files = create_podcast_intro_suite()
+        print(f"\n✅ Generated {len(audio_files)} audio files")
+        
+        # Step 2: Prepare for Reaper integration
+        reaper_config = integrate_with_reaper(audio_files)
+        print(f"\n✅ Reaper integration configured")
+        
+        # Step 3: Demonstrate LLM capabilities
+        llm_examples = demonstrate_llm_integration()
+        print(f"\n✅ LLM integration examples prepared")
+        
+        # Step 4: Generate final report
+        workflow_report = {
+            'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'generated_files': audio_files,
+            'reaper_config': reaper_config,
+            'llm_examples': llm_examples,
+            'next_steps': [
+                'Import audio files into Reaper using Lua script',
+                'Apply professional mixing and mastering',
+                'Export final audio for podcast use',
+                'Test MCP integration with GitHub Copilot'
+            ]
+        }
+        
+        with open('audio_workflow_report.json', 'w') as f:
+            json.dump(workflow_report, f, indent=2)
+        
+        print("\n🎉 Workflow Complete!")
+        print("📊 Report saved: audio_workflow_report.json")
+        print("\n🚀 Next Steps:")
+        for step in workflow_report['next_steps']:
+            print(f"   • {step}")
+        
+    except Exception as e:
+        print(f"\n❌ Workflow Error: {e}")
+        return False
+    
+    return True
+
+if __name__ == "__main__":
+    success = main()
+    exit(0 if success else 1)</div>
+        </div>
+
+        <!-- Final Summary -->
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #9f7aea, #805ad5); border-radius: 8px; color: white;">
+            <h3>🎵 Music to My Ears - Complete!</h3>
+            <p>You now have a complete AI audio generation pipeline that integrates Meta's AudioCraft with GitHub Copilot through MCP servers, enabling natural language audio creation and seamless Reaper DAW integration.</p>
+            
+            <div style="margin-top: 20px;">
+                <strong>🎯 Key Achievements:</strong>
+                <ul style="text-align: left; display: inline-block; margin-top: 10px;">
+                    <li>AudioCraft integration with Python virtual environment</li>
+                    <li>MCP server configuration for AI audio generation</li>
+                    <li>GitHub Copilot integration for natural language requests</li>
+                    <li>Automated Reaper DAW import and processing</li>
+                    <li>Complete workflow for professional audio production</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement;
+            const textContent = codeBlock.textContent.replace('Copy', '').trim();
+            navigator.clipboard.writeText(textContent).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

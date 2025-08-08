@@ -1,1004 +1,628 @@
-@page "/developer-guidelines"
+@page "/DeveloperGuidelines"
 @{
     ViewData["Title"] = "AI-Assisted Development Guidelines";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="display-4">🤖 AI-Assisted Enterprise Development Guidelines</h1>
-                <div>
-                    <a href="/" class="btn btn-outline-primary me-2">🏠 Home</a>
-                    <a href="/permissions" class="btn btn-outline-secondary me-2">🔒 Permissions</a>
-                    <a href="/service-account-setup" class="btn btn-outline-info">⚙️ IAM Setup</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .ai-banner {
+            background: linear-gradient(135deg, #3182ce, #2c5282);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .purpose-banner {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #f7fafc;
+        }
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .section-icon {
+            font-size: 1.8em;
+            margin-right: 15px;
+        }
+        .subsection {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            border-left: 4px solid #3182ce;
+        }
+        .subsection-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 16px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .best-practice {
+            background-color: #f0fff4;
+            border-left: 4px solid #38a169;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .anti-pattern {
+            background-color: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .info-banner {
+            background-color: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .toc-section {
+            background-color: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .toc-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .toc-list {
+            list-style: none;
+            padding: 0;
+        }
+        .toc-list li {
+            margin-bottom: 8px;
+        }
+        .toc-list a {
+            color: #3182ce;
+            text-decoration: none;
+            padding: 5px 0;
+            display: block;
+        }
+        .toc-list a:hover {
+            color: #2c5282;
+            text-decoration: underline;
+        }
+        .copy-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+        .mcp-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .mcp-card {
+            background-color: white;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #3182ce;
+        }
+        .mcp-card h6 {
+            color: #2d3748;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+            <a href="/" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🏠 Home</a>
+            <a href="/Permissions" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🔒 Permissions Guide</a>
+            <a href="/ServiceAccountSetup" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">⚙️ IAM Setup Guide</a>
+            <a href="/DeveloperGuidelines" style="color: #28a745; text-decoration: none; margin: 0 15px; font-weight: bold;">🤖 Developer Guidelines</a>
+            <a href="/MarkdownGuide" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">📝 Markdown for AI</a>
+            <a href="/FunctionalExamples" style="color: #007bff; text-decoration: none; margin: 0 15px; font-weight: bold;">🚀 Functional Examples</a>
+        </nav>
+
+        <h1>🤖 AI-Assisted Enterprise Development Guidelines</h1>
+        <div class="subtitle">Comprehensive patterns for productive AI collaboration in software development</div>
+
+        <div class="ai-banner">
+            🎯 For Software Developers, Architects, and Technical Leads using AI-assisted development environments
+        </div>
+
+        <div class="purpose-banner">
+            📚 Practical guidelines for leveraging AI assistants effectively - from code analysis to system integration
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc-section">
+            <h3 style="color: #2d3748; margin-top: 0;">📋 Table of Contents</h3>
+            <div class="toc-columns">
+                <ul class="toc-list">
+                    <li><a href="#philosophy">🎯 AI Development Philosophy</a></li>
+                    <li><a href="#mcp-education">📡 Understanding MCP Servers</a></li>
+                    <li><a href="#codebase-analysis">🔍 Codebase Analysis</a></li>
+                    <li><a href="#data-analysis">📊 Data Analysis & Querying</a></li>
+                    <li><a href="#problem-diagnosis">🩺 Problem Diagnosis</a></li>
+                </ul>
+                <ul class="toc-list">
+                    <li><a href="#new-code-development">💻 New Code Development</a></li>
+                    <li><a href="#system-integration">🔌 System Integration</a></li>
+                    <li><a href="#testing-strategies">🧪 Testing Strategies</a></li>
+                    <li><a href="#documentation">📚 Documentation & Knowledge</a></li>
+                    <li><a href="#anti-patterns">❌ Common Anti-Patterns</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- AI Development Philosophy -->
+        <div id="philosophy" class="section">
+            <div class="section-title">
+                <span class="section-icon">🎯</span>
+                AI Development Philosophy: Assistant, Not Search Engine
+            </div>
+            
+            <div class="two-column">
+                <div class="subsection">
+                    <div class="subsection-title">✅ AI as Development Partner</div>
+                    <ul>
+                        <li><strong>Context-Aware Collaboration</strong>: AI understands your project structure and business domain</li>
+                        <li><strong>Code Generation with Intent</strong>: Generate code that fits existing patterns and architecture</li>
+                        <li><strong>Iterative Refinement</strong>: Work together to improve solutions through multiple iterations</li>
+                        <li><strong>Knowledge Synthesis</strong>: Combine multiple data sources to provide comprehensive insights</li>
+                        <li><strong>Pattern Recognition</strong>: Identify recurring patterns and suggest improvements</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">❌ AI as Search Engine (Anti-Pattern)</div>
+                    <ul>
+                        <li><strong>Generic Code Snippets</strong>: Copy-paste code without understanding context</li>
+                        <li><strong>One-Shot Queries</strong>: Ask single questions without follow-up refinement</li>
+                        <li><strong>Isolated Problem Solving</strong>: Solve problems without considering system architecture</li>
+                        <li><strong>Documentation Replacement</strong>: Use AI instead of reading official documentation</li>
+                        <li><strong>Context-Free Development</strong>: Generate code without understanding business requirements</li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="alert alert-info">
-                <h5><i class="fas fa-info-circle"></i> Purpose</h5>
-                <strong>Comprehensive guidelines for leveraging AI assistants effectively in enterprise software development</strong><br>
-                <small>From code analysis to system integration - practical patterns for productive AI collaboration</small>
+            <div class="best-practice">
+                <h6><strong>🎯 Key Principle</strong></h6>
+                <strong>AI assistants excel when they have rich context about your project, business domain, and development goals.</strong>
+                The more context you provide, the more valuable their assistance becomes.
+            </div>
+        </div>
+
+        <!-- MCP Education -->
+        <div id="mcp-education" class="section">
+            <div class="section-title">
+                <span class="section-icon">📡</span>
+                Understanding Model Context Protocol (MCP) Servers
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">What Are MCP Servers?</div>
+                <p><strong>Model Context Protocol (MCP)</strong> servers are specialized services that provide AI assistants with real-time access to enterprise systems, databases, APIs, and tools. They act as secure bridges between AI models and your development environment.</p>
             </div>
 
-            <!-- Table of Contents -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5><i class="fas fa-list"></i> Table of Contents</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#philosophy">🎯 AI Development Philosophy</a></li>
-                                <li><a href="#mcp-education">📡 Understanding MCP Servers</a></li>
-                                <li><a href="#codebase-analysis">🔍 Codebase Analysis</a></li>
-                                <li><a href="#data-analysis">📊 Data Analysis & Querying</a></li>
-                                <li><a href="#problem-diagnosis">🩺 Problem Diagnosis</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                <li><a href="#new-code-development">💻 New Code Development</a></li>
-                                <li><a href="#system-integration">🔌 System Integration</a></li>
-                                <li><a href="#testing-strategies">🧪 Testing Strategies</a></li>
-                                <li><a href="#documentation">📚 Documentation & Knowledge</a></li>
-                                <li><a href="#anti-patterns">❌ Common Anti-Patterns</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div class="info-banner">
+                <h6><strong>💡 MCP Server Benefits</strong></h6>
+                <strong>Instead of asking AI assistants to guess or hallucinate information, MCP servers provide real-time, accurate data</strong> from your actual systems, databases, and APIs.
             </div>
 
-            <!-- AI Development Philosophy -->
-            <div id="philosophy" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-lightbulb"></i> AI Development Philosophy: Assistant, Not Search Engine</h4>
+            <div class="mcp-cards">
+                <div class="mcp-card">
+                    <h6>🐙 GitHub Context Server</h6>
+                    <p><strong>Repository Access</strong>: Browse code, issues, pull requests, and commit history</p>
+                    <ul>
+                        <li>Real-time repository browsing</li>
+                        <li>Issue and PR context</li>
+                        <li>Commit history analysis</li>
+                        <li>Branch and tag information</li>
+                    </ul>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ AI as Development Partner</h5>
-                            <ul>
-                                <li><strong>Context-Aware Collaboration</strong>: AI understands your project structure and business domain</li>
-                                <li><strong>Code Generation with Intent</strong>: Generate code that fits existing patterns and architecture</li>
-                                <li><strong>Iterative Refinement</strong>: Work together to improve solutions through multiple iterations</li>
-                                <li><strong>Knowledge Synthesis</strong>: Combine multiple data sources to provide comprehensive insights</li>
-                                <li><strong>Pattern Recognition</strong>: Identify recurring patterns and suggest improvements</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ AI as Search Engine (Anti-Pattern)</h5>
-                            <ul>
-                                <li><strong>Generic Code Snippets</strong>: Copy-paste code without understanding context</li>
-                                <li><strong>One-Shot Queries</strong>: Ask single questions without follow-up refinement</li>
-                                <li><strong>Isolated Problem Solving</strong>: Solve problems without considering system architecture</li>
-                                <li><strong>Documentation Replacement</strong>: Use AI instead of reading official documentation</li>
-                                <li><strong>Context-Free Development</strong>: Generate code without understanding business requirements</li>
-                            </ul>
-                        </div>
-                    </div>
 
-                    <div class="alert alert-warning mt-3">
-                        <h6><i class="fas fa-exclamation-triangle"></i> Key Principle</h6>
-                        <strong>AI assistants excel when they have rich context about your project, business domain, and development goals.</strong>
-                        The more context you provide, the more valuable their assistance becomes.
-                    </div>
+                <div class="mcp-card">
+                    <h6>☁️ Azure DevOps Server</h6>
+                    <p><strong>Enterprise Project Management</strong>: Work items, pipelines, and deployment tracking</p>
+                    <ul>
+                        <li>Work item queries and updates</li>
+                        <li>Build and release pipeline status</li>
+                        <li>Repository and branch management</li>
+                        <li>Team and project insights</li>
+                    </ul>
                 </div>
-            </div>
 
-            <!-- MCP Education -->
-            <div id="mcp-education" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-satellite-dish"></i> Understanding Model Context Protocol (MCP) Servers</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5>What Are MCP Servers?</h5>
-                            <p><strong>Model Context Protocol (MCP)</strong> servers are specialized services that provide AI assistants with real-time access to enterprise systems, databases, APIs, and tools. They act as secure bridges between AI models and your development environment.</p>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <h5 class="text-primary">🔧 How MCP Servers Work</h5>
-                            <ol>
-                                <li><strong>Context Injection</strong>: Automatically provide AI with current project state</li>
-                                <li><strong>Real-Time Data</strong>: Access live database schemas, API definitions, logs</li>
-                                <li><strong>Tool Integration</strong>: Execute commands, run tests, deploy changes</li>
-                                <li><strong>Security Layer</strong>: Controlled access through service account authentication</li>
-                                <li><strong>Bi-Directional Communication</strong>: AI can both read from and interact with systems</li>
-                            </ol>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ When MCP Servers Expedite Development</h5>
-                            <ul>
-                                <li><strong>Database Schema Analysis</strong>: Understand complex data relationships instantly</li>
-                                <li><strong>API Discovery</strong>: Explore microservice interfaces without manual documentation</li>
-                                <li><strong>Log Analysis</strong>: AI can parse application logs to identify issues</li>
-                                <li><strong>Code Repository Context</strong>: AI understands your entire codebase structure</li>
-                                <li><strong>Infrastructure Awareness</strong>: AI knows your deployment environment and constraints</li>
-                                <li><strong>Testing Integration</strong>: Automatically generate and run tests based on code changes</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-info mt-3">
-                        <h6><i class="fas fa-rocket"></i> MCP Server Value Proposition</h6>
-                        <strong>MCP servers transform AI from a generic coding assistant into a domain-expert that understands your specific enterprise environment.</strong>
-                        Instead of describing your database schema, the AI already knows it. Instead of explaining your API patterns, the AI can see them directly.
-                    </div>
-
-                    <h5 class="mt-4">Common MCP Server Types in Enterprise Development</h5>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card border-primary">
-                                <div class="card-header bg-primary text-white">
-                                    <strong>📂 Repository Servers</strong>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="small">
-                                        <li>GitHub/GitLab integration</li>
-                                        <li>Code structure analysis</li>
-                                        <li>Pull request context</li>
-                                        <li>Commit history insights</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card border-success">
-                                <div class="card-header bg-success text-white">
-                                    <strong>🗄️ Database Servers</strong>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="small">
-                                        <li>Schema introspection</li>
-                                        <li>Query optimization</li>
-                                        <li>Data relationship mapping</li>
-                                        <li>Performance analysis</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card border-warning">
-                                <div class="card-header bg-warning text-dark">
-                                    <strong>🌐 API Servers</strong>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="small">
-                                        <li>OpenAPI specification</li>
-                                        <li>Endpoint discovery</li>
-                                        <li>Authentication patterns</li>
-                                        <li>Response schema analysis</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Codebase Analysis -->
-            <div id="codebase-analysis" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-search"></i> Codebase Analysis: Understanding Complex Systems</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ Effective Codebase Analysis</h5>
-                            <div class="mb-3">
-                                <h6>Starting with Architecture Understanding</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I'm working on the OrderProcessing microservice. Can you help me understand the data flow from OrderController through to the payment integration? I need to add a new discount calculation step and want to ensure I follow existing patterns."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Provides context about the specific component, business intent, and architectural concerns.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Pattern Recognition Across System</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"Looking at our exception handling patterns across the UserService, ProductService, and OrderService, what's the consistent approach? I need to implement error handling for a new PaymentService and want to maintain consistency."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Asks AI to identify patterns across multiple components for consistent implementation.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Dependencies and Impact Analysis</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to modify the User entity to add a 'preferredCurrency' field. Can you help me identify all the places this change will impact, including database migrations, API contracts, and dependent services?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Requests comprehensive impact analysis before making changes.
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ Ineffective Codebase Analysis</h5>
-                            <div class="mb-3">
-                                <h6>Generic Code Questions</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"How do I add a field to a class in C#?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Generic programming question without business or architectural context.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Isolated Problem Focus</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"This method is throwing a NullReferenceException. Fix it."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> No context about the business logic, data flow, or intended behavior.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Surface-Level Understanding</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"What does this class do?"</em> (without business context)
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Asks for technical description without understanding business purpose or system role.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-success mt-3">
-                        <h6><i class="fas fa-lightbulb"></i> Best Practice: Progressive Context Building</h6>
-                        <ol>
-                            <li><strong>Start with Business Context</strong>: Explain what the system does for users</li>
-                            <li><strong>Identify Key Components</strong>: Map major services, databases, and integrations</li>
-                            <li><strong>Understand Data Flow</strong>: Follow how information moves through the system</li>
-                            <li><strong>Recognize Patterns</strong>: Identify consistent approaches used across components</li>
-                            <li><strong>Plan Changes Systematically</strong>: Consider impact before implementation</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data Analysis -->
-            <div id="data-analysis" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-database"></i> Data Analysis & Querying: Working with Enterprise Data</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ Effective Data Analysis</h5>
-                            <div class="mb-3">
-                                <h6>Schema-Aware Query Development</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to generate a report showing customer order trends by region for the last quarter. Based on our database schema, can you help me write a query that joins Customer, Order, and Region tables efficiently, considering our indexing strategy?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> References existing schema, performance considerations, and business requirements.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Performance-Conscious Analysis</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"Looking at our order processing performance, I need to identify bottlenecks in queries that involve the OrderItems table. Can you analyze the current query patterns and suggest optimizations, considering our table has 50M+ records?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Provides context about data volume and performance concerns.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Business Logic Integration</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to implement a data validation rule: 'Enterprise customers cannot have orders below $500 minimum.' Can you help me write both the database constraint and the application-level validation that aligns with our existing validation patterns?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Combines business rules with technical implementation and existing patterns.
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ Ineffective Data Analysis</h5>
-                            <div class="mb-3">
-                                <h6>Generic SQL Requests</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Write a SQL query to get all customers."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> No business purpose, no schema context, no performance considerations.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Ignoring Data Relationships</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"I need customer data" (without specifying relationships or business context)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Doesn't consider related entities, foreign keys, or business relationships.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Performance-Blind Queries</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Get all order data for reporting" (for a table with millions of records)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> No consideration for data volume, indexing, or query performance.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <h5><i class="fas fa-tools"></i> MCP Database Servers: Enhancing Data Analysis</h5>
-                            <div class="alert alert-info">
-                                <strong>With MCP Database Servers, AI assistants can:</strong>
-                                <ul class="mb-0">
-                                    <li><strong>Automatic Schema Discovery</strong>: Understand table relationships, indexes, and constraints without manual explanation</li>
-                                    <li><strong>Query Performance Analysis</strong>: Suggest optimizations based on actual database statistics</li>
-                                    <li><strong>Data Pattern Recognition</strong>: Identify data quality issues and suggest improvements</li>
-                                    <li><strong>Migration Planning</strong>: Understand impact of schema changes across the database</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Problem Diagnosis -->
-            <div id="problem-diagnosis" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-stethoscope"></i> Problem Diagnosis: Systematic Troubleshooting</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ Effective Problem Diagnosis</h5>
-                            <div class="mb-3">
-                                <h6>Comprehensive Context Gathering</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"Our checkout process is failing for enterprise customers during peak hours (2-4 PM EST). I'm seeing timeouts in the payment service logs, but individual payment API calls work fine in testing. Can you help me analyze the system architecture to identify potential bottlenecks in our distributed transaction handling?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Provides symptom, timing, affected user segment, initial observations, and system context.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Systematic Investigation Approach</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I have a memory leak in our UserService that manifests after ~6 hours of operation. Let's work through this systematically: 1) First, help me identify all areas where User objects are cached or retained, 2) Then analyze our event subscription patterns, 3) Finally, let's examine our disposal patterns for database connections."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Structured investigation plan that addresses likely root causes systematically.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Root Cause Analysis with Business Impact</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"We're getting customer complaints about 'duplicate order' emails, but our Order table shows no actual duplicates. I need to trace the email notification flow from order creation through our message queue to understand where the duplication occurs and assess the business impact."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Connects technical symptoms to business impact and traces through system architecture.
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ Ineffective Problem Diagnosis</h5>
-                            <div class="mb-3">
-                                <h6>Symptom-Only Reporting</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"My code is slow. How do I make it faster?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> No context about what constitutes "slow," when it occurs, or what the code does.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Jumping to Solutions</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"I'm getting errors. Should I add more exception handling?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Proposes solution without understanding root cause or error context.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Isolated Component Focus</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"This method isn't working" (without system context)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Doesn't consider how the method fits into the larger system or data flow.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-warning mt-3">
-                        <h6><i class="fas fa-microscope"></i> Diagnostic Methodology</h6>
-                        <ol>
-                            <li><strong>Symptom Documentation</strong>: What exactly is happening vs. what should happen</li>
-                            <li><strong>Context Collection</strong>: When, where, and under what conditions does the problem occur</li>
-                            <li><strong>System Tracing</strong>: Follow the data/request flow through the system architecture</li>
-                            <li><strong>Hypothesis Formation</strong>: Generate testable theories about root causes</li>
-                            <li><strong>Systematic Testing</strong>: Validate or eliminate hypotheses through targeted investigation</li>
-                            <li><strong>Impact Assessment</strong>: Understand business consequences and prioritize fixes accordingly</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-
-            <!-- New Code Development -->
-            <div id="new-code-development" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-code"></i> New Code Development: Integration-First Approach</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ Effective Code Development</h5>
-                            <div class="mb-3">
-                                <h6>Architecture-Aligned Implementation</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to implement a new feature for bulk product updates. Looking at our existing ProductService, it follows a CQRS pattern with command/query separation. Can you help me implement a BulkUpdateProductCommand that follows the same patterns, including validation, authorization, and event publishing that I see in CreateProductCommand?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> References existing patterns and architectural decisions for consistency.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Integration-Aware Development</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I'm building a new inventory synchronization service that needs to integrate with our existing OrderService and WarehouseAPI. Can you help me design the service interface that respects the existing message contracts and error handling patterns, while implementing proper retry logic for warehouse API failures?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Considers integration points, existing contracts, and error scenarios upfront.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Business Logic with Technical Implementation</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to implement a customer loyalty points calculation system. The business rules are: Bronze customers get 1 point per dollar, Silver get 1.5x, Gold get 2x, and points expire after 12 months. Can you help me implement this using our existing CustomerTier enum and following our domain model patterns?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Combines business requirements with existing technical infrastructure.
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ Ineffective Code Development</h5>
-                            <div class="mb-3">
-                                <h6>Generic Code Requests</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Write a class to calculate discounts."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> No business rules, no architectural context, no integration considerations.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Copy-Paste Programming</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Give me code to connect to a database" (without context about existing data access patterns)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Ignores existing infrastructure, connection management, and architectural patterns.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Feature-Only Thinking</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Create a login function" (without considering security, session management, or integration)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Doesn't consider security, existing authentication patterns, or system integration.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-primary mt-3">
-                        <h6><i class="fas fa-blueprint"></i> Development Best Practices</h6>
-                        <ul class="mb-0">
-                            <li><strong>Start with Architecture</strong>: Understand how your code fits into the existing system</li>
-                            <li><strong>Follow Established Patterns</strong>: Maintain consistency with existing code organization</li>
-                            <li><strong>Consider Integration Points</strong>: Think about how your code interacts with other components</li>
-                            <li><strong>Implement Business Rules Clearly</strong>: Make business logic explicit and testable</li>
-                            <li><strong>Plan for Failure Scenarios</strong>: Consider error handling and recovery patterns</li>
-                            <li><strong>Write for Maintainability</strong>: Code will be read and modified by others</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- System Integration -->
-            <div id="system-integration" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-plug"></i> System Integration: Connecting Enterprise Components</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ Effective System Integration</h5>
-                            <div class="mb-3">
-                                <h6>Contract-First Integration</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to integrate with the new PaymentGateway API. I have their OpenAPI specification. Can you help me generate a client that follows our existing API client patterns, including our standard retry policy, error mapping, and logging? Also, I need to handle their webhook callbacks for payment status updates."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> References API specification, existing patterns, and considers bidirectional communication.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Resilience-Focused Integration</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"Our InventoryService needs to call the WarehouseAPI, but it's known to be unreliable during peak hours. Can you help me implement a circuit breaker pattern that degrades gracefully? When the warehouse is unavailable, we should return cached inventory levels and queue updates for later processing."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Anticipates failure scenarios and plans for graceful degradation.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Event-Driven Architecture Integration</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I'm implementing order status updates that need to trigger multiple downstream processes: customer notification, inventory adjustment, analytics tracking, and shipping preparation. Can you help me design an event-driven approach using our existing message bus that ensures each process can handle the event independently?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Considers multiple consumers, decoupling, and existing messaging infrastructure.
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ Ineffective System Integration</h5>
-                            <div class="mb-3">
-                                <h6>Point-to-Point Coupling</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"How do I call another service's API?" (without considering error handling, timeouts, or data contracts)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Creates tight coupling without considering resilience or maintainability.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Ignoring Failure Scenarios</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Create an integration that sends data to the external system" (assuming always-available, always-successful calls)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Doesn't plan for network failures, service unavailability, or data validation errors.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Synchronous-Only Thinking</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Make this API call return the result immediately" (for potentially long-running operations)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Creates blocking operations that impact system responsiveness and scalability.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <h5><i class="fas fa-satellite-dish"></i> MCP API Servers: Enhancing Integration Development</h5>
-                            <div class="alert alert-info">
-                                <strong>With MCP API Servers, AI assistants can:</strong>
-                                <ul class="mb-0">
-                                    <li><strong>Automatic API Discovery</strong>: Understand endpoint contracts, authentication, and data schemas</li>
-                                    <li><strong>Integration Pattern Recognition</strong>: Identify consistent approaches across your API integrations</li>
-                                    <li><strong>Error Scenario Planning</strong>: Suggest error handling based on API documentation and SLA requirements</li>
-                                    <li><strong>Client Code Generation</strong>: Generate integration code that follows your established patterns</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testing Strategies -->
-            <div id="testing-strategies" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-vial"></i> Testing Strategies: Quality Assurance with AI Assistance</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ Effective AI-Assisted Testing</h5>
-                            <div class="mb-3">
-                                <h6>Behavior-Driven Test Development</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I've implemented a new customer loyalty calculation feature. Can you help me create comprehensive unit tests that cover these business scenarios: 1) Bronze customer single purchase, 2) Gold customer bulk purchase, 3) Points expiration after 12 months, 4) Edge cases like zero-dollar orders and negative adjustments? Please follow our existing test naming and arrangement patterns."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Focuses on business scenarios, covers edge cases, and maintains test consistency.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Integration Test Strategy</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need integration tests for our new PaymentProcessor service that calls the external PaymentGateway API. Can you help me create tests that: 1) Use TestContainers for our database, 2) Mock the external API with different response scenarios, 3) Verify our retry logic and error handling, 4) Test webhook callback processing?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Comprehensive testing strategy that considers external dependencies and infrastructure.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Test Data Management</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I'm testing our order processing pipeline that involves customers, products, and inventory. Can you help me create a test data builder pattern that allows me to easily set up different customer types, product configurations, and inventory levels for various test scenarios while maintaining referential integrity?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Focuses on maintainable test data creation with proper relationships.
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ Ineffective AI-Assisted Testing</h5>
-                            <div class="mb-3">
-                                <h6>Generic Test Generation</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Generate unit tests for this class."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> No consideration for business logic, edge cases, or testing strategy.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Happy Path Only</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Test that the method returns the right value when given valid input."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Ignores error scenarios, edge cases, and invalid input handling.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Test Implementation Without Strategy</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Write tests for integration with external API" (without considering mocking strategy or test environment)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> No consideration for test isolation, external dependency management, or test environment setup.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-success mt-3">
-                        <h6><i class="fas fa-check-double"></i> Testing Best Practices with AI</h6>
-                        <ul class="mb-0">
-                            <li><strong>Test Business Behavior</strong>: Focus on what the system should do, not just code coverage</li>
-                            <li><strong>Cover Edge Cases</strong>: Ask AI to help identify boundary conditions and error scenarios</li>
-                            <li><strong>Maintain Test Consistency</strong>: Follow established naming conventions and organizational patterns</li>
-                            <li><strong>Design for Maintainability</strong>: Create test data and mocks that are easy to understand and modify</li>
-                            <li><strong>Consider Test Performance</strong>: Ensure tests run quickly and can be executed frequently</li>
-                            <li><strong>Test Integration Points</strong>: Verify how components work together, not just in isolation</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Documentation -->
-            <div id="documentation" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-book"></i> Documentation & Knowledge Management</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="text-success">✅ Effective Documentation with AI</h5>
-                            <div class="mb-3">
-                                <h6>Architecture Decision Documentation</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to document why we chose to implement the payment processing using an event-driven architecture instead of direct API calls. Can you help me create an Architecture Decision Record (ADR) that explains the context, the decision, the consequences, and how it aligns with our scalability and reliability requirements?"</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Focuses on decision rationale and business impact, not just technical details.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>API Documentation Generation</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"Based on our OrderController implementation, can you help me generate comprehensive API documentation that includes: 1) Endpoint descriptions with business context, 2) Request/response examples for different scenarios, 3) Error codes and their meanings, 4) Authentication requirements, 5) Rate limiting information? Please follow our existing API documentation style."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Comprehensive documentation that considers both technical and business aspects.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Runbook and Troubleshooting Guides</h6>
-                                <div class="bg-light p-3 rounded">
-                                    <strong>Good Prompt:</strong><br>
-                                    <em>"I need to create a troubleshooting guide for our payment processing service. Can you help me document: 1) Common failure scenarios and their symptoms, 2) Step-by-step diagnostic procedures, 3) Resolution steps with required permissions, 4) Escalation paths for different types of issues? Include specific log patterns and monitoring alerts that indicate each problem type."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this works:</strong> Practical, actionable documentation for operational scenarios.
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5 class="text-danger">❌ Ineffective Documentation with AI</h5>
-                            <div class="mb-3">
-                                <h6>Generic Code Comments</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Add comments to this code."</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Creates redundant comments that don't add business value or explain "why" decisions were made.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Technical Details Only</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Document what this API does" (without business context or usage scenarios)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Focuses on implementation details without explaining business purpose or usage context.
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
-                                <h6>Static Documentation</h6>
-                                <div class="bg-light p-3 rounded border border-danger">
-                                    <strong>Bad Prompt:</strong><br>
-                                    <em>"Create documentation for this feature" (without considering maintenance, updates, or evolving requirements)</em>
-                                </div>
-                                <small class="text-muted">
-                                    <strong>Why this fails:</strong> Creates documentation that becomes outdated quickly without consideration for maintenance.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-info mt-3">
-                        <h6><i class="fas fa-lightbulb"></i> Documentation Strategy</h6>
-                        <ul class="mb-0">
-                            <li><strong>Document Decisions, Not Just Code</strong>: Explain why choices were made</li>
-                            <li><strong>Include Business Context</strong>: Help readers understand the purpose and value</li>
-                            <li><strong>Provide Examples and Scenarios</strong>: Show how to use features in real situations</li>
-                            <li><strong>Plan for Maintenance</strong>: Create documentation that can be easily updated</li>
-                            <li><strong>Consider Different Audiences</strong>: Write for developers, operations, and business stakeholders</li>
-                            <li><strong>Link to Related Resources</strong>: Connect documentation to relevant systems and processes</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Anti-Patterns -->
-            <div id="anti-patterns" class="card mb-4">
-                <div class="card-header">
-                    <h4><i class="fas fa-exclamation-triangle"></i> Common AI Development Anti-Patterns to Avoid</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="alert alert-danger">
-                                <h5>❌ The "Magic Code Generator" Anti-Pattern</h5>
-                                <p><strong>What it looks like:</strong> "Generate a complete e-commerce application"</p>
-                                <p><strong>Why it fails:</strong> AI generates generic code without understanding your specific business requirements, existing architecture, or enterprise constraints.</p>
-                                <p><strong>Better approach:</strong> Work incrementally, focusing on specific components that integrate with your existing system.</p>
-                            </div>
-
-                            <div class="alert alert-danger">
-                                <h5>❌ The "Context-Free Helper" Anti-Pattern</h5>
-                                <p><strong>What it looks like:</strong> "How do I fix this error?" (with no system context)</p>
-                                <p><strong>Why it fails:</strong> AI can't provide relevant solutions without understanding your system architecture and business requirements.</p>
-                                <p><strong>Better approach:</strong> Always provide business context, system architecture details, and specific requirements.</p>
-                            </div>
-
-                            <div class="alert alert-danger">
-                                <h5>❌ The "Copy-Paste Developer" Anti-Pattern</h5>
-                                <p><strong>What it looks like:</strong> Taking AI-generated code without understanding or adapting it</p>
-                                <p><strong>Why it fails:</strong> Creates technical debt, security vulnerabilities, and architectural inconsistencies.</p>
-                                <p><strong>Better approach:</strong> Understand the generated code, adapt it to your patterns, and validate it against your requirements.</p>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="alert alert-danger">
-                                <h5>❌ The "AI-Only Research" Anti-Pattern</h5>
-                                <p><strong>What it looks like:</strong> Using AI instead of reading official documentation, architecture diagrams, or business requirements</p>
-                                <p><strong>Why it fails:</strong> AI may not have the latest information or specific details about your enterprise environment.</p>
-                                <p><strong>Better approach:</strong> Use AI to help interpret and apply official documentation to your specific context.</p>
-                            </div>
-
-                            <div class="alert alert-danger">
-                                <h5>❌ The "Single-Shot Solution" Anti-Pattern</h5>
-                                <p><strong>What it looks like:</strong> Expecting AI to solve complex problems in a single interaction</p>
-                                <p><strong>Why it fails:</strong> Complex enterprise development requires iterative refinement and multiple perspectives.</p>
-                                <p><strong>Better approach:</strong> Work collaboratively through multiple iterations, refining requirements and solutions.</p>
-                            </div>
-
-                            <div class="alert alert-danger">
-                                <h5>❌ The "Ignore Integration" Anti-Pattern</h5>
-                                <p><strong>What it looks like:</strong> Developing features without considering how they integrate with existing systems</p>
-                                <p><strong>Why it fails:</strong> Creates integration problems, data inconsistencies, and architectural violations.</p>
-                                <p><strong>Better approach:</strong> Always consider integration points, data contracts, and system dependencies upfront.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-success mt-4">
-                        <h5><i class="fas fa-star"></i> The Golden Rule of AI-Assisted Development</h5>
-                        <p class="lead"><strong>"AI assistants are most valuable when they understand your specific context, business requirements, and architectural constraints."</strong></p>
-                        <p>The more context you provide about your enterprise environment, existing patterns, and business goals, the more helpful and relevant AI assistance becomes. Think of AI as a knowledgeable colleague who needs to understand your situation to provide the best advice.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer Navigation -->
-            <div class="row mt-5">
-                <div class="col-md-12">
-                    <div class="d-flex justify-content-between">
-                        <a href="/" class="btn btn-primary">
-                            <i class="fas fa-home"></i> Return to Home
-                        </a>
-                        <div>
-                            <a href="/permissions" class="btn btn-outline-secondary me-2">
-                                <i class="fas fa-shield-alt"></i> View Permissions Guide
-                            </a>
-                            <a href="/service-account-setup" class="btn btn-outline-info">
-                                <i class="fas fa-cog"></i> IAM Setup Guide
-                            </a>
-                        </div>
-                    </div>
+                <div class="mcp-card">
+                    <h6>🏢 SQL Server Context</h6>
+                    <p><strong>Database Analysis</strong>: Schema exploration and data querying</p>
+                    <ul>
+                        <li>Table and relationship discovery</li>
+                        <li>Data pattern analysis</li>
+                        <li>Query optimization suggestions</li>
+                        <li>Performance monitoring insights</li>
+                    </ul>
                 </div>
             </div>
         </div>
+
+        <!-- Codebase Analysis -->
+        <div id="codebase-analysis" class="section">
+            <div class="section-title">
+                <span class="section-icon">🔍</span>
+                Effective Codebase Analysis with AI
+            </div>
+
+            <div class="two-column">
+                <div class="subsection">
+                    <div class="subsection-title">📈 Best Practices</div>
+                    <ul>
+                        <li><strong>Architectural Overview</strong>: Start with high-level system understanding</li>
+                        <li><strong>Pattern Recognition</strong>: Identify consistent coding patterns and conventions</li>
+                        <li><strong>Dependency Mapping</strong>: Understand component relationships and data flow</li>
+                        <li><strong>Code Quality Assessment</strong>: Evaluate maintainability and technical debt</li>
+                        <li><strong>Security Analysis</strong>: Identify potential vulnerabilities and security patterns</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">🎯 Effective Prompts</div>
+                    <div class="code-block">
+"Analyze the architecture of this codebase and identify:
+1. Main components and their responsibilities
+2. Data flow between components
+3. External dependencies and integration points
+4. Coding patterns and conventions used
+5. Potential areas for improvement"</div>
+                </div>
+            </div>
+
+            <div class="best-practice">
+                <h6><strong>💡 Pro Tip: Progressive Analysis</strong></h6>
+                Start with broad architectural questions, then drill down into specific components. This helps AI build context progressively.
+            </div>
+        </div>
+
+        <!-- Data Analysis -->
+        <div id="data-analysis" class="section">
+            <div class="section-title">
+                <span class="section-icon">📊</span>
+                Data Analysis & Database Querying
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Database Schema Analysis</div>
+                <div class="code-block">
+"Analyze this database schema and help me understand:
+1. Primary entities and their relationships
+2. Data flow patterns and business logic
+3. Potential normalization issues
+4. Missing indexes or performance concerns
+5. Data consistency patterns"</div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Query Optimization</div>
+                <div class="code-block">
+"Review this SQL query for:
+1. Performance optimization opportunities
+2. Index utilization
+3. Alternative approaches for better efficiency
+4. Potential issues with large datasets
+5. Best practices compliance"</div>
+            </div>
+
+            <div class="anti-pattern">
+                <h6><strong>❌ Avoid: Generic Query Generation</strong></h6>
+                Don't ask AI to "write a query" without providing schema context. Always include table structures, relationships, and business requirements.
+            </div>
+        </div>
+
+        <!-- Problem Diagnosis -->
+        <div id="problem-diagnosis" class="section">
+            <div class="section-title">
+                <span class="section-icon">🩺</span>
+                Problem Diagnosis & Troubleshooting
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Systematic Troubleshooting</div>
+                <ol>
+                    <li><strong>Symptom Description</strong>: Clearly describe what's happening vs. what's expected</li>
+                    <li><strong>Context Gathering</strong>: Provide relevant code, configuration, and error messages</li>
+                    <li><strong>Environment Details</strong>: Include system, framework, and dependency versions</li>
+                    <li><strong>Reproduction Steps</strong>: Share minimal steps to reproduce the issue</li>
+                    <li><strong>Recent Changes</strong>: Mention any recent code or configuration changes</li>
+                </ol>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Effective Error Analysis Prompt</div>
+                <div class="code-block">
+"I'm experiencing [specific issue] in my [technology/framework] application.
+
+Error Details:
+[Paste full error message and stack trace]
+
+Relevant Code:
+[Include the specific code causing the issue]
+
+Context:
+- Environment: [development/staging/production]
+- Framework version: [version]
+- Recent changes: [what changed recently]
+- Expected behavior: [what should happen]
+
+Can you help me:
+1. Understand the root cause
+2. Identify potential solutions
+3. Prevent similar issues in the future"</div>
+            </div>
+        </div>
+
+        <!-- New Code Development -->
+        <div id="new-code-development" class="section">
+            <div class="section-title">
+                <span class="section-icon">💻</span>
+                New Code Development with AI
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Context-Rich Development</div>
+                <div class="code-block">
+"I need to implement [specific feature] in my [technology] application.
+
+Project Context:
+- Architecture: [brief architecture description]
+- Existing patterns: [coding patterns used]
+- Dependencies: [relevant libraries/frameworks]
+- Business requirements: [what the feature should accomplish]
+
+Please help me:
+1. Design the implementation approach
+2. Generate code that follows existing patterns
+3. Include appropriate error handling
+4. Suggest testing strategies
+5. Identify potential edge cases"</div>
+            </div>
+
+            <div class="best-practice">
+                <h6><strong>✅ Best Practice: Incremental Development</strong></h6>
+                Build features incrementally with AI assistance. Start with interfaces and core logic, then add error handling, validation, and optimization.
+            </div>
+        </div>
+
+        <!-- System Integration -->
+        <div id="system-integration" class="section">
+            <div class="section-title">
+                <span class="section-icon">🔌</span>
+                System Integration Patterns
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">API Integration Best Practices</div>
+                <ul>
+                    <li><strong>Authentication Strategy</strong>: Use service accounts, not personal credentials</li>
+                    <li><strong>Error Handling</strong>: Implement retry logic and circuit breakers</li>
+                    <li><strong>Rate Limiting</strong>: Respect API limits and implement backoff strategies</li>
+                    <li><strong>Data Validation</strong>: Validate all external data before processing</li>
+                    <li><strong>Monitoring</strong>: Log integration health and performance metrics</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Integration Planning Prompt</div>
+                <div class="code-block">
+"I need to integrate with [external system/API] in my application.
+
+Requirements:
+- Data to exchange: [what data needs to be shared]
+- Frequency: [how often the integration runs]
+- Security requirements: [authentication, encryption needs]
+- Error handling: [what happens when integration fails]
+
+Current architecture:
+[Brief description of your current system]
+
+Please help me design:
+1. Integration architecture and patterns
+2. Error handling and retry strategies  
+3. Security implementation
+4. Testing approach
+5. Monitoring and alerting"</div>
+            </div>
+        </div>
+
+        <!-- Testing Strategies -->
+        <div id="testing-strategies" class="section">
+            <div class="section-title">
+                <span class="section-icon">🧪</span>
+                AI-Assisted Testing Strategies
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Test Generation Approach</div>
+                <div class="code-block">
+"Generate comprehensive tests for this [component/function/class]:
+
+[Paste your code here]
+
+Please create:
+1. Unit tests covering all code paths
+2. Edge case testing scenarios
+3. Error condition tests
+4. Integration test scenarios
+5. Performance test considerations
+
+Testing framework: [Jest/NUnit/PyTest/etc.]
+Mocking library: [if applicable]"</div>
+            </div>
+
+            <div class="best-practice">
+                <h6><strong>✅ Testing Best Practice</strong></h6>
+                Use AI to generate test cases, but always review and understand what each test is validating. AI can miss business logic nuances.
+            </div>
+        </div>
+
+        <!-- Documentation -->
+        <div id="documentation" class="section">
+            <div class="section-title">
+                <span class="section-icon">📚</span>
+                Documentation & Knowledge Management
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Documentation Generation</div>
+                <div class="code-block">
+"Create comprehensive documentation for this [component/system/API]:
+
+[Include relevant code/schemas]
+
+Please generate:
+1. Overview and purpose
+2. API/interface documentation
+3. Usage examples
+4. Configuration options
+5. Troubleshooting guide
+6. Integration examples
+
+Target audience: [developers/ops/business users]
+Documentation format: [Markdown/Wiki/etc.]"</div>
+            </div>
+
+            <div class="anti-pattern">
+                <h6><strong>❌ Avoid: Documentation Without Context</strong></h6>
+                Don't generate generic documentation. Always provide specific code, business context, and target audience information.
+            </div>
+        </div>
+
+        <!-- Anti-Patterns -->
+        <div id="anti-patterns" class="section">
+            <div class="section-title">
+                <span class="section-icon">❌</span>
+                Common Anti-Patterns to Avoid
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">🚫 Development Anti-Patterns</div>
+                <ul>
+                    <li><strong>Copy-Paste Development</strong>: Using AI-generated code without understanding it</li>
+                    <li><strong>Context-Free Queries</strong>: Asking for solutions without providing project context</li>
+                    <li><strong>Over-Reliance</strong>: Not learning underlying concepts, just using AI output</li>
+                    <li><strong>Security Ignorance</strong>: Not reviewing AI-generated code for security issues</li>
+                    <li><strong>Pattern Breaking</strong>: Ignoring existing codebase patterns in favor of AI suggestions</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">🚫 Collaboration Anti-Patterns</div>
+                <ul>
+                    <li><strong>Silent Implementation</strong>: Using AI without discussing with team members</li>
+                    <li><strong>Documentation Skipping</strong>: Not documenting AI-assisted solutions</li>
+                    <li><strong>Review Avoidance</strong>: Skipping code reviews for AI-generated code</li>
+                    <li><strong>Knowledge Silos</strong>: Not sharing AI-discovered insights with the team</li>
+                </ul>
+            </div>
+
+            <div class="anti-pattern">
+                <h6><strong>⚠️ Remember: AI is a Tool, Not a Replacement</strong></h6>
+                AI assistants augment your capabilities but don't replace critical thinking, code review, testing, and team collaboration.
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background-color: #f7fafc; border-radius: 8px;">
+            <p><strong>🎯 Remember: Effective AI collaboration requires context, iteration, and continuous learning.</strong></p>
+            <p>These guidelines evolve with technology - keep experimenting and sharing insights with your team!</p>
+        </div>
     </div>
-</div>
 
-<style>
-    .card {
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        border: 1px solid #e9ecef;
-    }
-    
-    .card-header {
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
-        font-weight: 600;
-    }
-    
-    .bg-light {
-        background-color: #f8f9fa !important;
-    }
-    
-    .text-muted {
-        font-size: 0.9em;
-    }
-    
-    .alert {
-        border-left: 4px solid;
-    }
-    
-    .alert-info {
-        border-left-color: #17a2b8;
-    }
-    
-    .alert-success {
-        border-left-color: #28a745;
-    }
-    
-    .alert-warning {
-        border-left-color: #ffc107;
-    }
-    
-    .alert-danger {
-        border-left-color: #dc3545;
-    }
-    
-    .alert-primary {
-        border-left-color: #007bff;
-    }
-
-    .border-primary {
-        border-color: #007bff !important;
-    }
-    
-    .border-success {
-        border-color: #28a745 !important;
-    }
-    
-    .border-warning {
-        border-color: #ffc107 !important;
-    }
-    
-    .border-danger {
-        border-color: #dc3545 !important;
-    }
-    
-    h5.text-success, h5.text-danger {
-        border-bottom: 2px solid;
-        padding-bottom: 0.5rem;
-        margin-bottom: 1rem;
-    }
-    
-    h5.text-success {
-        border-bottom-color: #28a745;
-    }
-    
-    h5.text-danger {
-        border-bottom-color: #dc3545;
-    }
-</style>
+    <script>
+        function copyToClipboard(button) {
+            const codeBlock = button.previousElementSibling;
+            if (codeBlock && codeBlock.classList.contains('code-block')) {
+                navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                    const originalText = button.textContent;
+                    button.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 2000);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
