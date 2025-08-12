@@ -1,0 +1,30 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+     width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0056b3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="url(#grad1)"/>
+  
+  <!-- MCP Protocol Lines -->
+  <rect x="6" y="8" width="20" height="1.5" fill="#ffffff" opacity="0.4"/>
+  <rect x="6" y="11" width="20" height="1.5" fill="#ffffff" opacity="0.4"/>
+  <rect x="6" y="14" width="20" height="1.5" fill="#ffffff" opacity="0.4"/>
+  
+  <!-- Security Shield -->
+  <path d="M16 18c-3.5 0-6-1.5-6-3.5V12c0-1 2.5-2 6-2s6 1 6 2v2.5c0 2-2.5 3.5-6 3.5z" 
+        fill="none" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Checkmark -->
+  <path d="M13.5 14.5l1.5 1.5 3-3" stroke="#ffffff" stroke-width="2" 
+        fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Connection Points -->
+  <circle cx="8" cy="24" r="2" fill="#ffffff" opacity="0.6"/>
+  <circle cx="24" cy="24" r="2" fill="#ffffff" opacity="0.6"/>
+  <rect x="10" y="23" width="12" height="2" fill="#ffffff" opacity="0.6"/>
+</svg>
