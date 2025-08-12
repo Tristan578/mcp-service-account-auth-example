@@ -304,55 +304,56 @@
         }
 
         <div class="client-examples">
-            <h3>� VS Code MCP Server Examples</h3>
-            <p><strong>Use these service accounts in your VS Code settings instead of personal tokens:</strong></p>
+            <h3>🔧 VS Code MCP Server Examples</h3>
+            <p><strong>What you put in your VS Code settings - no raw secrets needed!</strong></p>
             
-            <div class="client-example" data-client-id="github-service-account" data-client-secret="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" data-service-type="github">
+            <div style="margin-bottom: 20px; padding: 15px; background-color: #e3f2fd; border-radius: 4px; border-left: 4px solid #2196f3;">
+                <strong>🔒 Key Security Benefit:</strong> You never see or handle actual secrets!<br />
+                • The examples below show what <em>you</em> configure in VS Code<br />
+                • Actual tokens/secrets are managed securely by the service account system<br />
+                • Your settings only contain safe tokenized references like <code>${mcp_service_token:account-name}</code>
+            </div>
+            
+            <div class="client-example" data-client-id="github-service-account" data-client-secret="${mcp_service_token:github-service-account}" data-service-type="github">
                 <strong>🐙 GitHub Context Server</strong> (Personal Access Token authentication)<br />
-                Client ID: <span class="client-id">github-service-account</span><br />
-                Client Secret: <span class="client-secret">ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span><br />
-                VS Code config: <span class="scopes">"GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"</span><br />
-                <small>✅ PAT stored in service account, not your VS Code settings</small>
+                Service Account: <span class="client-id">github-service-account</span><br />
+                What you configure: <span class="scopes">"GITHUB_PERSONAL_ACCESS_TOKEN": "${mcp_service_token:github-service-account}"</span><br />
+                <small>✅ No raw PAT in your VS Code settings - service account handles the actual token securely</small>
             </div>
             
-            <div class="client-example" data-client-id="sqlserver-service-account" data-client-secret="Server=server.database.windows.net;Database=MyDb;Authentication=Active Directory Service Principal;User Id=12345678-1234-1234-1234-123456789012;Password=MySecretPassword123!" data-service-type="sqlserver">
+            <div class="client-example" data-client-id="sqlserver-service-account" data-client-secret="${mcp_service_token:sqlserver-service-account}" data-service-type="sqlserver">
                 <strong>🏢 Microsoft SQL Server Context Server</strong> (Azure AD Service Principal)<br />
-                Client ID: <span class="client-id">sqlserver-service-account</span><br />
-                Client Secret: <span class="client-secret">Server=server.database.windows.net;Database=MyDb;Authentication=Active Directory Service Principal;User Id=12345678-1234-1234-1234-123456789012;Password=MySecretPassword123!</span><br />
-                VS Code config: <span class="scopes">"CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"</span><br />
-                <small>✅ Service Principal auth with Entra ID, no SQL auth passwords</small>
+                Service Account: <span class="client-id">sqlserver-service-account</span><br />
+                What you configure: <span class="scopes">"CONNECTION_STRING": "${mcp_service_token:sqlserver-service-account}"</span><br />
+                <small>✅ No connection string with passwords in your VS Code settings - service account manages authentication</small>
             </div>
             
-            <div class="client-example" data-client-id="azure-service-account" data-client-secret="12345678-1234-1234-1234-123456789012~abcdefghijklmnopqrstuvwxyz" data-service-type="azure">
+            <div class="client-example" data-client-id="azure-service-account" data-client-secret="${mcp_service_token:azure-service-account}" data-service-type="azure">
                 <strong>☁️ Azure Context Server</strong> (Service Principal with Client Secret)<br />
-                Client ID: <span class="client-id">azure-service-account</span><br />
-                Client Secret: <span class="client-secret">12345678-1234-1234-1234-123456789012~abcdefghijklmnopqrstuvwxyz</span><br />
-                VS Code config: <span class="scopes">"AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}"</span><br />
-                <small>✅ Azure Service Principal for Azure Resource Manager API access</small>
+                Service Account: <span class="client-id">azure-service-account</span><br />
+                What you configure: <span class="scopes">"AZURE_CLIENT_SECRET": "${mcp_service_token:azure-service-account}"</span><br />
+                <small>✅ No Azure service principal secrets in your VS Code settings - secure token resolution</small>
             </div>
             
             <div class="client-example">
-                <strong>� MuleSoft Context Server</strong> (Connected App Token)<br />
-                Client ID: <span class="client-id">mulesoft-service-account</span><br />
-                Client Secret: <span class="client-secret">mule_bearer_token_abc123def456ghi789jkl012mno345</span><br />
-                VS Code config: <span class="scopes">"MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}"</span><br />
-                <small>✅ Anypoint Platform Connected App for API Management access</small>
+                <strong>⚡ MuleSoft Context Server</strong> (Connected App Token)<br />
+                Service Account: <span class="client-id">mulesoft-service-account</span><br />
+                What you configure: <span class="scopes">"MULESOFT_BEARER_TOKEN": "${mcp_service_token:mulesoft-service-account}"</span><br />
+                <small>✅ No Anypoint Platform bearer tokens in your VS Code settings - centrally managed</small>
             </div>
             
-            <div class="client-example" data-client-id="sonarqube-service-account" data-client-secret="sqp_1234567890abcdef1234567890abcdef12345678" data-service-type="sonarqube">
+            <div class="client-example" data-client-id="sonarqube-service-account" data-client-secret="${mcp_service_token:sonarqube-service-account}" data-service-type="sonarqube">
                 <strong>📊 SonarQube Context Server</strong> (Project Analysis Token)<br />
-                Client ID: <span class="client-id">sonarqube-service-account</span><br />
-                Client Secret: <span class="client-secret">sqp_1234567890abcdef1234567890abcdef12345678</span><br />
-                VS Code config: <span class="scopes">"SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}"</span><br />
-                <small>✅ Project analysis token for code quality integration</small>
+                Service Account: <span class="client-id">sonarqube-service-account</span><br />
+                What you configure: <span class="scopes">"SONAR_TOKEN": "${mcp_service_token:sonarqube-service-account}"</span><br />
+                <small>✅ No SonarQube analysis tokens in your VS Code settings - secure project access</small>
             </div>
             
-            <div class="client-example" data-client-id="playwright-service-account" data-client-secret="pw_api_key_abcd1234efgh5678ijkl9012mnop3456qrst7890" data-service-type="playwright">
+            <div class="client-example" data-client-id="playwright-service-account" data-client-secret="${mcp_service_token:playwright-service-account}" data-service-type="playwright">
                 <strong>🎭 Playwright Context Server</strong> (API Key)<br />
-                Client ID: <span class="client-id">playwright-service-account</span><br />
-                Client Secret: <span class="client-secret">pw_api_key_abcd1234efgh5678ijkl9012mnop3456qrst7890</span><br />
-                VS Code config: <span class="scopes">"PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}"</span><br />
-                <small>✅ Playwright Test API for browser automation context</small>
+                Service Account: <span class="client-id">playwright-service-account</span><br />
+                What you configure: <span class="scopes">"PLAYWRIGHT_API_KEY": "${mcp_service_token:playwright-service-account}"</span><br />
+                <small>✅ No Playwright API keys in your VS Code settings - automated browser testing secured</small>
             </div>
             
             <div style="margin-top: 20px; padding: 15px; background-color: #e8f5e8; border-radius: 4px; border-left: 4px solid #28a745;">
